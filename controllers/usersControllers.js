@@ -62,7 +62,7 @@ export const registerUser = ctrlWrapper(async (req, res) => {
 });
 
 export const verifyEmail = ctrlWrapper(async (req, res) => {
-    const verificationToken = req.params.verificationToken || req.query.token;
+    const { verificationToken } = req.params;
     const user = await User.findOne({ verificationToken });
 
     if (!user) {

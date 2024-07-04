@@ -10,8 +10,6 @@ usersRouter.post("/register", validateBody(registerUserSchema), registerUser);
 
 usersRouter.get("/verify/:verificationToken", verifyEmail);
 
-usersRouter.get("/verify-email", verifyEmail);
-
 usersRouter.post("/verify", validateBody(emailSchema), resendVerifyEmail);
 
 usersRouter.post("/login", validateBody(loginUserSchema), loginUser);
