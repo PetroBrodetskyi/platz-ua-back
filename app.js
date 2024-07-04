@@ -15,6 +15,11 @@ app.use(express.json());
 app.use('/api/announcements', productsRouter);
 app.use("/api/users", usersRouter);
 
+app.use("/verify-email", (req, res, next) => {
+  req.url = `/api/users/verify-email${req.url}`;
+  next();
+});
+
 app.use((_, res) => {
   res.status(404).json({ message: "Route not found" });
 });
