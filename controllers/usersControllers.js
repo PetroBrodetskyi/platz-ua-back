@@ -45,7 +45,8 @@ export const registerUser = ctrlWrapper(async (req, res) => {
     });
 
     const verifyEmail = {
-        to: email, subject: "Verify email",
+        to: email,
+        subject: "Verify email",
         html: `<a target="_blank" href="${BASE_URL}/api/users/verify/${verificationToken}">Click verify email</a>`
     };
 
@@ -70,7 +71,7 @@ export const verifyEmail = ctrlWrapper(async (req, res) => {
 
     await User.findByIdAndUpdate(user._id, {verify: true, verificationToken: null});
 
-    res.redirect(`${process.env.FRONTEND_URL}/login?message=Email%20successfully%20verified`);
+    res.redirect(`${process.env.FRONTEND_URL}/auth/login?message=Email%20successfully%20verified`);
 });
 
 
@@ -96,12 +97,13 @@ export const resendVerifyEmail = ctrlWrapper(async (req, res) => {
     }
 
     const verifyEmail = {
-        to: email, subject: "Verify email",
+        to: email,
+        subject: "Verify email",
         html: `<a target="_blank" href="${BASE_URL}/api/users/verify/${user.verificationToken}">Click verify email</a>`
     };
 
     await sendEmail(verifyEmail);
-    await User.findByIdAndUpdate(user._id, {verify: true, verifiedEmailSent: true })
+    await User.findByIdAndUpdate(user._id, {verify: true, verifiedEmailSent: true });
 
     res.status(200).json({ message: "Verification email sent" });
 });
