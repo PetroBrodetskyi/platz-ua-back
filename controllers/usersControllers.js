@@ -68,10 +68,11 @@ export const verifyEmail = ctrlWrapper(async (req, res) => {
         throw HttpError(404, "Email not found");
     }
 
-    await User.findByIdAndUpdate(user._id, {verify: true, verificationToken: null})
+    await User.findByIdAndUpdate(user._id, {verify: true, verificationToken: null});
 
-    res.status(200).json({ message: "Email successfully verified" });
+    res.redirect(`${process.env.FRONTEND_URL}/auth/login?message=Email%20successfully%20verified`);
 });
+
 
 export const resendVerifyEmail = ctrlWrapper(async (req, res) => {
     const { email } = req.body;
