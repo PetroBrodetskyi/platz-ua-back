@@ -15,7 +15,7 @@ export const createProductSchema = Joi.object({
     image2: Joi.string().optional(),
     image3: Joi.string().optional(),
   }).optional(),
-  views: Joi.string().required(),
+  views: Joi.string().optional(),
   category: Joi.object({
     subcategory1: Joi.string().optional(),
     subcategory2: Joi.string().optional(),

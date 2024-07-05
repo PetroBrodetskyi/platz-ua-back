@@ -2,6 +2,7 @@ import * as productsServices from "../servises/productsServices.js";
 import ctrlWrapper from "../helpers/ctrlWrapper.js";
 import { updateProductSchema } from "../schemas/productsSchemas.js";
 import { handleNotFound } from "../helpers/errorHandlers.js";
+import cloudinary from "../cloudinaryConfig.js";
 
 export const getAllProducts = ctrlWrapper(async (req, res) => {
   const { page = 1, limit = 20 } = req.query;
@@ -39,7 +40,44 @@ export const deleteProduct = ctrlWrapper(async (req, res) => {
 export const createProduct = ctrlWrapper(async (req, res) => {
   const { name, price, description, condition, location, favorite, gallery, views, category } = req.body;
   const owner = req.user._id;
-  const result = await productsServices.createProduct({ name, price, description, condition, location, favorite, gallery, views, category, owner });
+
+  const uploadImages = async (files) => {
+    const uploadPromises = files.map((file) => {
+      return new Promise((resolve, reject) => {
+        const uploadStream = cloudinary.uploader.upload_stream((error, result) => {
+          if (error) {
+            reject(error);
+          } else {
+            resolve(result.secure_url);
+          }
+        });
+        uploadStream.end(file.buffer);
+      });
+    });
+
+    return await Promise.all(uploadPromises);
+  };
+
+  const uploadedUrls = await uploadImages(req.files);
+
+  const newProduct = {
+    name,
+    price,
+    description,
+    condition,
+    location,
+    favorite,
+    gallery: {
+      image1: uploadedUrls[0] || null,
+      image2: uploadedUrls[1] || null,
+      image3: uploadedUrls[2] || null,
+    },
+    views,
+    category,
+    owner,
+  };
+
+  const result = await productsServices.createProduct(newProduct);
   res.status(201).json(result);
 });
 

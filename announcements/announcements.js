@@ -1,8 +1,7 @@
-export const announcements = [
+[
   {
-    "id": "1",
     "name": "Газонокосарка",
-    "price": "€100",
+    "price": "100",
     "description": "Потужна газонокосарка для вашого саду",
     "condition": "Новий",
     "location": {
@@ -23,9 +22,8 @@ export const announcements = [
     }
   },
   {
-    "id": "2",
     "name": "Пилосос",
-    "price": "€200",
+    "price": "200",
     "description": "Високоякісний пилосос з великою потужністю",
     "condition": "Б/в",
     "location": {
@@ -46,9 +44,8 @@ export const announcements = [
     }
   },
   {
-    "id": "3",
     "name": "Диван",
-    "price": "€300",
+    "price": "300",
     "description": "Зручний та стильний диван для вашого дому",
     "condition": "Новий",
     "location": {
@@ -69,9 +66,8 @@ export const announcements = [
     }
   },
   {
-    "id": "4",
     "name": "Матрац",
-    "price": "€100",
+    "price": "100",
     "description": "Комфортний матрац для здорового сну",
     "condition": "Б/в",
     "location": {
@@ -92,9 +88,8 @@ export const announcements = [
     }
   },
   {
-    "id": "5",
     "name": "Велосипед",
-    "price": "€200",
+    "price": "200",
     "description": "Спортивний велосипед для активного відпочинку",
     "condition": "Новий",
     "location": {
@@ -115,9 +110,8 @@ export const announcements = [
     }
   },
   {
-    "id": "6",
     "name": "Mazda 6",
-    "price": "€3000",
+    "price": "3000",
     "description": "Надійний автомобіль з відмінними характеристиками",
     "condition": "Б/в",
     "location": {
@@ -138,9 +132,8 @@ export const announcements = [
     }
   },
   {
-    "id": "7",
     "name": "Лампа настільна",
-    "price": "€50",
+    "price": "50",
     "description": "Лампа",
     "condition": "Б/в",
     "location": {
@@ -161,9 +154,8 @@ export const announcements = [
     }
   },
   {
-    "id": "8",
     "name": "Ford Focus",
-    "price": "€5000",
+    "price": "5000",
     "description": "Надійний автомобіль з відмінними характеристиками",
     "condition": "Б/в",
     "location": {
