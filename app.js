@@ -12,7 +12,7 @@ app.use(morgan("tiny"));
 app.use(cors());
 app.use(express.json());
 
-app.use('/api/announcements', productsRouter);
+app.use('/api/products', productsRouter);
 app.use("/api/users", usersRouter);
 
 app.use((_, res) => {
