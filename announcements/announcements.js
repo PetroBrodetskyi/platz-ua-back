@@ -9,11 +9,9 @@
       "city": "Berlin"
     },
     "favorite": false,
-    "gallery": {
-      "image1": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d2/Tondeuse.png/1280px-Tondeuse.png",
-      "image2": "https://kwitka.ua/image/cache/webp/catalog/products/219715/elektrichna-gazonokosarka-konnersohnen-ks-38lm-14-kvt-380-mm1-700x700.webp",
-      "image3": "https://comfort-system.com.ua/content/images/25/600x600l80nn0/gazonokosilka-elektricheskaya-hecht-1802-s-besshchetochnyy-dvigatel-82582531869290.webp"
-    },
+    "image1": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d2/Tondeuse.png/1280px-Tondeuse.png",
+    "image2": "https://kwitka.ua/image/cache/webp/catalog/products/219715/elektrichna-gazonokosarka-konnersohnen-ks-38lm-14-kvt-380-mm1-700x700.webp",
+    "image3": "https://comfort-system.com.ua/content/images/25/600x600l80nn0/gazonokosilka-elektricheskaya-hecht-1802-s-besshchetochnyy-dvigatel-82582531869290.webp",
     "views": "123",
     "category": {
       "subcategory1": "",

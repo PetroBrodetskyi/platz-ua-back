@@ -33,11 +33,9 @@ const productSchema = new Schema({
     type: Boolean,
     default: false,
   },
-  gallery: {
-    image1: String,
-    image2: String,
-    image3: String,
-  },
+  image1: String,
+  image2: String,
+  image3: String,
   views: {
     type: String,
     required: [true, 'Set views for product'],

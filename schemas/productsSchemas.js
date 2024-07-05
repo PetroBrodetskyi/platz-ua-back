@@ -10,11 +10,9 @@ export const createProductSchema = Joi.object({
     city: Joi.string().required(),
   }).required(),
   favorite: Joi.boolean().optional(),
-  gallery: Joi.object({
-    image1: Joi.string().optional(),
-    image2: Joi.string().optional(),
-    image3: Joi.string().optional(),
-  }).optional(),
+  image1: Joi.string().optional(),
+  image2: Joi.string().optional(),
+  image3: Joi.string().optional(),
   views: Joi.string().optional(),
   category: Joi.object({
     subcategory1: Joi.string().optional(),
@@ -33,11 +31,9 @@ export const updateProductSchema = Joi.object({
     city: Joi.string().optional(),
   }).optional(),
   favorite: Joi.boolean().optional(),
-  gallery: Joi.object({
-    image1: Joi.string().optional(),
-    image2: Joi.string().optional(),
-    image3: Joi.string().optional(),
-  }).optional(),
+  image1: Joi.string().optional(),
+  image2: Joi.string().optional(),
+  image3: Joi.string().optional(),
   views: Joi.string().optional(),
   category: Joi.object({
     subcategory1: Joi.string().optional(),
