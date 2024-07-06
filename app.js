@@ -5,7 +5,7 @@ import "dotenv/config";
 
 import productsRouter from './routes/productsRouter.js';
 import usersRouter from "./routes/usersRouter.js";
-import uploadRouter from './routes/uploadRoute.js';
+import uploadRouter from './routes/uploadRouter.js';
 
 const app = express();
 

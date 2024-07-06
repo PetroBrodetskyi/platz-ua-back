@@ -38,7 +38,7 @@ export const deleteProduct = ctrlWrapper(async (req, res) => {
 });
 
 export const createProduct = ctrlWrapper(async (req, res) => {
-  const { name, price, description, condition, location, favorite, views, category } = req.body;
+  const { name, price, description, condition, PLZ, city, favorite, views, category, subcategory1, subcategory2, subcategory3 } = req.body;
   const owner = req.user._id;
 
   const uploadImages = async (files) => {
@@ -57,13 +57,17 @@ export const createProduct = ctrlWrapper(async (req, res) => {
     price,
     description,
     condition,
-    location,
+    PLZ,
+    city,
     favorite,
     image1: uploadedUrls[0] || null,
     image2: uploadedUrls[1] || null,
     image3: uploadedUrls[2] || null,
     views,
     category,
+    subcategory1,
+    subcategory2,
+    subcategory3,
     owner,
   };
 
@@ -83,6 +87,22 @@ export const updateProduct = ctrlWrapper(async (req, res) => {
   const { body } = req;
   const { _id: owner } = req.user;
   const options = { new: true };
+
+  const uploadImages = async (files) => {
+    const uploadedUrls = [];
+    for (const file of files) {
+      const result = await cloudinary.uploader.upload(file.path);
+      uploadedUrls.push(result.secure_url);
+    }
+    return uploadedUrls;
+  };
+
+  if (req.files.length > 0) {
+    const uploadedUrls = await uploadImages(req.files);
+    body.image1 = uploadedUrls[0] || null;
+    body.image2 = uploadedUrls[1] || null;
+    body.image3 = uploadedUrls[2] || null;
+  }
 
   try {
     await updateProductSchema.validateAsync(body);
@@ -109,7 +129,7 @@ export const updateStatusProduct = ctrlWrapper(async (req, res) => {
   const options = { new: true };
 
   try {
-    await updateProductSchema.validateAsync({ favorite });
+    await updateFavoriteSchema.validateAsync({ favorite });
   } catch (error) {
     return res.status(400).json({ message: error.message });
   }

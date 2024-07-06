@@ -19,32 +19,35 @@ const productSchema = new Schema({
     type: String,
     required: [true, 'Set condition for product'],
   },
-  location: {
-    PLZ: {
-      type: String,
-      required: [true, 'Set postal code for product'],
-    },
-    city: {
-      type: String,
-      required: [true, 'Set city for product'],
-    },
+  PLZ: {
+    type: String,
+    required: [true, 'Set postal code for product'],
+  },
+  city: {
+    type: String,
+    required: [true, 'Set city for product'],
   },
   favorite: {
     type: Boolean,
     default: false,
   },
-  image1: String,
+  image1: {
+    type: String,
+    required: [true, 'Set the first image for product'],
+  },
   image2: String,
   image3: String,
-  views: {
-    type: String,
-    required: [true, 'Set views for product'],
-  },
+  views: String,
   category: {
-    subcategory1: String,
-    subcategory2: String,
-    subcategory3: String,
+    type: String,
+    required: [true, 'Set category for product'],
   },
+  subcategory1: {
+    type: String,
+    required: [true, 'Set first subcategory for product'],
+  },
+  subcategory2: String,
+  subcategory3: String,
   owner: {
     type: Schema.Types.ObjectId,
     ref: 'User',

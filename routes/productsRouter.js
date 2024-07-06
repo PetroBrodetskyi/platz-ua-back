@@ -13,7 +13,6 @@ import { createProductSchema, updateProductSchema, updateFavoriteSchema } from "
 import { validateId } from "../middlewares/idValidator.js";
 import { authenticate } from "../middlewares/authenticate.js";
 import upload from '../multerConfig.js';
-import { parseJsonFields } from '../middlewares/parseJsonFields.js';
 
 const productsRouter = express.Router();
 
@@ -23,9 +22,9 @@ productsRouter.get("/:id", authenticate, validateId, getOneProduct);
 
 productsRouter.delete("/:id", authenticate, validateId, deleteProduct);
 
-productsRouter.post("/", authenticate, upload.array('images', 3), parseJsonFields, validateBody(createProductSchema), createProduct);
+productsRouter.post("/", authenticate, upload.array('images', 3), validateBody(createProductSchema), createProduct);
 
-productsRouter.put("/:id", authenticate, validateId, validateBody(updateProductSchema), updateProduct);
+productsRouter.put("/:id", authenticate, validateId, upload.array('images', 3), validateBody(updateProductSchema), updateProduct);
 
 productsRouter.patch("/:id/favorite", authenticate, validateId, validateBody(updateFavoriteSchema), updateStatusProduct);
 

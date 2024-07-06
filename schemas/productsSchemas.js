@@ -5,20 +5,17 @@ export const createProductSchema = Joi.object({
   price: Joi.string().required(),
   description: Joi.string().required(),
   condition: Joi.string().required(),
-  location: Joi.object({
-    PLZ: Joi.string().required(),
-    city: Joi.string().required(),
-  }).required(),
+  PLZ: Joi.string().required(),
+  city: Joi.string().required(),
   favorite: Joi.boolean().optional(),
-  image1: Joi.string().optional(),
-  image2: Joi.string().optional(),
-  image3: Joi.string().optional(),
+  image1: Joi.any().required(),
+  image2: Joi.any().optional(),
+  image3: Joi.any().optional(),
   views: Joi.string().optional(),
-  category: Joi.object({
-    subcategory1: Joi.string().optional(),
-    subcategory2: Joi.string().optional(),
-    subcategory3: Joi.string().optional(),
-  }).optional(),
+  category: Joi.string().required(),
+  subcategory1: Joi.string().required(),
+  subcategory2: Joi.string().optional(),
+  subcategory3: Joi.string().optional(),
 });
 
 export const updateProductSchema = Joi.object({
@@ -26,20 +23,17 @@ export const updateProductSchema = Joi.object({
   price: Joi.string().optional(),
   description: Joi.string().optional(),
   condition: Joi.string().optional(),
-  location: Joi.object({
-    PLZ: Joi.string().optional(),
-    city: Joi.string().optional(),
-  }).optional(),
+  PLZ: Joi.string().optional(),
+  city: Joi.string().optional(),
   favorite: Joi.boolean().optional(),
-  image1: Joi.string().optional(),
-  image2: Joi.string().optional(),
-  image3: Joi.string().optional(),
+  image1: Joi.any().optional(),
+  image2: Joi.any().optional(),
+  image3: Joi.any().optional(),
   views: Joi.string().optional(),
-  category: Joi.object({
-    subcategory1: Joi.string().optional(),
-    subcategory2: Joi.string().optional(),
-    subcategory3: Joi.string().optional(),
-  }).optional(),
+  category: Joi.string().optional(),
+  subcategory1: Joi.string().optional(),
+  subcategory2: Joi.string().optional(),
+  subcategory3: Joi.string().optional(),
 });
 
 export const updateFavoriteSchema = Joi.object({
