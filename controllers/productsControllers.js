@@ -1,6 +1,6 @@
-import * as productsServices from "../servises/productsServices.js";
+import * as productsServices from "../services/productsServices.js";
 import ctrlWrapper from "../helpers/ctrlWrapper.js";
-import { updateProductSchema, createProductSchema } from "../schemas/productsSchemas.js";
+import { updateProductSchema, createProductSchema, updateFavoriteSchema } from "../schemas/productsSchemas.js";
 import { handleNotFound } from "../helpers/errorHandlers.js";
 import cloudinary from "../cloudinaryConfig.js";
 

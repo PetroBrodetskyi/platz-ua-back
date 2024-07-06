@@ -1,6 +1,6 @@
 import express from 'express';
 import cloudinary from '../cloudinaryConfig.js';
-import upload from '../multerConfig.js';
+import { uploadProductPhoto } from '../middlewares/uploadConfig.js';
 import ctrlWrapper from '../helpers/ctrlWrapper.js';
 
 const router = express.Router();
@@ -27,6 +27,6 @@ const uploadImages = ctrlWrapper(async (req, res) => {
   }
 });
 
-router.post('/upload', upload.array('images', 3), uploadImages);
+router.post('/upload', uploadProductPhoto.array('images', 3), uploadImages); // використовуємо новий middleware
 
 export default router;

@@ -8,7 +8,7 @@ export const createProductSchema = Joi.object({
   PLZ: Joi.string().required(),
   city: Joi.string().required(),
   favorite: Joi.boolean().optional(),
-  image1: Joi.any().required(),
+  image1: Joi.any().optional(),
   image2: Joi.any().optional(),
   image3: Joi.any().optional(),
   views: Joi.string().optional(),

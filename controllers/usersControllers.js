@@ -1,4 +1,4 @@
-import * as userServices from "../servises/usersServices.js";
+import * as userServices from "../services/usersServices.js";
 import bcrypt from "bcrypt";
 import HttpError from "../helpers/HttpError.js";
 import ctrlWrapper from "../helpers/ctrlWrapper.js";
@@ -7,15 +7,12 @@ import { registerUserSchema, loginUserSchema } from "../schemas/usersSchemas.js"
 import jwt from "jsonwebtoken";
 import User from "../models/userModel.js";
 import gravatar from 'gravatar';
-import path from 'path';
-import fs from 'fs/promises';
-import jimp from 'jimp';
-import upload from "../middlewares/upload.js";
-import multer from 'multer';
 import { nanoid } from "nanoid";
+import cloudinary from "../cloudinaryConfig.js";
+import { uploadAvatar } from "../middlewares/uploadConfig.js";
+import multer from 'multer';
 
 const { SECRET_KEY, BASE_URL } = process.env;
-const AVATARS_DIR = path.resolve("public/avatars");
 
 export const registerUser = ctrlWrapper(async (req, res) => {
     const { error } = registerUserSchema.validate(req.body);
@@ -181,9 +178,9 @@ export const logoutUser = ctrlWrapper(async(req, res) => {
     res.status(204).json({ message: "No Content" });
 });
 
-export const uploadAvatar = async (req, res) => {
+export const uploadAvatarHandler = async (req, res) => {
     try {
-        upload.single("avatar")(req, res, async (err) => {
+        uploadAvatar.single("avatar")(req, res, async (err) => {
             if (err instanceof multer.MulterError) {
                 return res.status(400).json({ message: err.message });
             } else if (err) {
@@ -194,28 +191,12 @@ export const uploadAvatar = async (req, res) => {
                 return res.status(400).json({ message: "No file uploaded" });
             }
 
-            const tempFilePath = req.file.path;
+            const result = await cloudinary.uploader.upload(req.file.path);
 
-            try {
-                const image = await jimp.read(tempFilePath);
-                image.resize(250, 250);
+            req.user.avatarURL = result.secure_url;
+            await req.user.save();
 
-                const uniqueFileName = req.file.filename;
-
-                const newAvatarPath = path.join(AVATARS_DIR, uniqueFileName);
-
-                await image.writeAsync(newAvatarPath);
-
-                req.user.avatarURL = `/avatars/${uniqueFileName}`;
-                await req.user.save();
-
-                await fs.unlink(tempFilePath);
-
-                return res.json({ avatarURL: req.user.avatarURL });
-            } catch (error) {
-                console.error(error);
-                return res.status(500).json({ message: "Failed to update avatar" });
-            }
+            return res.json({ avatarURL: req.user.avatarURL });
         });
     } catch (error) {
         console.error(error);
