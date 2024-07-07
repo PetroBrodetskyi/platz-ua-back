@@ -38,7 +38,7 @@ export const deleteProduct = ctrlWrapper(async (req, res) => {
 });
 
 export const createProduct = ctrlWrapper(async (req, res) => {
-  const { name, price, description, condition, PLZ, city, favorite, views, category, subcategory1, subcategory2, subcategory3 } = req.body;
+  const { name, price, description, condition, PLZ, city, category, subcategory1, subcategory2, subcategory3 } = req.body;
   const owner = req.user._id;
 
   const uploadImages = async (files) => {
@@ -59,11 +59,9 @@ export const createProduct = ctrlWrapper(async (req, res) => {
     condition,
     PLZ,
     city,
-    favorite,
     image1: uploadedUrls[0] || null,
     image2: uploadedUrls[1] || null,
     image3: uploadedUrls[2] || null,
-    views,
     category,
     subcategory1,
     subcategory2,
@@ -71,8 +69,11 @@ export const createProduct = ctrlWrapper(async (req, res) => {
     owner,
   };
 
+  const productForValidation = { ...newProduct };
+  delete productForValidation.owner;
+
   try {
-    await createProductSchema.validateAsync(newProduct);
+    await createProductSchema.validateAsync(productForValidation);
   } catch (error) {
     return res.status(400).json({ message: error.message });
   }
@@ -81,6 +82,7 @@ export const createProduct = ctrlWrapper(async (req, res) => {
 
   res.status(201).json(result);
 });
+
 
 export const updateProduct = ctrlWrapper(async (req, res) => {
   const { id } = req.params;

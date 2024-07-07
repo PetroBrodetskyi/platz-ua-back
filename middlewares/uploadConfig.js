@@ -28,11 +28,13 @@ const avatarLimits = {
 
 // Configuration for product photos
 const productStorage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, 'uploads/');
+  destination: (req, file, cb) => {
+    cb(null, path.resolve('tmp'));
   },
-  filename: function (req, file, cb) {
-    cb(null, file.originalname);
+  filename: (req, file, cb) => {
+    const uniquePrefix = `${Date.now()}_${Math.round(Math.random() * 1E9)}`;
+    const filename = `${uniquePrefix}_${file.originalname}`;
+    cb(null, filename);
   }
 });
 
@@ -44,16 +46,19 @@ const productFileFilter = (req, file, cb) => {
   }
 };
 
+const uploadProductPhoto = multer({
+  storage: productStorage,
+  fileFilter: productFileFilter,
+  limits: {
+    fileSize: 1024 * 1024 * 5
+  }
+});
+
 // Multer instances
 const uploadAvatar = multer({
   storage: avatarStorage,
   limits: avatarLimits,
   fileFilter: avatarFileFilter,
-});
-
-const uploadProductPhoto = multer({
-  storage: productStorage,
-  fileFilter: productFileFilter,
 });
 
 export { uploadAvatar, uploadProductPhoto };

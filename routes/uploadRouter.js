@@ -27,6 +27,6 @@ const uploadImages = ctrlWrapper(async (req, res) => {
   }
 });
 
-router.post('/upload', uploadProductPhoto.array('images', 3), uploadImages); // використовуємо новий middleware
+router.post('/upload', uploadProductPhoto.array('image', 3), uploadImages);
 
 export default router;
