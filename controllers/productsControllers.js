@@ -4,6 +4,18 @@ import { updateProductSchema, createProductSchema, updateFavoriteSchema } from "
 import { handleNotFound } from "../helpers/errorHandlers.js";
 import cloudinary from "../cloudinaryConfig.js";
 
+export const getPublicProducts = ctrlWrapper(async (req, res) => {
+  const { page = 1, limit = 20 } = req.query;
+
+  const options = {
+    page: parseInt(page, 10),
+    limit: parseInt(limit, 10)
+  };
+
+  const products = await productsServices.getPublicProducts(options);
+  res.json(products);
+});
+
 export const getAllProducts = ctrlWrapper(async (req, res) => {
   const { page = 1, limit = 20 } = req.query;
   const currentUser = req.user;
@@ -79,10 +91,8 @@ export const createProduct = ctrlWrapper(async (req, res) => {
   }
 
   const result = await productsServices.createProduct(newProduct);
-
   res.status(201).json(result);
 });
-
 
 export const updateProduct = ctrlWrapper(async (req, res) => {
   const { id } = req.params;

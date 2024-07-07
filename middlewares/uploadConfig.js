@@ -23,7 +23,7 @@ const avatarFileFilter = (req, file, callback) => {
 };
 
 const avatarLimits = {
-  fileSize: 1024 * 1024 * 5,
+  fileSize: 1024 * 1024 * 5, // 5 MB
 };
 
 // Configuration for product photos
@@ -50,7 +50,7 @@ const uploadProductPhoto = multer({
   storage: productStorage,
   fileFilter: productFileFilter,
   limits: {
-    fileSize: 1024 * 1024 * 5
+    fileSize: 1024 * 1024 * 5, // 5 MB
   }
 });
 

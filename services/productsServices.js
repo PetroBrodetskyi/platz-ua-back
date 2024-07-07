@@ -11,3 +11,5 @@ export const createProduct = (productData) => Product.create(productData);
 export const updateProduct = (id, body, owner, options) => Product.findOneAndUpdate({ _id: id, owner }, body, options);
 
 export const updateStatusProduct = (id, body, owner, options) => Product.findOneAndUpdate({ _id: id, owner }, body, options);
+
+export const getPublicProducts = (options) => Product.find().skip((options.page - 1) * options.limit).limit(options.limit);

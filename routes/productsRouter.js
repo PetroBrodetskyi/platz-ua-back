@@ -1,5 +1,6 @@
 import express from "express";
 import {
+  getPublicProducts,
   getAllProducts,
   getOneProduct,
   deleteProduct,
@@ -15,6 +16,8 @@ import { authenticate } from "../middlewares/authenticate.js";
 import { uploadProductPhoto } from '../middlewares/uploadConfig.js';
 
 const productsRouter = express.Router();
+
+productsRouter.get('/public', getPublicProducts);
 
 productsRouter.get("/", authenticate, getAllProducts);
 
