@@ -1,6 +1,7 @@
 import express from "express";
 import morgan from "morgan";
 import cors from "cors";
+import axios from "axios";
 import "dotenv/config";
 
 import productsRouter from './routes/productsRouter.js';
@@ -16,6 +17,16 @@ app.use(express.json());
 app.use('/api/products', productsRouter);
 app.use("/api/users", usersRouter);
 app.use("/api", uploadRouter);
+
+app.get('/api/exchange-rate', async (req, res) => {
+  try {
+    const response = await axios.get('https://api.privatbank.ua/p24api/pubinfo?json&exchange&coursid=5');
+    const euroRate = response.data.find(rate => rate.ccy === 'EUR');
+    res.json(euroRate);
+  } catch (error) {
+    res.status(500).send('Error fetching exchange rate');
+  }
+});
 
 app.use((_, res) => {
   res.status(404).json({ message: "Route not found" });
