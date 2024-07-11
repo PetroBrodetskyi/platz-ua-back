@@ -2,7 +2,7 @@ import * as productsServices from "../services/productsServices.js";
 import ctrlWrapper from "../helpers/ctrlWrapper.js";
 import { updateProductSchema, createProductSchema, updateFavoriteSchema } from "../schemas/productsSchemas.js";
 import { handleNotFound } from "../helpers/errorHandlers.js";
-import cloudinary from "../cloudinaryConfig.js";
+import cloudinary from "../middlewares/cloudinaryConfig.js";
 
 export const getPublicProducts = ctrlWrapper(async (req, res) => {
   const { page = 1, limit = 20 } = req.query;

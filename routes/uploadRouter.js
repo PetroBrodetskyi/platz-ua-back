@@ -1,5 +1,5 @@
 import express from 'express';
-import cloudinary from '../cloudinaryConfig.js';
+import cloudinary from '../middlewares/cloudinaryConfig.js';
 import { uploadProductPhoto } from '../middlewares/uploadConfig.js';
 import ctrlWrapper from '../helpers/ctrlWrapper.js';
 
@@ -27,6 +27,6 @@ const uploadImages = ctrlWrapper(async (req, res) => {
   }
 });
 
-router.post('/upload', uploadProductPhoto.array('image', 3), uploadImages);
+router.post('/upload', uploadProductPhoto.array('image'), uploadImages);
 
 export default router;

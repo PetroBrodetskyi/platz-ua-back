@@ -25,7 +25,7 @@ productsRouter.get("/:id", authenticate, validateId, getOneProduct);
 
 productsRouter.delete("/:id", authenticate, validateId, deleteProduct);
 
-productsRouter.post("/", authenticate, uploadProductPhoto.array('image', 3), validateBody(createProductSchema), createProduct);
+productsRouter.post("/", authenticate, uploadProductPhoto.array('image'), validateBody(createProductSchema), createProduct);
 
 productsRouter.put("/:id", authenticate, validateId, uploadProductPhoto.array('image', 3), validateBody(updateProductSchema), updateProduct);
 

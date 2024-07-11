@@ -53,7 +53,7 @@ const productSchema = new Schema({
     ref: 'User',
     required: true,
   },
-}, { versionKey: false });
+}, { versionKey: false, timestamps: { createdAt: true } });
 
 const Product = mongoose.model('Product', productSchema);
 

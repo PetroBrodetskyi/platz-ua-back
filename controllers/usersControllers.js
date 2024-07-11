@@ -8,7 +8,7 @@ import jwt from "jsonwebtoken";
 import User from "../models/userModel.js";
 import gravatar from 'gravatar';
 import { nanoid } from "nanoid";
-import cloudinary from "../cloudinaryConfig.js";
+import cloudinary from "../middlewares/cloudinaryConfig.js";
 import { uploadAvatar } from "../middlewares/uploadConfig.js";
 import multer from 'multer';
 
