@@ -156,6 +156,17 @@ export const getCurrentUser = ctrlWrapper(async (req, res) => {
     });
 });
 
+export const getUserById = ctrlWrapper(async (req, res) => {
+    const { userId } = req.params;
+    const user = await User.findById(userId).select('-password -__v -createdAt -updatedAt');
+    
+    if (!user) {
+        throw HttpError(404, 'User not found');
+    }
+
+    res.json(user);
+});
+
 export const updateAvatar = async (req, res) => {
     try {
         const { user } = req;
