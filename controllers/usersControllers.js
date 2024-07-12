@@ -148,12 +148,33 @@ export const loginUser = ctrlWrapper(async (req, res) => {
 });
 
 export const getCurrentUser = ctrlWrapper(async (req, res) => {
-    const { email, subscription } = req.user;
+    const { name, email, phone, subscription, avatarURL } = req.user;
 
     res.json({
+        name,
         email,
+        phone,
         subscription,
+        avatarURL,
     });
+});
+
+export const updateUserDetails = ctrlWrapper(async (req, res) => {
+  const { user } = req;
+  const { name, phone, email } = req.body;
+
+  if (req.file) {
+    const result = await cloudinary.uploader.upload(req.file.path);
+    user.avatarURL = result.secure_url;
+  }
+
+  user.name = name;
+  user.phone = phone;
+  user.email = email;
+  
+  await user.save();
+
+  res.json(user);
 });
 
 export const getUserById = ctrlWrapper(async (req, res) => {
