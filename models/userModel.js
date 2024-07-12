@@ -43,7 +43,7 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: [true, 'Verify token is required'],
     }
-}, { versionKey: false });
+}, { versionKey: false, timestamps: { createdAt: true } });
 
 const User = mongoose.model('User', userSchema);
 
