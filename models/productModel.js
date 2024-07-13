@@ -37,6 +37,7 @@ const productSchema = new Schema({
   },
   image2: String,
   image3: String,
+  image4: String,
   views: String,
   category: {
     type: String,

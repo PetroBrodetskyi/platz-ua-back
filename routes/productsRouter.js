@@ -27,7 +27,7 @@ productsRouter.delete("/:id", authenticate, validateId, deleteProduct);
 
 productsRouter.post("/", authenticate, uploadProductPhoto.array('image'), validateBody(createProductSchema), createProduct);
 
-productsRouter.put("/:id", authenticate, validateId, uploadProductPhoto.array('image', 3), validateBody(updateProductSchema), updateProduct);
+productsRouter.put("/:id", authenticate, validateId, uploadProductPhoto.array('image', 4), validateBody(updateProductSchema), updateProduct);
 
 productsRouter.patch("/:id/favorite", authenticate, validateId, validateBody(updateFavoriteSchema), updateStatusProduct);
 

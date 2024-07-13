@@ -74,6 +74,7 @@ export const createProduct = ctrlWrapper(async (req, res) => {
     image1: uploadedUrls[0] || null,
     image2: uploadedUrls[1] || null,
     image3: uploadedUrls[2] || null,
+    image4: uploadedUrls[3] || null,
     category,
     subcategory1,
     subcategory2,
@@ -114,6 +115,7 @@ export const updateProduct = ctrlWrapper(async (req, res) => {
     body.image1 = uploadedUrls[0] || null;
     body.image2 = uploadedUrls[1] || null;
     body.image3 = uploadedUrls[2] || null;
+    body.image4 = uploadedUrls[3] || null;
   }
 
   try {
