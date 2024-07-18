@@ -3,7 +3,7 @@ import bcrypt from "bcrypt";
 import HttpError from "../helpers/HttpError.js";
 import ctrlWrapper from "../helpers/ctrlWrapper.js";
 import sendEmail from "../helpers/sendEmail.js";
-import { registerUserSchema, loginUserSchema } from "../schemas/usersSchemas.js";
+import { registerUserSchema, loginUserSchema, updateUserSchema } from "../schemas/usersSchemas.js";
 import jwt from "jsonwebtoken";
 import User from "../models/userModel.js";
 import gravatar from 'gravatar';
@@ -160,21 +160,31 @@ export const getCurrentUser = ctrlWrapper(async (req, res) => {
 });
 
 export const updateUserDetails = ctrlWrapper(async (req, res) => {
-  const { user } = req;
-  const { name, phone, email } = req.body;
+    const { error } = updateUserSchema.validate(req.body);
+    if (error) {
+        return res.status(400).json({ message: error.message });
+    }
+    
+    const { user } = req;
+    const { name, phone, email } = req.body;
 
-  if (req.file) {
-    const result = await cloudinary.uploader.upload(req.file.path);
-    user.avatarURL = result.secure_url;
-  }
+    if (req.file) {
+        const result = await cloudinary.uploader.upload(req.file.path);
+        user.avatarURL = result.secure_url;
+    }
 
-  user.name = name;
-  user.phone = phone;
-  user.email = email;
-  
-  await user.save();
+    if (name) user.name = name;
+    if (phone) user.phone = phone;
+    if (email) user.email = email;
 
-  res.json(user);
+    await user.save();
+
+    res.json({
+        name: user.name,
+        phone: user.phone,
+        email: user.email,
+        avatarURL: user.avatarURL
+    });
 });
 
 export const getUserById = ctrlWrapper(async (req, res) => {
@@ -235,3 +245,40 @@ export const uploadAvatarHandler = async (req, res) => {
         return res.status(500).json({ message: "Failed to upload avatar" });
     }
 };
+
+export const likeUser = async (req, res) => {
+  try {
+    const userId = req.params.userId;
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    console.log(`Before update: ${user.likes}`);
+    
+    user.likes += 1;
+    await user.save();
+
+    console.log(`After update: ${user.likes}`);
+    
+    res.status(200).json({ likes: user.likes });
+  } catch (error) {
+    console.error("Error adding like:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+
+export const unlikeUser = ctrlWrapper(async (req, res) => {
+    const { userId } = req.params;
+    const user = await User.findById(userId);
+    if (!user) {
+        throw HttpError(404, "User not found");
+    }
+
+    user.likes = Math.max(user.likes - 1, 0);
+    await user.save();
+
+    res.json({ likes: user.likes });
+});

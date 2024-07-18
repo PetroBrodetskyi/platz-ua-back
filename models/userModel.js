@@ -42,7 +42,11 @@ const userSchema = new mongoose.Schema({
     verificationToken: {
         type: String,
         required: [true, 'Verify token is required'],
-    }
+    },
+    likes: {
+        type: Number,
+        default: 0,
+    },
 }, { versionKey: false, timestamps: { createdAt: true } });
 
 const User = mongoose.model('User', userSchema);
