@@ -24,7 +24,7 @@ usersRouter.post("/logout", authenticate, logoutUser);
 
 usersRouter.get("/:userId", getUserById);
 
-usersRouter.patch("/:userId/likes", getUserById, updateLikes);
+usersRouter.patch("/:userId/likes", authenticate, updateLikes);
 
 
 export default usersRouter;

@@ -251,29 +251,38 @@ export const uploadAvatarHandler = async (req, res) => {
     }
 };
 
-export const updateLikes = async (req, res) => {
+export const updateLikes = ctrlWrapper(async (req, res) => {
   try {
     const { userId } = req.params;
-    const currentUserId = req.user._id;
+    console.log('Received userId:', userId);
 
     const userToLike = await User.findById(userId);
     if (!userToLike) {
+      console.log('User not found:', userId);
       return res.status(404).json({ message: 'User not found' });
     }
 
-    if (userToLike.likedUsers && userToLike.likedUsers.includes(currentUserId)) {
+    const currentUserId = req.user._id.toString();
+    console.log('Authenticated userId:', currentUserId);
+
+    const alreadyLiked = userToLike.likedUsers.some(user => user._id.toString() === currentUserId);
+    if (alreadyLiked) {
+      console.log('User already liked:', currentUserId);
       return res.status(400).json({ message: 'You have already liked this user' });
     }
 
-    userToLike.likes = (userToLike.likes || 0) + 1;
-    userToLike.likedUsers = userToLike.likedUsers || [];
-    userToLike.likedUsers.push(currentUserId);
+    userToLike.likes += 1;
+    userToLike.likedUsers.push({ _id: currentUserId, avatarURL: req.user.avatarURL });
 
+    console.log('Updated likes:', userToLike.likes);
     await userToLike.save();
 
-    res.json({ likes: userToLike.likes, likedUsers: userToLike.likedUsers.map(userId => userId.toString()) });
+    res.status(200).json({
+      likes: userToLike.likes,
+      likedUsers: userToLike.likedUsers
+    });
   } catch (error) {
     console.error('Failed to update likes:', error);
     res.status(500).json({ message: 'Failed to update likes' });
   }
-};
+});
