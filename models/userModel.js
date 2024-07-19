@@ -43,6 +43,7 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: [true, 'Verify token is required'],
     },
+    likedUsers: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
     likes: {
         type: Number,
         default: 0,

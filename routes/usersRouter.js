@@ -1,7 +1,7 @@
 import express from "express";
 import validateBody from "../helpers/validateBody.js";
 import { registerUserSchema, emailSchema, loginUserSchema, updateUserSchema } from "../schemas/usersSchemas.js";
-import { registerUser, loginUser, getCurrentUser, logoutUser, uploadAvatarHandler, verifyEmail, resendVerifyEmail, getUserById, likeUser, unlikeUser, updateUserDetails } from "../controllers/usersControllers.js";
+import { registerUser, loginUser, getCurrentUser, logoutUser, uploadAvatarHandler, verifyEmail, resendVerifyEmail, getUserById, updateLikes, updateUserDetails } from "../controllers/usersControllers.js";
 import { authenticate } from "../middlewares/authenticate.js";
 
 const usersRouter = express.Router();
@@ -24,8 +24,7 @@ usersRouter.post("/logout", authenticate, logoutUser);
 
 usersRouter.get("/:userId", getUserById);
 
-usersRouter.patch("/:userId/like", getUserById, likeUser);
+usersRouter.patch("/:userId/likes", getUserById, updateLikes);
 
-usersRouter.patch("/:userId/unlike", getUserById, unlikeUser);
 
 export default usersRouter;

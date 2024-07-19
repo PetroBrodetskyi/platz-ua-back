@@ -6,6 +6,7 @@ import {
   deleteProduct,
   createProduct,
   updateProduct,
+  updateUserProduct,
   updateStatusProduct,
 } from "../controllers/productsControllers.js";
 
@@ -28,6 +29,8 @@ productsRouter.delete("/:id", authenticate, validateId, deleteProduct);
 productsRouter.post("/", authenticate, uploadProductPhoto.array('image'), validateBody(createProductSchema), createProduct);
 
 productsRouter.put("/:id", authenticate, validateId, uploadProductPhoto.array('image', 4), validateBody(updateProductSchema), updateProduct);
+
+productsRouter.patch("/:id", authenticate, validateId, validateBody(updateProductSchema), updateUserProduct);
 
 productsRouter.patch("/:id/favorite", authenticate, validateId, validateBody(updateFavoriteSchema), updateStatusProduct);
 

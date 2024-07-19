@@ -39,6 +39,7 @@ export const registerUser = ctrlWrapper(async (req, res) => {
         password: hashedPassword,
         avatarURL,
         verificationToken,
+        likes: 0,
     });
 
     const verifyEmail = {
@@ -148,14 +149,16 @@ export const loginUser = ctrlWrapper(async (req, res) => {
 });
 
 export const getCurrentUser = ctrlWrapper(async (req, res) => {
-    const { name, email, phone, subscription, avatarURL } = req.user;
+    const { _id, name, email, phone, subscription, avatarURL, likes } = req.user;
 
     res.json({
+        _id,
         name,
         email,
         phone,
         subscription,
         avatarURL,
+        likes,
     });
 });
 
@@ -189,7 +192,9 @@ export const updateUserDetails = ctrlWrapper(async (req, res) => {
 
 export const getUserById = ctrlWrapper(async (req, res) => {
     const { userId } = req.params;
-    const user = await User.findById(userId).select('-password -__v -createdAt -updatedAt');
+    const user = await User.findById(userId)
+        .select('-password -__v -createdAt -updatedAt')
+        .populate('likedUsers', 'avatarURL');;
     
     if (!user) {
         throw HttpError(404, 'User not found');
@@ -246,39 +251,29 @@ export const uploadAvatarHandler = async (req, res) => {
     }
 };
 
-export const likeUser = async (req, res) => {
+export const updateLikes = async (req, res) => {
   try {
-    const userId = req.params.userId;
-    const user = await User.findById(userId);
+    const { userId } = req.params;
+    const currentUserId = req.user._id;
 
-    if (!user) {
-      return res.status(404).json({ message: "User not found" });
+    const userToLike = await User.findById(userId);
+    if (!userToLike) {
+      return res.status(404).json({ message: 'User not found' });
     }
 
-    console.log(`Before update: ${user.likes}`);
-    
-    user.likes += 1;
-    await user.save();
+    if (userToLike.likedUsers && userToLike.likedUsers.includes(currentUserId)) {
+      return res.status(400).json({ message: 'You have already liked this user' });
+    }
 
-    console.log(`After update: ${user.likes}`);
-    
-    res.status(200).json({ likes: user.likes });
+    userToLike.likes = (userToLike.likes || 0) + 1;
+    userToLike.likedUsers = userToLike.likedUsers || [];
+    userToLike.likedUsers.push(currentUserId);
+
+    await userToLike.save();
+
+    res.json({ likes: userToLike.likes, likedUsers: userToLike.likedUsers.map(userId => userId.toString()) });
   } catch (error) {
-    console.error("Error adding like:", error);
-    res.status(500).json({ message: "Server error" });
+    console.error('Failed to update likes:', error);
+    res.status(500).json({ message: 'Failed to update likes' });
   }
 };
-
-
-export const unlikeUser = ctrlWrapper(async (req, res) => {
-    const { userId } = req.params;
-    const user = await User.findById(userId);
-    if (!user) {
-        throw HttpError(404, "User not found");
-    }
-
-    user.likes = Math.max(user.likes - 1, 0);
-    await user.save();
-
-    res.json({ likes: user.likes });
-});
