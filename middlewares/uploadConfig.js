@@ -39,7 +39,7 @@ const productStorage = multer.diskStorage({
 });
 
 const productFileFilter = (req, file, cb) => {
-  if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/png') {
+  if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/png' || file.mimetype === 'image/webp') {
     cb(null, true);
   } else {
     cb(new Error('Invalid file type'), false);
