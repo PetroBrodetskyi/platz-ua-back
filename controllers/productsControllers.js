@@ -16,6 +16,28 @@ export const getPublicProducts = ctrlWrapper(async (req, res) => {
   res.json(products);
 });
 
+export const getProductsByCategory = ctrlWrapper(async (req, res) => {
+  const { category } = req.query;
+  const { page = 1, limit = 60 } = req.query;
+
+  if (!category) {
+    return res.status(400).json({ message: "Category parameter is required" });
+  }
+
+  const options = {
+    page: parseInt(page, 10),
+    limit: parseInt(limit, 10),
+    category,
+  };
+
+  try {
+    const products = await productsServices.getProductsByCategory(options);
+    res.json(products);
+  } catch (error) {
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+});
+
 export const getAllProducts = ctrlWrapper(async (req, res) => {
   const { page = 1, limit = 60 } = req.query;
   const currentUser = req.user;

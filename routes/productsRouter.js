@@ -8,6 +8,7 @@ import {
   updateProduct,
   updateUserProduct,
   updateStatusProduct,
+  getProductsByCategory,
 } from "../controllers/productsControllers.js";
 
 import validateBody from "../helpers/validateBody.js";
@@ -19,6 +20,8 @@ import { uploadProductPhoto } from '../middlewares/uploadConfig.js';
 const productsRouter = express.Router();
 
 productsRouter.get('/public', getPublicProducts);
+
+productsRouter.get('/public/category', getProductsByCategory);
 
 productsRouter.get("/", authenticate, getAllProducts);
 

@@ -13,3 +13,5 @@ export const updateProduct = (id, body, owner, options) => Product.findOneAndUpd
 export const updateStatusProduct = (id, body, owner, options) => Product.findOneAndUpdate({ _id: id, owner }, body, options);
 
 export const getPublicProducts = (options) => Product.find().skip((options.page - 1) * options.limit).limit(options.limit);
+
+export const getProductsByCategory = (options) => Product.find({ category: options.category }).skip((options.page - 1) * options.limit).limit(options.limit);
