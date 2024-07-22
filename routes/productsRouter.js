@@ -9,6 +9,7 @@ import {
   updateUserProduct,
   updateStatusProduct,
   getProductsByCategory,
+  getOnePublicProduct,
 } from "../controllers/productsControllers.js";
 
 import validateBody from "../helpers/validateBody.js";
@@ -26,6 +27,8 @@ productsRouter.get('/public/category', getProductsByCategory);
 productsRouter.get("/", authenticate, getAllProducts);
 
 productsRouter.get("/:id", authenticate, validateId, getOneProduct);
+
+productsRouter.get('/public/:id', validateId, getOnePublicProduct);
 
 productsRouter.delete("/:id", authenticate, validateId, deleteProduct);
 

@@ -61,6 +61,15 @@ export const getOneProduct = ctrlWrapper(async (req, res) => {
   res.json(oneProduct);
 });
 
+export const getOnePublicProduct = ctrlWrapper(async (req, res) => {
+  const { id } = req.params;
+  const onePublicProduct = await productsServices.getOnePublicProduct(id);
+  if (!onePublicProduct) {
+    return res.status(404).json({ message: 'Product not found' });
+  }
+  res.json(onePublicProduct);
+});
+
 export const deleteProduct = ctrlWrapper(async (req, res) => {
   const { id } = req.params;
   const { _id: owner } = req.user;

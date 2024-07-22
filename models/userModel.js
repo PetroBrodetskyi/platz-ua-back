@@ -48,6 +48,7 @@ const userSchema = new mongoose.Schema({
         type: Number,
         default: 0,
     },
+    views: { type: Number, default: 0 },
 }, { versionKey: false, timestamps: { createdAt: true } });
 
 const User = mongoose.model('User', userSchema);
