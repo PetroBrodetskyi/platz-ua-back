@@ -54,6 +54,7 @@ const productSchema = new Schema({
     ref: 'User',
     required: true,
   },
+  views: { type: Number, default: 0 },
 }, { versionKey: false, timestamps: { createdAt: true } });
 
 const Product = mongoose.model('Product', productSchema);
