@@ -16,4 +16,11 @@ export const getPublicProducts = (options) => Product.find().skip((options.page 
 
 export const getProductsByCategory = (options) => Product.find({ category: options.category }).skip((options.page - 1) * options.limit).limit(options.limit);
 
-export const getOnePublicProduct = (id) => Product.findById(id); // Просто повертаємо продукт без збільшення переглядів
+export const getOnePublicProduct = async (id) => {
+  const product = await Product.findById(id);
+  if (product) {
+    product.views = (product.views || 0) + 1;
+    await product.save();
+  }
+  return product;
+};

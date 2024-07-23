@@ -1,26 +1,22 @@
-import express from 'express';
-import morgan from 'morgan';
-import cors from 'cors';
-import cookieParser from 'cookie-parser';
-import axios from 'axios';
+import express from "express";
+import morgan from "morgan";
+import cors from "cors";
+import axios from "axios";
 import "dotenv/config";
 
 import productsRouter from './routes/productsRouter.js';
-import usersRouter from './routes/usersRouter.js';
+import usersRouter from "./routes/usersRouter.js";
 import uploadRouter from './routes/uploadRouter.js';
-import viewsRouter from './routes/viewsRouter.js';
 
 const app = express();
 
 app.use(morgan("tiny"));
 app.use(cors());
 app.use(express.json({ limit: '10mb' }));
-app.use(cookieParser());
 
 app.use('/api/products', productsRouter);
-app.use('/api/users', usersRouter);
-app.use('/api', uploadRouter);
-app.use('/api/views', viewsRouter);
+app.use("/api/users", usersRouter);
+app.use("/api", uploadRouter);
 
 app.get('/api/exchange-rate', async (req, res, next) => {
   try {
