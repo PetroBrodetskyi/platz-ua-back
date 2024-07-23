@@ -7,6 +7,7 @@ import "dotenv/config";
 import productsRouter from './routes/productsRouter.js';
 import usersRouter from "./routes/usersRouter.js";
 import uploadRouter from './routes/uploadRouter.js';
+import viewsRouter from './routes/viewsRouter.js'; // Додано
 
 const app = express();
 
@@ -17,6 +18,7 @@ app.use(express.json({ limit: '10mb' }));
 app.use('/api/products', productsRouter);
 app.use("/api/users", usersRouter);
 app.use("/api", uploadRouter);
+app.use("/api", viewsRouter); // Додано
 
 app.get('/api/exchange-rate', async (req, res, next) => {
   try {
