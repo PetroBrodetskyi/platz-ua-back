@@ -2,6 +2,39 @@ import mongoose from "mongoose";
 
 const { Schema } = mongoose;
 
+const replySchema = new Schema({
+  text: {
+    type: String,
+    required: true,
+  },
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: true,
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now,
+  }
+}, { _id: false });
+
+const commentSchema = new Schema({
+  text: {
+    type: String,
+    required: true,
+  },
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: true,
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now,
+  },
+  replies: [replySchema],
+}, { _id: false });
+
 const productSchema = new Schema({
   name: {
     type: String,
@@ -53,7 +86,11 @@ const productSchema = new Schema({
     ref: 'User',
     required: true,
   },
-  views: { type: Number, default: 0 },
+  views: {
+    type: Number,
+    default: 0,
+  },
+  comments: [commentSchema],
 }, { versionKey: false, timestamps: { createdAt: true } });
 
 const Product = mongoose.model('Product', productSchema);

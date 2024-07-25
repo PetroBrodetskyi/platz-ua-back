@@ -24,3 +24,63 @@ export const getOnePublicProduct = async (id) => {
   }
   return product;
 };
+
+export const addComment = async (productId, commentData) => {
+  const product = await Product.findById(productId);
+  if (!product) {
+    throw new Error('Product not found');
+  }
+
+  product.comments.push(commentData);
+  await product.save();
+  return product;
+};
+
+export const getComments = async (productId) => {
+  const product = await Product.findById(productId).populate('comments.user').populate('comments.replies.user');
+  if (!product) {
+    throw new Error('Product not found');
+  }
+  return product.comments;
+};
+
+export const addReply = async (productId, commentId, replyData) => {
+  const product = await Product.findById(productId);
+  if (!product) {
+    throw new Error('Product not found');
+  }
+
+  const comment = product.comments.id(commentId);
+  if (!comment) {
+    throw new Error('Comment not found');
+  }
+
+  comment.replies.push(replyData);
+  await product.save();
+  return product;
+};
+
+export const editReply = async (productId, replyId, text, user) => {
+  const product = await Product.findById(productId);
+  if (!product) {
+    throw new Error('Product not found');
+  }
+
+  const comment = product.comments.find(c => c.replies.id(replyId));
+  if (!comment) {
+    throw new Error('Comment or Reply not found');
+  }
+
+  const reply = comment.replies.id(replyId);
+  if (!reply) {
+    throw new Error('Reply not found');
+  }
+
+  if (reply.user.toString() !== user.toString()) {
+    throw new Error('Unauthorized action');
+  }
+
+  reply.text = text;
+  await product.save();
+  return product;
+};

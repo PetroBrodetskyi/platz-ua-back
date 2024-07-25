@@ -10,6 +10,10 @@ import {
   updateStatusProduct,
   getProductsByCategory,
   getOnePublicProduct,
+  addComment,
+  getComments,
+  addReply,
+  editReply
 } from "../controllers/productsControllers.js";
 
 import validateBody from "../helpers/validateBody.js";
@@ -39,5 +43,13 @@ productsRouter.put("/:id", authenticate, validateId, uploadProductPhoto.array('i
 productsRouter.patch("/:id", authenticate, validateId, validateBody(updateProductSchema), updateUserProduct);
 
 productsRouter.patch("/:id/favorite", authenticate, validateId, validateBody(updateFavoriteSchema), updateStatusProduct);
+
+productsRouter.post("/:productId/comments", authenticate, addComment);
+
+productsRouter.get("/:productId/comments", getComments);
+
+productsRouter.post("/:productId/comments/:commentId/replies", authenticate, addReply);
+
+productsRouter.patch("/:productId/replies/:replyId", authenticate, editReply);
 
 export default productsRouter;

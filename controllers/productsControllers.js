@@ -212,3 +212,47 @@ export const updateStatusProduct = ctrlWrapper(async (req, res) => {
 
   res.status(200).json(updatedFavorite);
 });
+
+export const addComment = ctrlWrapper(async (req, res) => {
+  const { productId } = req.params;
+  const { text } = req.body;
+  const userId = req.user._id;
+
+  const newComment = {
+    text,
+    user: userId,
+  };
+
+  const updatedProduct = await productsServices.addComment(productId, newComment);
+  res.status(201).json(updatedProduct);
+});
+
+export const getComments = ctrlWrapper(async (req, res) => {
+  const { productId } = req.params;
+
+  const comments = await productsServices.getComments(productId);
+  res.status(200).json(comments);
+});
+
+export const addReply = ctrlWrapper(async (req, res) => {
+  const { productId, commentId } = req.params;
+  const { text } = req.body;
+  const userId = req.user._id;
+
+  const newReply = {
+    text,
+    user: userId,
+  };
+
+  const updatedProduct = await productsServices.addReply(productId, commentId, newReply);
+  res.status(201).json(updatedProduct);
+});
+
+export const editReply = ctrlWrapper(async (req, res) => {
+  const { productId, replyId } = req.params;
+  const { text } = req.body;
+  const userId = req.user._id;
+
+  const updatedProduct = await productsServices.editReply(productId, replyId, text, userId);
+  res.status(200).json(updatedProduct);
+});
