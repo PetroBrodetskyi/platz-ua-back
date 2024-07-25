@@ -224,7 +224,21 @@ export const addComment = ctrlWrapper(async (req, res) => {
   };
 
   const updatedProduct = await productsServices.addComment(id, newComment);
-  res.status(201).json(updatedProduct);
+
+  const commentWithUserDetails = await Promise.all(
+    updatedProduct.comments.map(async (comment) => {
+      const user = await User.findById(comment.user);
+      return {
+        ...comment,
+        user: {
+          _id: user._id,
+          name: user.name,
+        },
+      };
+    })
+  );
+
+  res.status(201).json(commentWithUserDetails.find(comment => comment._id === newComment._id));
 });
 
 export const getComments = ctrlWrapper(async (req, res) => {
