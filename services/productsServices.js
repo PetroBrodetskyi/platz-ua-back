@@ -25,8 +25,8 @@ export const getOnePublicProduct = async (id) => {
   return product;
 };
 
-export const addComment = async (productId, commentData) => {
-  const product = await Product.findById(productId);
+export const addComment = async (id, commentData) => {
+  const product = await Product.findById(id);
   if (!product) {
     throw new Error('Product not found');
   }
@@ -36,16 +36,16 @@ export const addComment = async (productId, commentData) => {
   return product;
 };
 
-export const getComments = async (productId) => {
-  const product = await Product.findById(productId).populate('comments.user').populate('comments.replies.user');
+export const getComments = async (id) => {
+  const product = await Product.findById(id).populate('comments.user').populate('comments.replies.user');
   if (!product) {
     throw new Error('Product not found');
   }
   return product.comments;
 };
 
-export const addReply = async (productId, commentId, replyData) => {
-  const product = await Product.findById(productId);
+export const addReply = async (id, commentId, replyData) => {
+  const product = await Product.findById(id);
   if (!product) {
     throw new Error('Product not found');
   }
@@ -60,8 +60,8 @@ export const addReply = async (productId, commentId, replyData) => {
   return product;
 };
 
-export const editReply = async (productId, replyId, text, user) => {
-  const product = await Product.findById(productId);
+export const editReply = async (id, replyId, text, user) => {
+  const product = await Product.findById(id);
   if (!product) {
     throw new Error('Product not found');
   }

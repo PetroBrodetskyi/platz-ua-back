@@ -214,7 +214,7 @@ export const updateStatusProduct = ctrlWrapper(async (req, res) => {
 });
 
 export const addComment = ctrlWrapper(async (req, res) => {
-  const { productId } = req.params;
+  const { id } = req.params;
   const { text } = req.body;
   const userId = req.user._id;
 
@@ -223,19 +223,19 @@ export const addComment = ctrlWrapper(async (req, res) => {
     user: userId,
   };
 
-  const updatedProduct = await productsServices.addComment(productId, newComment);
+  const updatedProduct = await productsServices.addComment(id, newComment);
   res.status(201).json(updatedProduct);
 });
 
 export const getComments = ctrlWrapper(async (req, res) => {
-  const { productId } = req.params;
+  const { id } = req.params;
 
-  const comments = await productsServices.getComments(productId);
+  const comments = await productsServices.getComments(id);
   res.status(200).json(comments);
 });
 
 export const addReply = ctrlWrapper(async (req, res) => {
-  const { productId, commentId } = req.params;
+  const { id, commentId } = req.params;
   const { text } = req.body;
   const userId = req.user._id;
 
@@ -244,15 +244,15 @@ export const addReply = ctrlWrapper(async (req, res) => {
     user: userId,
   };
 
-  const updatedProduct = await productsServices.addReply(productId, commentId, newReply);
+  const updatedProduct = await productsServices.addReply(id, commentId, newReply);
   res.status(201).json(updatedProduct);
 });
 
 export const editReply = ctrlWrapper(async (req, res) => {
-  const { productId, replyId } = req.params;
+  const { id, replyId } = req.params;
   const { text } = req.body;
   const userId = req.user._id;
 
-  const updatedProduct = await productsServices.editReply(productId, replyId, text, userId);
+  const updatedProduct = await productsServices.editReply(id, replyId, text, userId);
   res.status(200).json(updatedProduct);
 });

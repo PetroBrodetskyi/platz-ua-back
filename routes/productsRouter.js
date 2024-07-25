@@ -44,12 +44,12 @@ productsRouter.patch("/:id", authenticate, validateId, validateBody(updateProduc
 
 productsRouter.patch("/:id/favorite", authenticate, validateId, validateBody(updateFavoriteSchema), updateStatusProduct);
 
-productsRouter.patch("/:productId/comments", authenticate, addComment);
+productsRouter.patch("/:id/comments", authenticate, addComment);
 
-productsRouter.get("/:productId/comments", getComments);
+productsRouter.get("/:id/comments", getComments);
 
-productsRouter.patch("/:productId/comments/:commentId/replies", authenticate, addReply);
+productsRouter.patch("/:id/comments/:commentId/replies", authenticate, addReply);
 
-productsRouter.patch("/:productId/replies/:replyId", authenticate, editReply);
+productsRouter.patch("/:id/replies/:replyId", authenticate, editReply);
 
 export default productsRouter;
