@@ -41,7 +41,8 @@ export const getComments = async (id) => {
   if (!product) {
     throw new Error('Product not found');
   }
-  return product.comments;
+  const sortedComments = product.comments.sort((a, b) => b.createdAt - a.createdAt);
+  return sortedComments;
 };
 
 export const addReply = async (id, commentId, replyData) => {
