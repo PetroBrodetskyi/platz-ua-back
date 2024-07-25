@@ -44,11 +44,11 @@ productsRouter.patch("/:id", authenticate, validateId, validateBody(updateProduc
 
 productsRouter.patch("/:id/favorite", authenticate, validateId, validateBody(updateFavoriteSchema), updateStatusProduct);
 
-productsRouter.post("/:productId/comments", authenticate, addComment);
+productsRouter.patch("/:productId/comments", authenticate, addComment);
 
 productsRouter.get("/:productId/comments", getComments);
 
-productsRouter.post("/:productId/comments/:commentId/replies", authenticate, addReply);
+productsRouter.patch("/:productId/comments/:commentId/replies", authenticate, addReply);
 
 productsRouter.patch("/:productId/replies/:replyId", authenticate, editReply);
 
