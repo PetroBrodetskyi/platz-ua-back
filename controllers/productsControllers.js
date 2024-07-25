@@ -221,23 +221,11 @@ export const addComment = ctrlWrapper(async (req, res) => {
   const newComment = {
     text,
     user: userId,
-    createdAt: new Date(), // Дата створення коментаря
-    replies: [], // Пустий масив для відповідей
   };
 
   const updatedProduct = await productsServices.addComment(id, newComment);
-
-  // Популяція коментаря з деталями користувача
-  const commentWithUserDetails = updatedProduct.comments.find(comment => comment.user.toString() === userId.toString());
-
-  if (!commentWithUserDetails) {
-    return res.status(404).json({ message: 'Comment not found' });
-  }
-
-  // Повертаємо коментар з деталями про користувача
-  res.status(201).json(commentWithUserDetails);
+  res.status(201).json(updatedProduct);
 });
-
 
 export const getComments = ctrlWrapper(async (req, res) => {
   const { id } = req.params;

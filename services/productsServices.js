@@ -33,17 +33,7 @@ export const addComment = async (id, commentData) => {
 
   product.comments.push(commentData);
   await product.save();
-
-  // Отримуємо коментарі з деталями про користувача
-  const updatedProduct = await Product.findById(id)
-    .populate('comments.user', 'name avatarURL')
-    .populate('comments.replies.user', 'name avatarURL');
-
-  if (!updatedProduct) {
-    throw new Error('Product not found after adding comment');
-  }
-
-  return updatedProduct;
+  return product;
 };
 
 export const getComments = async (id) => {
