@@ -252,37 +252,27 @@ export const uploadAvatarHandler = async (req, res) => {
 };
 
 export const updateLikes = ctrlWrapper(async (req, res) => {
-  try {
-    const { userId } = req.params;
-    console.log('Received userId:', userId);
+  const { userId } = req.body;
+  const { userId: ownerId } = req.params;
 
-    const userToLike = await User.findById(userId);
-    if (!userToLike) {
-      console.log('User not found:', userId);
-      return res.status(404).json({ message: 'User not found' });
-    }
-
-    const currentUserId = req.user._id.toString();
-    console.log('Authenticated userId:', currentUserId);
-
-    const alreadyLiked = userToLike.likedUsers.some(user => user._id.toString() === currentUserId);
-    if (alreadyLiked) {
-      console.log('User already liked:', currentUserId);
-      return res.status(400).json({ message: 'You have already liked this user' });
-    }
-
-    userToLike.likes += 1;
-    userToLike.likedUsers.push({ _id: currentUserId, avatarURL: req.user.avatarURL });
-
-    console.log('Updated likes:', userToLike.likes);
-    await userToLike.save();
-
-    res.status(200).json({
-      likes: userToLike.likes,
-      likedUsers: userToLike.likedUsers
-    });
-  } catch (error) {
-    console.error('Failed to update likes:', error);
-    res.status(500).json({ message: 'Failed to update likes' });
+  if (!userId || !ownerId) {
+    throw HttpError(400, "Missing userId or ownerId");
   }
+
+  const owner = await User.findById(ownerId);
+
+  if (!owner) {
+    throw HttpError(404, "User not found");
+  }
+
+  if (owner.likedUsers.some(user => user._id.toString() === userId)) {
+    throw HttpError(400, "User already liked");
+  }
+
+  owner.likedUsers.push(userId);
+  owner.likes = owner.likedUsers.length;
+
+  await owner.save();
+
+  res.status(200).json(owner);
 });
