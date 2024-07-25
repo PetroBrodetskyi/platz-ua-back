@@ -6,6 +6,8 @@ const replySchema = new Schema({
   text: {
     type: String,
     required: true,
+    minlength: 1,
+    maxlength: 500
   },
   user: {
     type: mongoose.Schema.Types.ObjectId,
@@ -22,6 +24,8 @@ const commentSchema = new Schema({
   text: {
     type: String,
     required: true,
+    minlength: 1,
+    maxlength: 1500
   },
   user: {
     type: mongoose.Schema.Types.ObjectId,
