@@ -26,9 +26,18 @@ const avatarLimits = {
   fileSize: 1024 * 1024 * 5, // 5 MB
 };
 
-const destination = path.resolve("tmp");
-
 // Configuration for product photos
+
+const productFileFilter = (req, file, cb) => {
+  if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/jpg' || file.mimetype === 'image/png' || file.mimetype === 'image/webp' || file.mimetype === 'image/avif') {
+    cb(null, true);
+  } else {
+    cb(new Error('Invalid file type'), false);
+  }
+};
+
+const destination = path.resolve("public");
+
 const productStorage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, destination);
@@ -40,13 +49,7 @@ const productStorage = multer.diskStorage({
   }
 });
 
-const productFileFilter = (req, file, cb) => {
-  if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/jpg' || file.mimetype === 'image/png' || file.mimetype === 'image/webp' || file.mimetype === 'image/avif') {
-    cb(null, true);
-  } else {
-    cb(new Error('Invalid file type'), false);
-  }
-};
+
 
 const uploadProductPhoto = multer({
   storage: productStorage,
