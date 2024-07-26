@@ -26,10 +26,12 @@ const avatarLimits = {
   fileSize: 1024 * 1024 * 5, // 5 MB
 };
 
+const destination = path.resolve("tmp");
+
 // Configuration for product photos
 const productStorage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, path.resolve('tmp'));
+    cb(null, destination);
   },
   filename: (req, file, cb) => {
     const uniquePrefix = `${Date.now()}_${Math.round(Math.random() * 1E9)}`;
