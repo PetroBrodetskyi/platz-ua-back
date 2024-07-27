@@ -1,6 +1,6 @@
 import express from "express";
-import morgan from "morgan";
 import cors from "cors";
+import morgan from "morgan";
 import axios from "axios";
 import "dotenv/config";
 
@@ -10,8 +10,15 @@ import uploadRouter from './routes/uploadRouter.js';
 
 const app = express();
 
+// Налаштування CORS
+app.use(cors({
+  origin: 'https://petrobrodetskyi.github.io', // Домен вашого клієнта
+  methods: 'GET,POST,PUT,DELETE',
+  allowedHeaders: 'Content-Type,Authorization',
+  credentials: true
+}));
+
 app.use(morgan("tiny"));
-app.use(cors());
 app.use(express.json({ limit: '10mb' }));
 
 app.use('/api/products', productsRouter);
@@ -27,6 +34,9 @@ app.get('/api/exchange-rate', async (req, res, next) => {
     next(error);
   }
 });
+
+// Обробка preflight запитів
+app.options('*', cors());
 
 app.use((req, res) => {
   res.status(404).json({ message: "Route not found" });
