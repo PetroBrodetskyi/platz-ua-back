@@ -84,16 +84,8 @@ export const createProduct = ctrlWrapper(async (req, res) => {
   const { name, price, description, condition, PLZ, city, category, subcategory1, subcategory2, subcategory3 } = req.body;
   const owner = req.user._id;
 
-  const uploadImages = async (files) => {
-    const uploadedUrls = [];
-    for (const file of files) {
-      const result = await cloudinary.uploader.upload(file.path);
-      uploadedUrls.push(result.secure_url);
-    }
-    return uploadedUrls;
-  };
-
-  const uploadedUrls = await uploadImages(req.files);
+  // URL зображень вже присутні у req.files, завантажені Multer
+  const uploadedUrls = req.files.map(file => file.path);
 
   const newProduct = {
     name,
