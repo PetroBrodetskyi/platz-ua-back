@@ -2,6 +2,7 @@ import express from "express";
 import {
   getPublicProducts,
   getAllProducts,
+  getUserProducts,
   getOneProduct,
   deleteProduct,
   createProduct,
@@ -29,6 +30,8 @@ productsRouter.get('/public', getPublicProducts);
 productsRouter.get('/public/category', getProductsByCategory);
 
 productsRouter.get("/", authenticate, getAllProducts);
+
+productsRouter.get("/user/:userId", getUserProducts);
 
 productsRouter.get("/:id", authenticate, validateId, getOneProduct);
 

@@ -2,6 +2,8 @@ import Product from "../models/productModel.js";
 
 export const getAllProducts = (owner, options) => Product.find({ owner }).skip((options.page - 1) * options.limit).limit(options.limit);
 
+export const getUserProducts = (owner) => Product.find({ owner });
+
 export const getOneProduct = (id, owner) => Product.findOne({ _id: id, owner });
 
 export const deleteProduct = (id, owner) => Product.findOneAndDelete({ _id: id, owner });

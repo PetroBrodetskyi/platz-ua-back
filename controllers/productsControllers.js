@@ -51,6 +51,12 @@ export const getAllProducts = ctrlWrapper(async (req, res) => {
   res.json(products);
 });
 
+export const getUserProducts = ctrlWrapper(async (req, res) => {
+  const { userId } = req.params;
+  const usersProducts = await productsServices.getUserProducts(userId);
+  res.status(200).json(usersProducts);
+});
+
 export const getOneProduct = ctrlWrapper(async (req, res) => {
   const { id } = req.params;
   const { _id: owner } = req.user;
@@ -84,7 +90,6 @@ export const createProduct = ctrlWrapper(async (req, res) => {
   const { name, price, description, condition, PLZ, city, category, subcategory1, subcategory2, subcategory3 } = req.body;
   const owner = req.user._id;
 
-  // URL зображень вже присутні у req.files, завантажені Multer
   const uploadedUrls = req.files.map(file => file.path);
 
   const newProduct = {
