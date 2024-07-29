@@ -142,6 +142,7 @@ export const loginUser = ctrlWrapper(async (req, res) => {
     res.status(200).json({
         token,
         user: {
+            name: existingUser.name,
             email: existingUser.email,
             subscription: existingUser.subscription,
         }
