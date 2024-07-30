@@ -87,7 +87,7 @@ export const deleteProduct = ctrlWrapper(async (req, res) => {
 });
 
 export const createProduct = ctrlWrapper(async (req, res) => {
-  const { name, price, description, condition, PLZ, city, category, subcategory1, subcategory2, subcategory3 } = req.body;
+  const { name, price, description, condition, PLZ, city, category, subcategory1, subcategory2, subcategory3, delivery } = req.body;
   const owner = req.user._id;
 
   const uploadedUrls = req.files.map(file => file.path);
@@ -107,6 +107,7 @@ export const createProduct = ctrlWrapper(async (req, res) => {
     subcategory1,
     subcategory2,
     subcategory3,
+    delivery,
     owner,
   };
 

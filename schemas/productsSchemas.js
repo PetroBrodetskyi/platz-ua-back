@@ -17,6 +17,7 @@ export const createProductSchema = Joi.object({
   subcategory1: Joi.string().required(),
   subcategory2: Joi.string().optional(),
   subcategory3: Joi.string().optional(),
+  delivery: Joi.array().items(Joi.string()).optional(),
 });
 
 export const updateProductSchema = Joi.object({
@@ -36,6 +37,7 @@ export const updateProductSchema = Joi.object({
   subcategory1: Joi.string().optional(),
   subcategory2: Joi.string().optional(),
   subcategory3: Joi.string().optional(),
+  delivery: Joi.array().items(Joi.string()).optional(),
 });
 
 export const updateFavoriteSchema = Joi.object({
