@@ -90,13 +90,7 @@ export const createProduct = ctrlWrapper(async (req, res) => {
   const { name, price, description, condition, PLZ, city, category, subcategory1, subcategory2, subcategory3, delivery } = req.body;
   const owner = req.user._id;
 
-  let deliveryMethods;
-  try {
-    deliveryMethods = Array.isArray(delivery) ? delivery : JSON.parse(delivery || '[]');
-  } catch (error) {
-    return res.status(400).json({ message: '"delivery" must be an array' });
-  }
-  
+  const deliveryMethods = Array.isArray(delivery) ? delivery : JSON.parse(delivery || '[]');
   const uploadedUrls = req.files.map(file => file.path);
 
   const newProduct = {
