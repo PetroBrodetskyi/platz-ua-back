@@ -90,7 +90,6 @@ export const createProduct = ctrlWrapper(async (req, res) => {
   const { name, price, description, condition, PLZ, city, category, subcategory1, subcategory2, subcategory3, pickup, delivery } = req.body;
   const owner = req.user._id;
 
-  // Обробка строк із чекбоксів
   const deliveryMethods = [];
   if (pickup === "самовивіз") {
     deliveryMethods.push(pickup);
@@ -116,7 +115,7 @@ export const createProduct = ctrlWrapper(async (req, res) => {
     subcategory1,
     subcategory2,
     subcategory3,
-    delivery: deliveryMethods.join(','),
+    delivery: deliveryMethods,
     owner,
   };
 
