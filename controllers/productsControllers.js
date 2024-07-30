@@ -87,16 +87,8 @@ export const deleteProduct = ctrlWrapper(async (req, res) => {
 });
 
 export const createProduct = ctrlWrapper(async (req, res) => {
-  const { name, price, description, condition, PLZ, city, category, subcategory1, subcategory2, subcategory3, pickup, delivery } = req.body;
+  const { name, price, description, condition, PLZ, city, category, subcategory1, subcategory2, subcategory3 } = req.body;
   const owner = req.user._id;
-
-  const deliveryMethods = [];
-  if (pickup === "самовивіз") {
-    deliveryMethods.push(pickup);
-  }
-  if (delivery === "відправка поштою") {
-    deliveryMethods.push(delivery);
-  }
 
   const uploadedUrls = req.files.map(file => file.path);
 
@@ -115,7 +107,6 @@ export const createProduct = ctrlWrapper(async (req, res) => {
     subcategory1,
     subcategory2,
     subcategory3,
-    delivery: deliveryMethods,
     owner,
   };
 
@@ -131,7 +122,6 @@ export const createProduct = ctrlWrapper(async (req, res) => {
   const result = await productsServices.createProduct(newProduct);
   res.status(201).json(result);
 });
-
 
 export const updateProduct = ctrlWrapper(async (req, res) => {
   const { id } = req.params;

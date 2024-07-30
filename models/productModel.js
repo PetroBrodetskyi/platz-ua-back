@@ -85,10 +85,6 @@ const productSchema = new Schema({
   },
   subcategory2: String,
   subcategory3: String,
-  delivery: {
-    type: [String],
-    required: [true, 'Set delivery for product'],
-  },
   owner: {
     type: Schema.Types.ObjectId,
     ref: 'User',
