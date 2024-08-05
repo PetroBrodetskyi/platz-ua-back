@@ -94,6 +94,11 @@ const productSchema = new Schema({
     type: Number,
     default: 0,
   },
+  status: {
+        type: String,
+        enum: ["pending", "approved", "rejected"],
+        default: "pending"
+    },
   comments: [commentSchema],
 }, { versionKey: false, timestamps: { createdAt: true } });
 
