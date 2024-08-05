@@ -267,13 +267,28 @@ export const updateLikes = ctrlWrapper(async (req, res) => {
   }
 
   if (owner.likedUsers.some(user => user._id.toString() === userId)) {
-    throw HttpError(400, "User already liked");
-  }
-
-  owner.likedUsers.push(userId);
-  owner.likes = owner.likedUsers.length;
+    owner.likedUsers = owner.likedUsers.filter(user => user._id.toString() !== userId);
+    owner.likes = owner.likedUsers.length;
+} else {
+    owner.likedUsers.push(userId);
+    owner.likes = owner.likedUsers.length;
+}
 
   await owner.save();
 
   res.status(200).json(owner);
+});
+
+export const updateUserSubscription = ctrlWrapper(async (req, res) => {
+    const { subscription } = req.body;
+    const validSubscriptions = ["starter", "pro", "business", "admin"];
+    
+    if (!validSubscriptions.includes(subscription)) {
+        throw HttpError(400, "Invalid subscription type");
+    }
+    
+    req.user.subscription = subscription;
+    await req.user.save();
+    
+    res.json({ message: "Subscription updated", subscription: req.user.subscription });
 });

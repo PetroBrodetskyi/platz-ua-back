@@ -24,7 +24,7 @@ const userSchema = new mongoose.Schema({
     },
     subscription: {
         type: String,
-        enum: ["starter", "pro", "business"],
+        enum: ["starter", "pro", "business", "admin"],
         default: "starter"
     },
     token: {

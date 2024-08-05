@@ -5,7 +5,7 @@ import axios from "axios";
 import "dotenv/config";
 
 import productsRouter from './routes/productsRouter.js';
-import usersRouter from "./routes/usersRouter.js";
+import { usersRouter, adminRouter } from "./routes/usersRouter.js";
 import uploadRouter from './routes/uploadRouter.js';
 
 const app = express();
@@ -16,6 +16,7 @@ app.use(express.json({ limit: '10mb' }));
 
 app.use('/api/products', productsRouter);
 app.use("/api/users", usersRouter);
+app.use("/api/admin", adminRouter);
 app.use("/api", uploadRouter);
 
 app.get('/api/exchange-rate', async (req, res, next) => {
