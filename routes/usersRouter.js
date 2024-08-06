@@ -28,6 +28,7 @@ usersRouter.get("/:userId", getUserById);
 
 usersRouter.patch("/:userId/likes", authenticate, updateLikes);
 
-adminRouter.get('/user/dashboard', authenticate, isAdmin);
+adminRouter.get('/admin', authenticate, isAdmin);
+
 
 export { usersRouter, adminRouter };
