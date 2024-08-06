@@ -16,7 +16,7 @@ app.use(express.json({ limit: '10mb' }));
 
 app.use('/api/products', productsRouter);
 app.use("/api/users", usersRouter);
-app.use("/api/admin", adminRouter);
+app.use("/api/user", adminRouter);
 app.use("/api", uploadRouter);
 
 app.get('/api/exchange-rate', async (req, res, next) => {
