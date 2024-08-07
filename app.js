@@ -11,11 +11,7 @@ import uploadRouter from './routes/uploadRouter.js';
 const app = express();
 
 app.use(morgan("tiny"));
-app.use(cors({
-  origin: 'http://localhost:5173', // Дозволяє запити тільки з цього домену
-  methods: ['GET', 'POST', 'PATCH', 'DELETE'], // Дозволяє тільки ці методи
-  allowedHeaders: ['Content-Type', 'Authorization'], // Дозволяє ці заголовки
-}));
+app.use(cors());
 app.use(express.json({ limit: '10mb' }));
 
 app.use('/api/products', productsRouter);

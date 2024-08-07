@@ -1,6 +1,5 @@
 import * as productsServices from "../services/productsServices.js";
 import ctrlWrapper from "../helpers/ctrlWrapper.js";
-import { isAdmin } from '../helpers/isAdmin.js';
 import { updateProductSchema, createProductSchema, updateFavoriteSchema } from "../schemas/productsSchemas.js";
 import { handleNotFound } from "../helpers/errorHandlers.js";
 import cloudinary from "../middlewares/cloudinaryConfig.js";
@@ -127,7 +126,7 @@ export const createProduct = ctrlWrapper(async (req, res) => {
 export const updateProduct = ctrlWrapper(async (req, res) => {
   const { id } = req.params;
   const { body } = req;
-  const { _id: owner, role } = req.user;
+  const { _id: owner } = req.user;
   const options = { new: true };
 
   const uploadImages = async (files) => {
@@ -157,8 +156,7 @@ export const updateProduct = ctrlWrapper(async (req, res) => {
     return res.status(400).json({ message: "Body must have at least one field" });
   }
 
-  const isAdminUser = isAdmin(role);
-  const existingProduct = await productsServices.updateProduct(id, body, owner, options, isAdminUser);
+  const existingProduct = await productsServices.updateProduct(id, body, owner, options);
   if (!existingProduct) {
     return handleNotFound(req, res);
   }
