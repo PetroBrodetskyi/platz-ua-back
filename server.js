@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 import app from "./app.js";
 import { createServer } from "http";
 import { Server } from "socket.io";
+import ChatMessage from './models/chatMessage.js';
 
 const { DB_HOST, PORT } = process.env;
 
@@ -13,25 +14,32 @@ const mongooseOptions = {
   socketTimeoutMS: 45000
 };
 
-// Створюємо HTTP сервер з Express
 const server = createServer(app);
 
-// Ініціалізуємо socket.io
 const io = new Server(server, {
   cors: {
-    origin: "*", // Налаштуйте дозволені домени
+    origin: "*",
   },
 });
 
-// Обробка підключень через WebSocket
 io.on("connection", (socket) => {
   console.log("Новий клієнт підключився", socket.id);
 
-  socket.on("message", (data) => {
-    console.log("Повідомлення від клієнта:", data);
-    
-    // Відправка повідомлення всім клієнтам
-    io.emit("message", data);
+  ChatMessage.find().sort({ timestamp: 1 }).then((messages) => {
+    socket.emit('initialMessages', messages);
+  }).catch(error => {
+    console.error('Error fetching messages:', error.message);
+  });
+
+  socket.on("message", (message) => {
+    const { sender, content } = message;
+
+    const newMessage = new ChatMessage({ sender, content });
+    newMessage.save().then(() => {
+      io.emit("message", newMessage);
+    }).catch(error => {
+      console.error('Error saving message:', error.message);
+    });
   });
 
   socket.on("disconnect", () => {
