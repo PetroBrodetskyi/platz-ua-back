@@ -26,21 +26,26 @@ const io = new Server(server, {
 io.on("connection", (socket) => {
   console.log("Новий клієнт підключився", socket.id);
 
-  ChatMessage.find().sort({ timestamp: 1 }).then((messages) => {
-    socket.emit('initialMessages', messages);
-  }).catch(error => {
-    console.error('Error fetching messages:', error.message);
+  // Показати останні 50 повідомлень замість всіх
+  ChatMessage.find().sort({ timestamp: -1 }).limit(50).exec((err, messages) => {
+    if (err) {
+      console.error('Error fetching messages:', err.message);
+      return;
+    }
+    socket.emit('initialMessages', messages.reverse()); // Відправити у зворотному порядку
   });
 
   socket.on("message", (message) => {
     const { sender, content } = message;
-
     const newMessage = new ChatMessage({ sender, content });
-    newMessage.save().then(() => {
-      io.emit("message", newMessage);
-    }).catch(error => {
-      console.error('Error saving message:', error.message);
-    });
+
+    newMessage.save()
+      .then(() => {
+        io.emit("message", newMessage);
+      })
+      .catch(error => {
+        console.error('Error saving message:', error.message);
+      });
   });
 
   socket.on("disconnect", () => {
