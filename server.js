@@ -18,7 +18,8 @@ const server = createServer(app);
 
 const io = new Server(server, {
   cors: {
-    origin: "*",
+    origin: "https://petrobrodetskyi.github.io/platz-ua-front",
+    methods: ["GET", "POST"],
   },
 });
 
