@@ -19,7 +19,7 @@ const pusher = new Pusher({
   useTLS: true
 });
 
-app.get('/', async (req, res) => {
+app.get('/messages', async (req, res) => {
   try {
     const messages = await ChatMessage.find().sort({ timestamp: -1 }).limit(50).exec();
     res.json(messages.reverse());
@@ -28,7 +28,7 @@ app.get('/', async (req, res) => {
   }
 });
 
-app.post('/', async (req, res) => {
+app.post('/messages', async (req, res) => {
   const { sender, content } = req.body;
   const newMessage = new ChatMessage({ sender, content });
 
