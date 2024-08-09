@@ -194,7 +194,7 @@ export const updateUserDetails = ctrlWrapper(async (req, res) => {
 export const getUserById = ctrlWrapper(async (req, res) => {
     const { userId } = req.params;
     const user = await User.findById(userId)
-        .select('-password -__v -createdAt -updatedAt')
+        .select('-password -__v')
         .populate('likedUsers', 'avatarURL');;
     
     if (!user) {
