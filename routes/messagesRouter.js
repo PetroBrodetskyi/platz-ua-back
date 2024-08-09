@@ -1,9 +1,9 @@
 import express from 'express';
 import Message from '../models/chatMessage.js';
 
-const router = express.Router();
+const messagesRouter = express.Router();
 
-router.get('/', async (req, res) => {
+router.get('/messages', async (req, res) => {
   try {
     const messages = await Message.find().sort({ timestamp: 1 });
     res.json(messages);
@@ -12,7 +12,7 @@ router.get('/', async (req, res) => {
   }
 });
 
-router.post('/', async (req, res) => {
+router.post('/messages', async (req, res) => {
   const { sender, content } = req.body;
 
   try {
@@ -24,4 +24,4 @@ router.post('/', async (req, res) => {
   }
 });
 
-export default router;
+export default messagesRouter;
