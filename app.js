@@ -7,7 +7,6 @@ import "dotenv/config";
 import productsRouter from './routes/productsRouter.js';
 import { usersRouter, adminRouter } from "./routes/usersRouter.js";
 import uploadRouter from './routes/uploadRouter.js';
-import messagesRouter from './routes/messagesRouter.js';
 
 const app = express();
 
@@ -19,7 +18,6 @@ app.use('/api/products', productsRouter);
 app.use("/api/users", usersRouter);
 app.use("/api/admin", adminRouter);
 app.use("/api", uploadRouter);
-app.use('/api/messages', messagesRouter);
 
 app.get('/api/exchange-rate', async (req, res, next) => {
   try {
