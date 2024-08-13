@@ -5,7 +5,7 @@ import { handleNotFound } from "../helpers/errorHandlers.js";
 import cloudinary from "../middlewares/cloudinaryConfig.js";
 
 export const getPublicProducts = ctrlWrapper(async (req, res) => {
-  const { page = 1, limit = 8 } = req.query;
+  const { page = 1, limit = 60 } = req.query;
 
   const options = {
     page: parseInt(page, 10),
@@ -18,7 +18,7 @@ export const getPublicProducts = ctrlWrapper(async (req, res) => {
 
 export const getProductsByCategory = ctrlWrapper(async (req, res) => {
   const { category } = req.query;
-  const { page = 1, limit = 8 } = req.query;
+  const { page = 1, limit = 60 } = req.query;
 
   if (!category) {
     return res.status(400).json({ message: "Category parameter is required" });
@@ -39,7 +39,7 @@ export const getProductsByCategory = ctrlWrapper(async (req, res) => {
 });
 
 export const getAllProducts = ctrlWrapper(async (req, res) => {
-  const { page = 1, limit = 8 } = req.query;
+  const { page = 1, limit = 60 } = req.query;
   const currentUser = req.user;
 
   const options = {
