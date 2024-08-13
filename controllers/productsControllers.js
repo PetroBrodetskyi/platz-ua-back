@@ -5,7 +5,7 @@ import { handleNotFound } from "../helpers/errorHandlers.js";
 import cloudinary from "../middlewares/cloudinaryConfig.js";
 
 export const getPublicProducts = ctrlWrapper(async (req, res) => {
-  const { page = 1, limit = 60 } = req.query;
+  const { page = 1, limit = 8 } = req.query;
 
   const options = {
     page: parseInt(page, 10),
