@@ -45,7 +45,7 @@ export const registerUser = ctrlWrapper(async (req, res) => {
     const verifyEmail = {
         to: email,
         subject: "Verify email",
-        html: `<a target="_blank" href="${BASE_URL}/api/users/verify/${verificationToken}">Перейдіть за цим посиланням, щоб підтвердити Ваш email</a>`
+        html: `<a target="_blank" href="${BASE_URL}/api/users/verify/${verificationToken}">Click verify email</a>`
     };
 
     await sendEmail(verifyEmail);
@@ -97,7 +97,7 @@ export const resendVerifyEmail = ctrlWrapper(async (req, res) => {
     const verifyEmail = {
         to: email,
         subject: "Verify email",
-        html: `<a target="_blank" href="${BASE_URL}/api/users/verify/${user.verificationToken}">Перейдіть за цим посиланням, щоб підтвердити Ваш email</a>`
+        html: `<a target="_blank" href="${BASE_URL}/api/users/verify/${user.verificationToken}">Click verify email</a>`
     };
 
     await sendEmail(verifyEmail);
