@@ -12,7 +12,7 @@ import cloudinary from "../middlewares/cloudinaryConfig.js";
 import { uploadAvatar } from "../middlewares/uploadConfig.js";
 import multer from 'multer';
 
-const { SECRET_KEY, BASE_URL } = process.env;
+const { SECRET_KEY, BASE_URL, FRONTEND_URL } = process.env;
 
 export const registerUser = ctrlWrapper(async (req, res) => {
     const { error } = registerUserSchema.validate(req.body);
@@ -45,7 +45,7 @@ export const registerUser = ctrlWrapper(async (req, res) => {
     const verifyEmail = {
         to: email,
         subject: "Verify email",
-        html: `<a target="_blank" href="${BASE_URL}/api/users/verify/${verificationToken}">Click verify email.</a>`
+        html: `<a target="_blank" href="${FRONTEND_URL}/api/users/verify/${verificationToken}">Click verify email.</a>`
     };
 
     await sendEmail(verifyEmail);
