@@ -12,7 +12,7 @@ import cloudinary from "../middlewares/cloudinaryConfig.js";
 import { uploadAvatar } from "../middlewares/uploadConfig.js";
 import multer from 'multer';
 
-const { SECRET_KEY, BASE_URL, FRONTEND_URL } = process.env;
+const { SECRET_KEY, BASE_URL } = process.env;
 
 export const registerUser = ctrlWrapper(async (req, res) => {
     const { error } = registerUserSchema.validate(req.body);
