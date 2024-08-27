@@ -69,19 +69,7 @@ export const verifyEmail = ctrlWrapper(async (req, res) => {
 
     await User.findByIdAndUpdate(user._id, { verify: true, verificationToken: null });
 
-    res.send(`
-    <div style="display: flex; justify-content: center; align-items: center; gap: 20px; height: 100vh; background-color: #f3f4f6;">
-        <div style="text-align: center; padding: 40px; border-radius: 4px; background-color: #fff; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
-            <h2 style="color: #2d3748; font-family: Arial, sans-serif;">Ваш e-mail підтверджено</h2>
-            <p style="color: #4a5568; font-family: Arial, sans-serif;">Виконується перенаправлення на сторінку авторизації...</p>
-        </div>
-    </div>
-    <script>
-        setTimeout(() => {
-            window.location.href = "${process.env.FRONTEND_URL}/login";
-        }, 3000);
-    </script>
-`);
+    res.redirect(`${process.env.FRONTEND_URL}/email-verified`);
 });
 
 
