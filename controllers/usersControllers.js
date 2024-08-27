@@ -45,7 +45,7 @@ export const registerUser = ctrlWrapper(async (req, res) => {
     const verifyEmail = {
         to: email,
         subject: "Verify email",
-        html: `<a target="_blank" href="${FRONTEND_URL}/api/users/verify/${verificationToken}">Click verify email.</a>`
+        html: `<a target="_blank" href="${BASE_URL}/api/users/verify/${verificationToken}">Click verify email.</a>`
     };
 
     await sendEmail(verifyEmail);
@@ -67,9 +67,17 @@ export const verifyEmail = ctrlWrapper(async (req, res) => {
         throw HttpError(404, "Email not found");
     }
 
-    await User.findByIdAndUpdate(user._id, {verify: true, verificationToken: null});
+    await User.findByIdAndUpdate(user._id, { verify: true, verificationToken: null });
 
-    res.redirect(`${process.env.FRONTEND_URL}/login`);
+    res.send(`
+        <h1>Email Verified</h1>
+        <p>You will be redirected to the login page shortly...</p>
+        <script>
+            setTimeout(() => {
+                window.location.href = "${process.env.FRONTEND_URL}/login";
+            }, 3000);
+        </script>
+    `);
 });
 
 
