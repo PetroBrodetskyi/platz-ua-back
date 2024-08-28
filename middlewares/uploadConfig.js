@@ -15,6 +15,12 @@ const cloudinaryStorage = new CloudinaryStorage({
   params: {
     folder: 'product_photos',
     public_id: (req, file) => `${Date.now()}_${Math.round(Math.random() * 1E9)}_${file.originalname}`,
+    transformation: [
+      {
+        quality: 'auto',
+        format: 'webp',
+      },
+    ],
   },
 });
 
@@ -48,7 +54,7 @@ const avatarStorage = multer.diskStorage({
 const avatarFileFilter = (req, file, callback) => {
   const extention = file.originalname.split('.').pop();
   if (extention === 'exe') {
-    return callback(HttpError(400, '.exe extention not allow'));
+    return callback(HttpError(400, '.exe extension not allowed'));
   }
   callback(null, true);
 };
