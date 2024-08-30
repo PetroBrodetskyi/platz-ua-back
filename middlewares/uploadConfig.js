@@ -40,33 +40,36 @@ const uploadProductPhoto = multer({
   },
 });
 
-const avatarStorage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, path.resolve('tmp'));
-  },
-  filename: (req, file, cb) => {
-    const uniquePrefix = `${Date.now()}_${Math.round(Math.random() * 1E9)}`;
-    const filename = `${uniquePrefix}_${file.originalname}`;
-    cb(null, filename);
+const avatarCloudinaryStorage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: {
+    folder: 'user_avatars',
+    public_id: (req, file) => `${Date.now()}_${Math.round(Math.random() * 1E9)}_${file.originalname}`,
+    transformation: [
+      {
+        width: 200,
+        height: 200,
+        crop: 'fill',
+        quality: 'auto',
+        format: 'webp',
+      },
+    ],
   },
 });
 
-const avatarFileFilter = (req, file, callback) => {
-  const extention = file.originalname.split('.').pop();
-  if (extention === 'exe') {
-    return callback(HttpError(400, '.exe extension not allowed'));
-  }
-  callback(null, true);
-};
-
-const avatarLimits = {
-  fileSize: 1024 * 1024 * 5, // 5 MB
-};
-
 const uploadAvatar = multer({
-  storage: avatarStorage,
-  limits: avatarLimits,
-  fileFilter: avatarFileFilter,
+  storage: avatarCloudinaryStorage,
+  fileFilter: (req, file, cb) => {
+    const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp', 'image/avif'];
+    if (allowedTypes.includes(file.mimetype)) {
+      cb(null, true);
+    } else {
+      cb(new Error('Invalid file type'), false);
+    }
+  },
+  limits: {
+    fileSize: 1024 * 1024 * 5, // 5 MB
+  },
 });
 
 export { uploadAvatar, uploadProductPhoto };

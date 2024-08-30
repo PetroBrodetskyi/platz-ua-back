@@ -204,20 +204,31 @@ export const getUserById = ctrlWrapper(async (req, res) => {
     res.json(user);
 });
 
-export const updateAvatar = async (req, res) => {
-    try {
-        const { user } = req;
-        const { avatar } = req.body;
+export const updateAvatar = ctrlWrapper(async (req, res) => {
+    uploadAvatar.single("avatar")(req, res, async (err) => {
+        if (err instanceof multer.MulterError) {
+            return res.status(400).json({ message: err.message });
+        } else if (err) {
+            return res.status(500).json({ message: "Server Error" });
+        }
 
-        user.avatarURL = avatar;
-        await user.save();
+        if (!req.file) {
+            return res.status(400).json({ message: "No file uploaded" });
+        }
 
-        res.json({ avatarURL: user.avatarURL });
-    } catch (error) {
-        console.error(error);
-        throw new HttpError(500, "Failed to update avatar");
-    }
-};
+        try {
+            const result = await cloudinary.uploader.upload(req.file.path);
+
+            req.user.avatarURL = result.secure_url;
+            await req.user.save();
+
+            res.json({ avatarURL: req.user.avatarURL });
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({ message: "Failed to update avatar" });
+        }
+    });
+});
 
 export const logoutUser = ctrlWrapper(async(req, res) => {
     const { _id } = req.user;
@@ -225,32 +236,6 @@ export const logoutUser = ctrlWrapper(async(req, res) => {
 
     res.status(204).json({ message: "No Content" });
 });
-
-export const uploadAvatarHandler = async (req, res) => {
-    try {
-        uploadAvatar.single("avatar")(req, res, async (err) => {
-            if (err instanceof multer.MulterError) {
-                return res.status(400).json({ message: err.message });
-            } else if (err) {
-                return res.status(500).json({ message: "Server Error" });
-            }
-
-            if (!req.file) {
-                return res.status(400).json({ message: "No file uploaded" });
-            }
-
-            const result = await cloudinary.uploader.upload(req.file.path);
-
-            req.user.avatarURL = result.secure_url;
-            await req.user.save();
-
-            return res.json({ avatarURL: req.user.avatarURL });
-        });
-    } catch (error) {
-        console.error(error);
-        return res.status(500).json({ message: "Failed to upload avatar" });
-    }
-};
 
 export const updateLikes = ctrlWrapper(async (req, res) => {
   const { userId } = req.body;

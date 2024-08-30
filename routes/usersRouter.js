@@ -1,7 +1,7 @@
 import express from "express";
 import validateBody from "../helpers/validateBody.js";
 import { registerUserSchema, emailSchema, loginUserSchema, updateUserSchema } from "../schemas/usersSchemas.js";
-import { registerUser, loginUser, getCurrentUser, logoutUser, uploadAvatarHandler, verifyEmail, resendVerifyEmail, getUserById, updateLikes, updateUserDetails } from "../controllers/usersControllers.js";
+import { registerUser, loginUser, getCurrentUser, logoutUser, updateAvatar, verifyEmail, resendVerifyEmail, getUserById, updateLikes, updateUserDetails } from "../controllers/usersControllers.js";
 import { authenticate } from "../middlewares/authenticate.js";
 import isAdmin from "../helpers/isAdmin.js";
 
@@ -20,7 +20,7 @@ usersRouter.get("/current", authenticate, getCurrentUser);
 
 usersRouter.patch("/current", authenticate, validateBody(updateUserSchema), updateUserDetails);
 
-usersRouter.patch("/avatars", authenticate, uploadAvatarHandler);
+usersRouter.patch("/avatars", authenticate, updateAvatar);
 
 usersRouter.post("/logout", authenticate, logoutUser);
 
