@@ -11,7 +11,7 @@ import uploadRouter from './routes/uploadRouter.js';
 const app = express();
 
 const corsOptions = {
-  origin: 'https://platz-ua-front.vercel.app',
+  origin: ['https://platz-ua-front.vercel.app', 'http://localhost:5173'],
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
   allowedHeaders: 'Content-Type, Authorization',
   credentials: true,

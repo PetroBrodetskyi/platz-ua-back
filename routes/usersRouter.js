@@ -3,6 +3,7 @@ import validateBody from "../helpers/validateBody.js";
 import { registerUserSchema, emailSchema, loginUserSchema, updateUserSchema } from "../schemas/usersSchemas.js";
 import { registerUser, loginUser, getCurrentUser, logoutUser, verifyEmail, resendVerifyEmail, getUserById, updateLikes, updateUserDetails } from "../controllers/usersControllers.js";
 import { authenticate } from "../middlewares/authenticate.js";
+import { uploadAvatar } from "../middlewares/uploadConfig.js";
 import isAdmin from "../helpers/isAdmin.js";
 
 const usersRouter = express.Router();
