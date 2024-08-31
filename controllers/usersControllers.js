@@ -161,12 +161,28 @@ export const getCurrentUser = ctrlWrapper(async (req, res) => {
     });
 });
 
+// export const updateUserDetails = async (req, res, next) => {
+//   try {
+//     const user = req.user._id;
+
+//     if (req.file) {
+//       const { path } = req.file;
+//       req.body.avatarURL = path;
+//     }
+
+//     const updatedUser = await User.findByIdAndUpdate(user, req.body, { new: true, runValidators: true });
+//     res.json(updatedUser);
+//   } catch (error) {
+//     next(error);
+//   }
+// };
+
 export const updateUserDetails = async (req, res, next) => {
   try {
     const user = await User.findById(req.user._id);
 
     if (!user) {
-      throw HttpError(404, "User not found");
+      return res.status(404).json({ message: "User not found" });
     }
 
     if (req.file) {
@@ -190,6 +206,7 @@ export const updateUserDetails = async (req, res, next) => {
     next(error);
   }
 };
+
 
 export const getUserById = ctrlWrapper(async (req, res) => {
     const { userId } = req.params;
