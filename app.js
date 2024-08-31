@@ -10,8 +10,15 @@ import uploadRouter from './routes/uploadRouter.js';
 
 const app = express();
 
+const corsOptions = {
+  origin: 'https://platz-ua-front.vercel.app',
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  allowedHeaders: 'Content-Type, Authorization',
+  credentials: true,
+};
+
 app.use(morgan("tiny"));
-app.use(cors());
+app.use(cors(corsOptions));
 app.use(express.json({ limit: '10mb' }));
 
 app.use('/api/products', productsRouter);
