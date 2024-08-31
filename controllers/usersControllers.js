@@ -163,14 +163,28 @@ export const getCurrentUser = ctrlWrapper(async (req, res) => {
 
 export const updateUserDetails = async (req, res, next) => {
   try {
-    const user = req.user._id;
+    const user = await User.findById(req.user._id);
 
-    if (req.file) {
-      const { path } = req.file;
-      req.body.avatarURL = path;
+    if (!user) {
+      throw HttpError(404, "User not found");
     }
 
-    const updatedUser = await User.findByIdAndUpdate(user, req.body, { new: true, runValidators: true });
+    if (req.file) {
+      const { path: newAvatarURL, filename: newAvatarPublicId } = req.file;
+
+      if (user.avatarPublicId) {
+        await cloudinary.uploader.destroy(user.avatarPublicId);
+      }
+
+      user.avatarURL = newAvatarURL;
+      user.avatarPublicId = newAvatarPublicId;
+    }
+
+    if (req.body.name) user.name = req.body.name;
+    if (req.body.phone) user.phone = req.body.phone;
+    if (req.body.email) user.email = req.body.email;
+
+    const updatedUser = await user.save();
     res.json(updatedUser);
   } catch (error) {
     next(error);
