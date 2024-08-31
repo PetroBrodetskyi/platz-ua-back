@@ -8,7 +8,7 @@ import jwt from "jsonwebtoken";
 import User from "../models/userModel.js";
 import gravatar from 'gravatar';
 import { nanoid } from "nanoid";
-import cloudinary from "../middlewares/cloudinaryConfig.js";
+
 
 const { SECRET_KEY, BASE_URL } = process.env;
 
@@ -163,13 +163,14 @@ export const getCurrentUser = ctrlWrapper(async (req, res) => {
 
 export const updateUserDetails = async (req, res, next) => {
   try {
-    const userId = req.user._id;
-    
-    if (!req.user.verificationToken) {
-      return res.status(400).json({ message: 'Verification token is not required for profile update' });
+    const user = req.user._id;
+
+    if (req.file) {
+      const { path } = req.file;
+      req.body.avatarURL = path;
     }
-    
-    const updatedUser = await User.findByIdAndUpdate(userId, req.body, { new: true, runValidators: true });
+
+    const updatedUser = await User.findByIdAndUpdate(user, req.body, { new: true, runValidators: true });
     res.json(updatedUser);
   } catch (error) {
     next(error);

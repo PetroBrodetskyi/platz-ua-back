@@ -20,6 +20,6 @@ export const updateUserSchema = Joi.object({
     name: Joi.string().optional(),
     phone: Joi.string().optional(),
     email: Joi.string().email().optional(),
-    avatarURL: Joi.string().uri().optional(),
+    avatar: Joi.any().optional(),
     likes: Joi.number().integer().min(0).optional()
 });
