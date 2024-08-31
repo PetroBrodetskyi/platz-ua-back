@@ -161,35 +161,13 @@ export const getCurrentUser = ctrlWrapper(async (req, res) => {
     });
 });
 
-// export const updateUserDetails = async (req, res, next) => {
-//   try {
-//     const user = req.user._id;
-
-//     if (req.file) {
-//       const { path } = req.file;
-//       req.body.avatarURL = path;
-//     }
-
-//     const updatedUser = await User.findByIdAndUpdate(user, req.body, { new: true, runValidators: true });
-//     res.json(updatedUser);
-//   } catch (error) {
-//     next(error);
-//   }
-// };
-
 export const updateUserDetails = async (req, res, next) => {
   try {
     const user = req.user._id;
 
     if (req.file) {
-      const { path: newAvatarURL, filename: newAvatarPublicId } = req.file;
-
-      if (user.avatarPublicId) {
-        await cloudinary.uploader.destroy(user.avatarPublicId);
-      }
-
-      user.avatarURL = newAvatarURL;
-      user.avatarPublicId = newAvatarPublicId;
+      const { path } = req.file;
+      req.body.avatarURL = path;
     }
 
     const updatedUser = await User.findByIdAndUpdate(user, req.body, { new: true, runValidators: true });
