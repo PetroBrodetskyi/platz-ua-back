@@ -179,11 +179,7 @@ export const getCurrentUser = ctrlWrapper(async (req, res) => {
 
 export const updateUserDetails = async (req, res, next) => {
   try {
-    const user = await User.findById(req.user._id);
-
-    if (!user) {
-      return res.status(404).json({ message: "User not found" });
-    }
+    const user = req.user._id;
 
     if (req.file) {
       const { path: newAvatarURL, filename: newAvatarPublicId } = req.file;
@@ -196,11 +192,7 @@ export const updateUserDetails = async (req, res, next) => {
       user.avatarPublicId = newAvatarPublicId;
     }
 
-    if (req.body.name) user.name = req.body.name;
-    if (req.body.phone) user.phone = req.body.phone;
-    if (req.body.email) user.email = req.body.email;
-
-    const updatedUser = await user.save();
+    const updatedUser = await User.findByIdAndUpdate(user, req.body, { new: true, runValidators: true });
     res.json(updatedUser);
   } catch (error) {
     next(error);
