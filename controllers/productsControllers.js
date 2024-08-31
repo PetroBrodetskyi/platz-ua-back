@@ -76,55 +76,13 @@ export const getOnePublicProduct = ctrlWrapper(async (req, res) => {
   res.json(onePublicProduct);
 });
 
-// export const deleteProduct = ctrlWrapper(async (req, res) => {
-//   const { id } = req.params;
-//   const { _id: owner } = req.user;
-//   const deletedProduct = await productsServices.deleteProduct(id, owner);
-//   if (!deletedProduct) {
-//     return handleNotFound(req, res);
-//   }
-//   res.json(deletedProduct);
-// });
-
 export const deleteProduct = ctrlWrapper(async (req, res) => {
   const { id } = req.params;
   const { _id: owner } = req.user;
-
-  // Отримати продукт з бази даних
-  const product = await productsServices.getOneProduct(id, owner);
-  if (!product) {
-    return handleNotFound(req, res);
-  }
-
-  // Визначити список publicId для видалення
-  const imagePublicIds = [
-    product.image1PublicId,
-    product.image2PublicId,
-    product.image3PublicId,
-    product.image4PublicId
-  ].filter(id => id);
-
-  console.log('Deleting images with public IDs:', imagePublicIds); // Додати це для перевірки
-
-  // Видалити зображення з Cloudinary
-  for (const publicId of imagePublicIds) {
-    try {
-      const result = await cloudinary.uploader.destroy(publicId);
-      console.log('Cloudinary destroy result:', result); // Додати це для перевірки
-      if (result.result !== 'ok') {
-        console.error('Failed to delete image from Cloudinary with public ID:', publicId);
-      }
-    } catch (error) {
-      console.error('Error deleting image from Cloudinary:', error);
-    }
-  }
-
-  // Видалити продукт з бази даних
   const deletedProduct = await productsServices.deleteProduct(id, owner);
   if (!deletedProduct) {
     return handleNotFound(req, res);
   }
-
   res.json(deletedProduct);
 });
 
