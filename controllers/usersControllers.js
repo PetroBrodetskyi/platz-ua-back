@@ -9,8 +9,6 @@ import User from "../models/userModel.js";
 import gravatar from 'gravatar';
 import { nanoid } from "nanoid";
 import cloudinary from "../middlewares/cloudinaryConfig.js";
-import { uploadAvatar } from "../middlewares/uploadConfig.js";
-import multer from 'multer';
 
 const { SECRET_KEY, BASE_URL } = process.env;
 
@@ -168,13 +166,12 @@ export const updateUserDetails = ctrlWrapper(async (req, res) => {
     if (error) {
         return res.status(400).json({ message: error.message });
     }
-    
+
     const { user } = req;
     const { name, phone, email } = req.body;
 
     if (req.file) {
-        const result = await cloudinary.uploader.upload(req.file.path);
-        user.avatarURL = result.secure_url;
+        user.avatarURL = req.file.path;
     }
 
     if (name) user.name = name;
@@ -202,32 +199,6 @@ export const getUserById = ctrlWrapper(async (req, res) => {
     }
 
     res.json(user);
-});
-
-export const updateAvatar = ctrlWrapper(async (req, res) => {
-    uploadAvatar.single("avatar")(req, res, async (err) => {
-        if (err instanceof multer.MulterError) {
-            return res.status(400).json({ message: err.message });
-        } else if (err) {
-            return res.status(500).json({ message: "Server Error" });
-        }
-
-        if (!req.file) {
-            return res.status(400).json({ message: "No file uploaded" });
-        }
-
-        try {
-            const result = await cloudinary.uploader.upload(req.file.path);
-
-            req.user.avatarURL = result.secure_url;
-            await req.user.save();
-
-            res.json({ avatarURL: req.user.avatarURL });
-        } catch (error) {
-            console.error(error);
-            res.status(500).json({ message: "Failed to update avatar" });
-        }
-    });
 });
 
 export const logoutUser = ctrlWrapper(async(req, res) => {
