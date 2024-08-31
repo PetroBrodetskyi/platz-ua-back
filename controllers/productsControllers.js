@@ -102,8 +102,19 @@ export const deleteProduct = ctrlWrapper(async (req, res) => {
     product.image4PublicId
   ].filter(id => id);
 
+  // Логирование для проверки
+  console.log('Attempting to delete images with public IDs:', imagePublicIds);
+
   for (const publicId of imagePublicIds) {
-    await cloudinary.uploader.destroy(publicId);
+    try {
+      const result = await cloudinary.uploader.destroy(publicId);
+      console.log(`Cloudinary delete result for ${publicId}:`, result);
+      if (result.result !== 'ok') {
+        console.error(`Failed to delete image with publicId ${publicId}`);
+      }
+    } catch (error) {
+      console.error(`Error deleting image with publicId ${publicId}:`, error);
+    }
   }
 
   const deletedProduct = await productsServices.deleteProduct(id, owner);
