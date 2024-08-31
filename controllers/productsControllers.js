@@ -76,13 +76,41 @@ export const getOnePublicProduct = ctrlWrapper(async (req, res) => {
   res.json(onePublicProduct);
 });
 
+// export const deleteProduct = ctrlWrapper(async (req, res) => {
+//   const { id } = req.params;
+//   const { _id: owner } = req.user;
+//   const deletedProduct = await productsServices.deleteProduct(id, owner);
+//   if (!deletedProduct) {
+//     return handleNotFound(req, res);
+//   }
+//   res.json(deletedProduct);
+// });
+
 export const deleteProduct = ctrlWrapper(async (req, res) => {
   const { id } = req.params;
   const { _id: owner } = req.user;
+
+  const product = await productsServices.getOneProduct(id, owner);
+  if (!product) {
+    return handleNotFound(req, res);
+  }
+
+  const imagePublicIds = [
+    product.image1PublicId,
+    product.image2PublicId,
+    product.image3PublicId,
+    product.image4PublicId
+  ].filter(id => id);
+
+  for (const publicId of imagePublicIds) {
+    await cloudinary.uploader.destroy(publicId);
+  }
+
   const deletedProduct = await productsServices.deleteProduct(id, owner);
   if (!deletedProduct) {
     return handleNotFound(req, res);
   }
+
   res.json(deletedProduct);
 });
 
