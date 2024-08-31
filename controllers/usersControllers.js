@@ -161,32 +161,20 @@ export const getCurrentUser = ctrlWrapper(async (req, res) => {
     });
 });
 
-export const updateUserDetails = ctrlWrapper(async (req, res) => {
-    const { error } = updateUserSchema.validate(req.body);
-    if (error) {
-        return res.status(400).json({ message: error.message });
+export const updateUserDetails = async (req, res, next) => {
+  try {
+    const userId = req.user._id;
+    
+    if (!req.user.verificationToken) {
+      return res.status(400).json({ message: 'Verification token is not required for profile update' });
     }
-
-    const { user } = req;
-    const { name, phone, email } = req.body;
-
-    if (req.file) {
-        user.avatarURL = req.file.path;
-    }
-
-    if (name) user.name = name;
-    if (phone) user.phone = phone;
-    if (email) user.email = email;
-
-    await user.save();
-
-    res.json({
-        name: user.name,
-        phone: user.phone,
-        email: user.email,
-        avatarURL: user.avatarURL
-    });
-});
+    
+    const updatedUser = await User.findByIdAndUpdate(userId, req.body, { new: true, runValidators: true });
+    res.json(updatedUser);
+  } catch (error) {
+    next(error);
+  }
+};
 
 export const getUserById = ctrlWrapper(async (req, res) => {
     const { userId } = req.params;
