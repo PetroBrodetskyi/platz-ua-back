@@ -3,9 +3,10 @@ import bcrypt from "bcrypt";
 import HttpError from "../helpers/HttpError.js";
 import ctrlWrapper from "../helpers/ctrlWrapper.js";
 import sendEmail from "../helpers/sendEmail.js";
-import { registerUserSchema, loginUserSchema, updateUserSchema } from "../schemas/usersSchemas.js";
+import { registerUserSchema, loginUserSchema } from "../schemas/usersSchemas.js";
 import jwt from "jsonwebtoken";
 import User from "../models/userModel.js";
+import { v2 as cloudinary } from 'cloudinary';
 import gravatar from 'gravatar';
 import { nanoid } from "nanoid";
 
@@ -165,9 +166,17 @@ export const updateUserDetails = async (req, res, next) => {
   try {
     const user = req.user._id;
 
+    const currentUser = await User.findById(user);
+
     if (req.file) {
       const { path } = req.file;
+
+      if (currentUser.avatarPublicId) {
+        await cloudinary.uploader.destroy(currentUser.avatarPublicId);
+      }
+
       req.body.avatarURL = path;
+      req.body.avatarPublicId = req.file.filename;
     }
 
     const updatedUser = await User.findByIdAndUpdate(user, req.body, { new: true, runValidators: true });
