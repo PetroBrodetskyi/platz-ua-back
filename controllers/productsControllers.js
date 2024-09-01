@@ -5,12 +5,21 @@ import { handleNotFound } from "../helpers/errorHandlers.js";
 import cloudinary from "../middlewares/cloudinaryConfig.js";
 
 export const getPublicProducts = ctrlWrapper(async (req, res) => {
-  const { page = 1, limit = 8 } = req.query;
+  const { page = 1, limit = 8, plz, city } = req.query;
 
   const options = {
     page: parseInt(page, 10),
-    limit: parseInt(limit, 10)
+    limit: parseInt(limit, 10),
+    filters: {},
   };
+
+  if (plz) {
+    options.filters.plz = plz;
+  }
+
+  if (city) {
+    options.filters.city = city;
+  }
 
   const products = await productsServices.getPublicProducts(options);
   res.json(products);
