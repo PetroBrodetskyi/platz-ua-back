@@ -14,7 +14,28 @@ export const updateProduct = (id, body, owner, options) => Product.findOneAndUpd
 
 export const updateStatusProduct = (id, body, owner, options) => Product.findOneAndUpdate({ _id: id, owner }, body, options);
 
-export const getPublicProducts = (options) => Product.find().sort({ createdAt: -1 }).skip((options.page - 1) * options.limit).limit(options.limit);
+export const getPublicProducts = async (options) => {
+  const { page, limit, filter } = options;
+
+  const query = {};
+
+  if (filter && filter.PLZ) {
+    query.PLZ = filter.PLZ;
+  }
+
+  if (filter && filter.city) {
+    query.city = filter.city;
+  }
+
+  const products = await Product.find(query)
+    .sort({ createdAt: -1 })
+    .skip((page - 1) * limit)
+    .limit(limit)
+    .exec();
+
+  return products;
+};
+
 
 export const getProductsByCategory = (options) => Product.find({ category: options.category }).skip((options.page - 1) * options.limit).limit(options.limit);
 
