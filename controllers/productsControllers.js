@@ -115,8 +115,8 @@ export const createProduct = ctrlWrapper(async (req, res) => {
     image4: uploadedUrls[3] || null,
     category,
     subcategory1,
-    subcategory2,
-    subcategory3,
+    subcategory2: subcategory2 || null,
+    subcategory3: subcategory3 || null,
     owner,
   };
 
