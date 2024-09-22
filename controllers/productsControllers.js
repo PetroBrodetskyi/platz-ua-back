@@ -13,13 +13,8 @@ export const getPublicProducts = ctrlWrapper(async (req, res) => {
     filter: {}
   };
 
-  if (PLZ) {
-    options.filter.PLZ = PLZ;
-  }
-
-  if (city) {
-    options.filter.city = city;
-  }
+  if (PLZ) options.filter.PLZ = PLZ.trim();
+  if (city) options.filter.city = city.trim();
 
   const products = await productsServices.getPublicProducts(options);
   res.json(products);
