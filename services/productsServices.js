@@ -17,7 +17,7 @@ export const updateStatusProduct = (id, body, owner, options) => Product.findOne
 export const getPublicProducts = async (options) => {
   const { page, limit, filter } = options;
 
-  const query = {};
+  let query = {};
 
   if (filter && filter.PLZ) {
     query.PLZ = filter.PLZ;
@@ -27,13 +27,15 @@ export const getPublicProducts = async (options) => {
     query.city = filter.city;
   }
 
+  const totalProductsCount = await Product.countDocuments(query);
+
   const products = await Product.find(query)
     .sort({ createdAt: -1 })
     .skip((page - 1) * limit)
     .limit(limit)
     .exec();
 
-  return products;
+  return { products, totalProductsCount };
 };
 
 
