@@ -120,6 +120,13 @@ export const createProduct = ctrlWrapper(async (req, res) => {
     owner,
   };
 
+  if (newProduct.subcategory2 === '') {
+    delete newProduct.subcategory2;
+  }
+  if (newProduct.subcategory3 === '') {
+    delete newProduct.subcategory3;
+  }
+
   const productForValidation = { ...newProduct };
   delete productForValidation.owner;
 
