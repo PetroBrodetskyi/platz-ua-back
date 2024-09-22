@@ -120,10 +120,10 @@ export const createProduct = ctrlWrapper(async (req, res) => {
     owner,
   };
 
-  if (newProduct.subcategory2 === '') {
+  if (newProduct.subcategory2 === null) {
     delete newProduct.subcategory2;
   }
-  if (newProduct.subcategory3 === '') {
+  if (newProduct.subcategory3 === null) {
     delete newProduct.subcategory3;
   }
 
