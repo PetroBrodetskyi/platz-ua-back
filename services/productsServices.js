@@ -17,10 +17,15 @@ export const updateStatusProduct = (id, body, owner, options) => Product.findOne
 export const getPublicProducts = async (options) => {
   const { page, limit, filter } = options;
 
-  const query = {
-    ...(filter.PLZ && { PLZ: filter.PLZ }),
-    ...(filter.city && { city: filter.city })
-  };
+  const query = {};
+
+  if (filter && filter.PLZ) {
+    query.PLZ = filter.PLZ;
+  }
+
+  if (filter && filter.city) {
+    query.city = filter.city;
+  }
 
   const products = await Product.find(query)
     .sort({ createdAt: -1 })
