@@ -51,6 +51,8 @@ productsRouter.patch("/:id/comments", authenticate, addComment);
 
 productsRouter.get("/:id/comments", getComments);
 
+productsRouter.delete("/:id/comments/:commentId", authenticate, deleteComment);
+
 productsRouter.patch("/:id/comments/:commentId/replies", authenticate, addReply);
 
 productsRouter.patch("/:id/replies/:replyId", authenticate, editReply);
