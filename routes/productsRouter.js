@@ -52,7 +52,7 @@ productsRouter.patch("/:id/comments", authenticate, addComment);
 
 productsRouter.get("/:id/comments", getComments);
 
-productsRouter.delete("/:productId/comments/:commentId", authenticate, deleteComment);
+productsRouter.delete("/:id/comments/:userId", authenticate, deleteComment);
 
 productsRouter.patch("/:id/comments/:commentId/replies", authenticate, addReply);
 
