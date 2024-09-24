@@ -74,7 +74,7 @@ export const deleteComment = async (id, userId) => {
     throw new Error('Product not found');
   }
 
-  const commentIndex = product.comments.findIndex((comment) => comment.userId.toString() === id);
+  const commentIndex = product.comments.findIndex((comment) => comment._id.toString() === userId);
   if (commentIndex === -1) {
     throw new Error('Comment not found');
   }
