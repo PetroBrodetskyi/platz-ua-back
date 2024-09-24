@@ -13,6 +13,7 @@ import {
   getOnePublicProduct,
   addComment,
   getComments,
+  deleteComment,
   addReply,
   editReply
 } from "../controllers/productsControllers.js";
