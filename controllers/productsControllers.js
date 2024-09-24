@@ -244,10 +244,10 @@ export const getComments = ctrlWrapper(async (req, res) => {
 });
 
 export const deleteComment = ctrlWrapper(async (req, res) => {
-  const { id: productId, commentId } = req.params;
+  const { id } = req.params;
   const userId = req.user._id;
 
-  const updatedProduct = await productsServices.deleteComment(productId, commentId, userId);
+  const updatedProduct = await productsServices.deleteComment( id, userId);
   res.status(200).json({ message: 'Comment deleted', updatedProduct });
 });
 
