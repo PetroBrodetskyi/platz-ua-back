@@ -67,13 +67,13 @@ export const getComments = async (id) => {
   return product.comments;
 };
 
-export const deleteComment = async (id, userId) => {
+export const deleteComment = async (id, commentId, userId) => {
   const product = await Product.findById(id);
   if (!product) {
     throw new Error('Product not found');
   }
 
-  const commentIndex = product.comments.findIndex((comment) => comment.user.toString() === userId);
+  const commentIndex = product.comments.findIndex((comment) => comment._id.toString() === commentId);
   if (commentIndex === -1) {
     throw new Error('Comment not found');
   }
