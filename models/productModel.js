@@ -18,7 +18,7 @@ const replySchema = new Schema({
     type: Date,
     default: Date.now,
   }
-}, { _id: false });
+}, { timestamps: { createdAt: true } });
 
 const commentSchema = new Schema({
   text: {
@@ -37,7 +37,7 @@ const commentSchema = new Schema({
     default: Date.now,
   },
   replies: [replySchema],
-}, { _id: false });
+}, { timestamps: { createdAt: true } });
 
 const productSchema = new Schema({
   name: {
