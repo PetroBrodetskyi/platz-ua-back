@@ -1,16 +1,20 @@
 import * as productsServices from "../services/productsServices.js";
 import ctrlWrapper from "../helpers/ctrlWrapper.js";
-import { updateProductSchema, createProductSchema, updateFavoriteSchema } from "../schemas/productsSchemas.js";
+import {
+  updateProductSchema,
+  createProductSchema,
+  updateFavoriteSchema,
+} from "../schemas/productsSchemas.js";
 import { handleNotFound } from "../helpers/errorHandlers.js";
 import cloudinary from "../middlewares/cloudinaryConfig.js";
 
 export const getPublicProducts = ctrlWrapper(async (req, res) => {
-  const { page = 1, limit = 8, PLZ, city } = req.query;
+  const { page = 1, limit = 4, PLZ, city } = req.query;
 
   const options = {
     page: parseInt(page, 10),
     limit: parseInt(limit, 10),
-    filter: {}
+    filter: {},
   };
 
   if (PLZ) options.filter.PLZ = PLZ.trim();
@@ -19,7 +23,6 @@ export const getPublicProducts = ctrlWrapper(async (req, res) => {
   const products = await productsServices.getPublicProducts(options);
   res.json(products);
 });
-
 
 export const getProductsByCategory = ctrlWrapper(async (req, res) => {
   const { category } = req.query;
@@ -44,15 +47,18 @@ export const getProductsByCategory = ctrlWrapper(async (req, res) => {
 });
 
 export const getAllProducts = ctrlWrapper(async (req, res) => {
-  const { page = 1, limit = 60 } = req.query;
+  const { page = 1, limit = 8 } = req.query;
   const currentUser = req.user;
 
   const options = {
     page: parseInt(page, 10),
-    limit: parseInt(limit, 10)
+    limit: parseInt(limit, 10),
   };
 
-  const products = await productsServices.getAllProducts(currentUser._id, options);
+  const products = await productsServices.getAllProducts(
+    currentUser._id,
+    options
+  );
   res.json(products);
 });
 
@@ -76,7 +82,7 @@ export const getOnePublicProduct = ctrlWrapper(async (req, res) => {
   const { id } = req.params;
   const onePublicProduct = await productsServices.getOnePublicProduct(id);
   if (!onePublicProduct) {
-    return res.status(404).json({ message: 'Product not found' });
+    return res.status(404).json({ message: "Product not found" });
   }
   res.json(onePublicProduct);
 });
@@ -92,10 +98,21 @@ export const deleteProduct = ctrlWrapper(async (req, res) => {
 });
 
 export const createProduct = ctrlWrapper(async (req, res) => {
-  const { name, price, description, condition, PLZ, city, category, subcategory1, subcategory2, subcategory3 } = req.body;
+  const {
+    name,
+    price,
+    description,
+    condition,
+    PLZ,
+    city,
+    category,
+    subcategory1,
+    subcategory2,
+    subcategory3,
+  } = req.body;
   const owner = req.user._id;
 
-  const uploadedUrls = req.files.map(file => file.path);
+  const uploadedUrls = req.files.map((file) => file.path);
 
   const newProduct = {
     name,
@@ -165,10 +182,17 @@ export const updateProduct = ctrlWrapper(async (req, res) => {
   }
 
   if (!Object.keys(body).length) {
-    return res.status(400).json({ message: "Body must have at least one field" });
+    return res
+      .status(400)
+      .json({ message: "Body must have at least one field" });
   }
 
-  const existingProduct = await productsServices.updateProduct(id, body, owner, options);
+  const existingProduct = await productsServices.updateProduct(
+    id,
+    body,
+    owner,
+    options
+  );
   if (!existingProduct) {
     return handleNotFound(req, res);
   }
@@ -194,10 +218,17 @@ export const updateUserProduct = ctrlWrapper(async (req, res) => {
   }
 
   if (!Object.keys(body).length) {
-    return res.status(400).json({ message: "Body must have at least one field" });
+    return res
+      .status(400)
+      .json({ message: "Body must have at least one field" });
   }
 
-  const updatedUserProduct = await productsServices.updateProduct(id, body, owner, options);
+  const updatedUserProduct = await productsServices.updateProduct(
+    id,
+    body,
+    owner,
+    options
+  );
 
   res.status(200).json(updatedUserProduct);
 });
@@ -214,7 +245,12 @@ export const updateStatusProduct = ctrlWrapper(async (req, res) => {
     return res.status(400).json({ message: error.message });
   }
 
-  const updatedFavorite = await productsServices.updateStatusProduct(id, { favorite }, owner, options);
+  const updatedFavorite = await productsServices.updateStatusProduct(
+    id,
+    { favorite },
+    owner,
+    options
+  );
   if (!updatedFavorite) {
     return handleNotFound(req, res);
   }
@@ -246,8 +282,12 @@ export const getComments = ctrlWrapper(async (req, res) => {
 export const deleteComment = ctrlWrapper(async (req, res) => {
   try {
     const { id, commentId } = req.params;
-    const updatedProduct = await productsServices.deleteComment(id, commentId, req.user.id);
-    res.status(200).json({ message: 'Comment deleted', updatedProduct });
+    const updatedProduct = await productsServices.deleteComment(
+      id,
+      commentId,
+      req.user.id
+    );
+    res.status(200).json({ message: "Comment deleted", updatedProduct });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: error.message });
@@ -264,7 +304,11 @@ export const addReply = ctrlWrapper(async (req, res) => {
     user: userId,
   };
 
-  const updatedProduct = await productsServices.addReply(id, commentId, newReply);
+  const updatedProduct = await productsServices.addReply(
+    id,
+    commentId,
+    newReply
+  );
   res.status(201).json(updatedProduct);
 });
 
@@ -273,6 +317,11 @@ export const editReply = ctrlWrapper(async (req, res) => {
   const { text } = req.body;
   const userId = req.user._id;
 
-  const updatedProduct = await productsServices.editReply(id, replyId, text, userId);
+  const updatedProduct = await productsServices.editReply(
+    id,
+    replyId,
+    text,
+    userId
+  );
   res.status(200).json(updatedProduct);
 });
