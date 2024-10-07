@@ -12,7 +12,7 @@ export const addToCart = ctrlWrapper(async (req, res) => {
     return handleNotFound(req, res);
   }
 
-  const user = await userServices.getUserById(userId);
+  const user = await userServices.findUser(userId);
   if (!user) {
     return res.status(404).json({ message: "User not found" });
   }
