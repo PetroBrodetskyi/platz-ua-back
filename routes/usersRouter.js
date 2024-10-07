@@ -18,7 +18,11 @@ import {
   updateLikes,
   updateUserDetails,
 } from "../controllers/usersControllers.js";
-import { addToCart, removeFromCart } from "../controllers/cartsControllers.js";
+import {
+  addToCart,
+  removeFromCart,
+  getProductsInCart,
+} from "../controllers/cartsControllers.js";
 import { authenticate } from "../middlewares/authenticate.js";
 import { uploadAvatar } from "../middlewares/uploadConfig.js";
 import isAdmin from "../helpers/isAdmin.js";
@@ -47,6 +51,7 @@ usersRouter.patch(
   addToCart
 );
 usersRouter.delete("/cart", authenticate, removeFromCart);
+usersRouter.get("/cart", authenticate, getProductsInCart);
 usersRouter.post("/logout", authenticate, logoutUser);
 usersRouter.get("/:userId", getUserById);
 usersRouter.patch("/:userId/likes", authenticate, updateLikes);

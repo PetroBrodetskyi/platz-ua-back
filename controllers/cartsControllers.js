@@ -54,3 +54,18 @@ export const removeFromCart = ctrlWrapper(async (req, res) => {
     return res.status(404).json({ message: "Product not found in cart" });
   }
 });
+
+export const getProductsInCart = ctrlWrapper(async (req, res) => {
+  const userId = req.user._id; // Отримати ID користувача
+
+  const user = await userServices.findUser(userId);
+  if (!user) {
+    return res.status(404).json({ message: "User not found" });
+  }
+
+  const productIds = user.cart.map((id) => id.toString()); // Отримати ID продуктів з кошика
+
+  const products = await productsServices.getProductsByIds(productIds);
+
+  res.status(200).json(products);
+});

@@ -10,3 +10,7 @@ export const updateUserById = async (userId, updateData) => {
     runValidators: false,
   });
 };
+
+export const getProductsByIds = async (ids) => {
+  return await Product.find({ userId: { $in: ids } });
+};
