@@ -18,8 +18,9 @@ export const addToCart = ctrlWrapper(async (req, res) => {
   }
 
   if (!user.cart.includes(productId.toString())) {
-    user.cart.push(productId.toString());
-    await user.save();
+    await userServices.updateUserById(userId, {
+      $addToSet: { cart: productId.toString() },
+    });
   }
 
   res.status(200).json({ message: "Product added to cart", cart: user.cart });
@@ -29,18 +30,20 @@ export const removeFromCart = ctrlWrapper(async (req, res) => {
   const { productId } = req.body;
   const userId = req.user._id;
 
-  const user = await userServices.getUserById(userId);
+  const user = await userServices.findUser(userId);
   if (!user) {
     return res.status(404).json({ message: "User not found" });
   }
 
   if (user.cart.includes(productId.toString())) {
-    user.cart = user.cart.filter((id) => id.toString() !== productId);
-    await user.save();
-    return res
-      .status(200)
-      .json({ message: "Product removed from cart", cart: user.cart });
+    await userServices.updateUserById(userId, {
+      $pull: { cart: productId.toString() },
+    });
   } else {
     return res.status(404).json({ message: "Product not found in cart" });
   }
+
+  res
+    .status(200)
+    .json({ message: "Product removed from cart", cart: user.cart });
 });

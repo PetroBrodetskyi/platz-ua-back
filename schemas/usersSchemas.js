@@ -22,5 +22,8 @@ export const updateUserSchema = Joi.object({
   email: Joi.string().email().optional(),
   avatar: Joi.any().optional(),
   likes: Joi.number().integer().min(0).optional(),
-  cart: Joi.array().items(Joi.string()).optional(),
+});
+
+export const addToCartSchema = Joi.object({
+  productId: Joi.string().required(),
 });

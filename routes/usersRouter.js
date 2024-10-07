@@ -5,6 +5,7 @@ import {
   emailSchema,
   loginUserSchema,
   updateUserSchema,
+  addToCartSchema,
 } from "../schemas/usersSchemas.js";
 import {
   registerUser,
@@ -39,8 +40,13 @@ usersRouter.patch(
   updateUserDetails
 );
 
-usersRouter.patch("/current/cart", authenticate, addToCart);
-usersRouter.delete("/current/cart", authenticate, removeFromCart);
+usersRouter.patch(
+  "/cart",
+  authenticate,
+  validateBody(addToCartSchema),
+  addToCart
+);
+usersRouter.delete("/cart", authenticate, removeFromCart);
 usersRouter.post("/logout", authenticate, logoutUser);
 usersRouter.get("/:userId", getUserById);
 usersRouter.patch("/:userId/likes", authenticate, updateLikes);
