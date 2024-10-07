@@ -23,7 +23,11 @@ export const addToCart = ctrlWrapper(async (req, res) => {
     });
   }
 
-  res.status(200).json({ message: "Product added to cart", cart: user.cart });
+  const updatedUser = await userServices.findUser(userId);
+
+  res
+    .status(200)
+    .json({ message: "Product added to cart", cart: updatedUser.cart });
 });
 
 export const removeFromCart = ctrlWrapper(async (req, res) => {
@@ -39,11 +43,14 @@ export const removeFromCart = ctrlWrapper(async (req, res) => {
     await userServices.updateUserById(userId, {
       $pull: { cart: productId.toString() },
     });
+
+    const updatedUser = await userServices.findUser(userId);
+
+    return res.status(200).json({
+      message: "Product removed from cart",
+      cart: updatedUser.cart,
+    });
   } else {
     return res.status(404).json({ message: "Product not found in cart" });
   }
-
-  res
-    .status(200)
-    .json({ message: "Product removed from cart", cart: user.cart });
 });
