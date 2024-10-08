@@ -50,7 +50,8 @@ usersRouter.patch(
   validateBody(addToCartSchema),
   addToCart
 );
-usersRouter.delete("/cart", authenticate, removeFromCart);
+// usersRouter.delete("/cart", authenticate, removeFromCart);
+usersRouter.delete("/cart/:productId", authenticate, removeFromCart);
 usersRouter.get("/cart", authenticate, getProductsInCart);
 usersRouter.post("/logout", authenticate, logoutUser);
 usersRouter.get("/:userId", getUserById);
