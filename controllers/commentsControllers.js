@@ -62,3 +62,12 @@ export const editReply = ctrlWrapper(async (req, res) => {
   );
   res.status(200).json(updatedProduct);
 });
+
+export const deleteReply = ctrlWrapper(async (req, res) => {
+  const { id: productId, commentId, replyId } = req.params;
+  const userId = req.user._id;
+
+  await productsServices.deleteReply(productId, commentId, replyId, userId);
+
+  res.status(200).json({ message: "Reply deleted" });
+});

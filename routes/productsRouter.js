@@ -19,6 +19,7 @@ import {
   deleteComment,
   addReply,
   editReply,
+  deleteReply,
 } from "../controllers/commentsControllers.js";
 
 import validateBody from "../helpers/validateBody.js";
@@ -93,5 +94,11 @@ productsRouter.patch(
 );
 
 productsRouter.patch("/:id/replies/:replyId", authenticate, editReply);
+
+productsRouter.delete(
+  "/:id/comments/:commentId/replies/:replyId",
+  authenticate,
+  deleteReply
+);
 
 export default productsRouter;

@@ -147,3 +147,31 @@ export const editReply = async (id, replyId, text, user) => {
   await product.save();
   return product;
 };
+
+export const deleteReply = async (productId, commentId, replyId, userId) => {
+  const product = await Product.findById(productId);
+  if (!product) {
+    throw new Error("Product not found");
+  }
+
+  const comment = product.comments.id(commentId);
+  if (!comment) {
+    throw new Error("Comment not found");
+  }
+
+  const replyIndex = comment.replies.findIndex(
+    (reply) => reply._id.toString() === replyId
+  );
+  if (replyIndex === -1) {
+    throw new Error("Reply not found");
+  }
+
+  if (comment.replies[replyIndex].user.toString() !== userId.toString()) {
+    throw new Error("Not authorized to delete this reply");
+  }
+
+  comment.replies.splice(replyIndex, 1);
+  await product.save();
+
+  return product;
+};
