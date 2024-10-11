@@ -22,6 +22,20 @@ export const getComments = ctrlWrapper(async (req, res) => {
   res.status(200).json(comments);
 });
 
+export const editComment = ctrlWrapper(async (req, res) => {
+  const { id, commentId } = req.params;
+  const { text } = req.body;
+  const userId = req.user._id;
+
+  const updatedComment = await productsServices.editComment(
+    id,
+    commentId,
+    text,
+    userId
+  );
+  res.status(200).json(updatedComment);
+});
+
 export const deleteComment = ctrlWrapper(async (req, res) => {
   try {
     const { id, commentId } = req.params;
@@ -50,17 +64,18 @@ export const addReply = async (req, res) => {
 };
 
 export const editReply = ctrlWrapper(async (req, res) => {
-  const { id, replyId } = req.params;
+  const { id, commentId, replyId } = req.params;
   const { text } = req.body;
   const userId = req.user._id;
 
-  const updatedProduct = await productsServices.editReply(
+  const updatedReply = await productsServices.editReply(
     id,
+    commentId,
     replyId,
     text,
     userId
   );
-  res.status(200).json(updatedProduct);
+  res.status(200).json(updatedReply);
 });
 
 export const deleteReply = ctrlWrapper(async (req, res) => {

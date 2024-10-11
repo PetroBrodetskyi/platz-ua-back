@@ -107,6 +107,26 @@ export const deleteComment = async (id, commentId, userId) => {
   return product;
 };
 
+export const editComment = async (id, commentId, text, user) => {
+  const product = await Product.findById(id);
+  if (!product) {
+    throw new Error("Product not found");
+  }
+
+  const comment = product.comments.id(commentId);
+  if (!comment) {
+    throw new Error("Comment not found");
+  }
+
+  if (comment.user.toString() !== user.toString()) {
+    throw new Error("Unauthorized action");
+  }
+
+  comment.text = text;
+  await product.save();
+  return comment;
+};
+
 export const addReply = async (id, commentId, replyData) => {
   const product = await Product.findById(id);
   if (!product) {
@@ -123,15 +143,15 @@ export const addReply = async (id, commentId, replyData) => {
   return product;
 };
 
-export const editReply = async (id, replyId, text, user) => {
+export const editReply = async (id, commentId, replyId, text, user) => {
   const product = await Product.findById(id);
   if (!product) {
     throw new Error("Product not found");
   }
 
-  const comment = product.comments.find((c) => c.replies.id(replyId));
+  const comment = product.comments.id(commentId);
   if (!comment) {
-    throw new Error("Comment or Reply not found");
+    throw new Error("Comment not found");
   }
 
   const reply = comment.replies.id(replyId);
@@ -145,7 +165,7 @@ export const editReply = async (id, replyId, text, user) => {
 
   reply.text = text;
   await product.save();
-  return product;
+  return reply;
 };
 
 export const deleteReply = async (productId, commentId, replyId, userId) => {

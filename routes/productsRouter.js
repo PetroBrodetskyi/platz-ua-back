@@ -17,6 +17,7 @@ import {
   addComment,
   getComments,
   deleteComment,
+  editComment,
   addReply,
   editReply,
   deleteReply,
@@ -83,6 +84,8 @@ productsRouter.patch(
 
 productsRouter.patch("/:id/comments", authenticate, addComment);
 
+productsRouter.patch("/:id/comments/:commentId", authenticate, editComment);
+
 productsRouter.get("/:id/comments", getComments);
 
 productsRouter.delete("/:id/comments/:commentId", authenticate, deleteComment);
@@ -93,7 +96,11 @@ productsRouter.patch(
   addReply
 );
 
-productsRouter.patch("/:id/replies/:replyId", authenticate, editReply);
+productsRouter.patch(
+  "/:id/comments/:commentId/replies/:replyId",
+  authenticate,
+  editReply
+);
 
 productsRouter.delete(
   "/:id/comments/:commentId/replies/:replyId",
