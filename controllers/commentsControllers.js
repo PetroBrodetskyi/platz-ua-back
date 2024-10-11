@@ -37,23 +37,17 @@ export const deleteComment = ctrlWrapper(async (req, res) => {
   }
 });
 
-export const addReply = ctrlWrapper(async (req, res) => {
+export const addReply = async (req, res) => {
   const { id, commentId } = req.params;
-  const { text } = req.body;
-  const userId = req.user._id;
+  const replyData = req.body;
 
-  const newReply = {
-    text,
-    user: userId,
-  };
-
-  const updatedProduct = await productsServices.addReply(
-    id,
-    commentId,
-    newReply
-  );
-  res.status(201).json(updatedProduct);
-});
+  try {
+    const product = await productsServices.addReply(id, commentId, replyData);
+    return res.status(200).json(product);
+  } catch (error) {
+    return res.status(404).json({ message: error.message });
+  }
+};
 
 export const editReply = ctrlWrapper(async (req, res) => {
   const { id, replyId } = req.params;
