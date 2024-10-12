@@ -63,6 +63,7 @@ export const registerUser = ctrlWrapper(async (req, res) => {
       email: newUser.email,
       subscription: newUser.subscription,
       avatar: newUser.avatarURL,
+      verify: newUser.verify,
     },
   });
 });
