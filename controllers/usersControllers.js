@@ -21,7 +21,9 @@ export const registerUser = ctrlWrapper(async (req, res) => {
     res.status(400).json({ message: error.message });
     return;
   }
-  const { email, password, name, phone } = req.body;
+
+  const { firstName, lastName, email, password, phone } = req.body;
+  const fullName = `${firstName} ${lastName}`;
 
   const avatarURL = gravatar.url(email, {
     protocol: "https",
@@ -39,7 +41,7 @@ export const registerUser = ctrlWrapper(async (req, res) => {
   const verificationToken = nanoid();
 
   const newUser = await userServices.signup({
-    name,
+    name: fullName,
     email,
     phone,
     password: hashedPassword,

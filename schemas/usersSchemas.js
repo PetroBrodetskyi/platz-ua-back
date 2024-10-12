@@ -1,10 +1,12 @@
 import Joi from "joi";
 
 export const registerUserSchema = Joi.object({
-  name: Joi.string().required(),
+  firstName: Joi.string().required(),
+  lastName: Joi.string().required(),
   phone: Joi.string().required(),
   email: Joi.string().email().required(),
   password: Joi.string().min(6).required(),
+  confirmPassword: Joi.any().valid(Joi.ref("password")).required(),
 });
 
 export const emailSchema = Joi.object({
