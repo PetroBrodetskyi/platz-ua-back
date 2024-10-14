@@ -12,7 +12,7 @@ const app = express();
 
 const corsOptions = {
   origin: [
-    "http://platzua.com",
+    "https://platzua.com",
     "https://platz-ua-front.vercel.app",
     "http://localhost:5173",
   ],
