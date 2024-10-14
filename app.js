@@ -4,32 +4,38 @@ import cors from "cors";
 import axios from "axios";
 import "dotenv/config";
 
-import productsRouter from './routes/productsRouter.js';
+import productsRouter from "./routes/productsRouter.js";
 import { usersRouter, adminRouter } from "./routes/usersRouter.js";
-import uploadRouter from './routes/uploadRouter.js';
+import uploadRouter from "./routes/uploadRouter.js";
 
 const app = express();
 
 const corsOptions = {
-  origin: ['https://platz-ua-front.vercel.app', 'http://localhost:5173'],
-  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-  allowedHeaders: 'Content-Type, Authorization',
+  origin: [
+    "http://platzua.com",
+    "https://platz-ua-front.vercel.app",
+    "http://localhost:5173",
+  ],
+  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+  allowedHeaders: "Content-Type, Authorization",
   credentials: true,
 };
 
 app.use(morgan("tiny"));
 app.use(cors(corsOptions));
-app.use(express.json({ limit: '10mb' }));
+app.use(express.json({ limit: "10mb" }));
 
-app.use('/api/products', productsRouter);
+app.use("/api/products", productsRouter);
 app.use("/api/users", usersRouter);
 app.use("/api/admin", adminRouter);
 app.use("/api", uploadRouter);
 
-app.get('/api/exchange-rate', async (req, res, next) => {
+app.get("/api/exchange-rate", async (req, res, next) => {
   try {
-    const response = await axios.get('https://api.privatbank.ua/p24api/pubinfo?json&exchange&coursid=5');
-    const euroRate = response.data.find(rate => rate.ccy === 'EUR');
+    const response = await axios.get(
+      "https://api.privatbank.ua/p24api/pubinfo?json&exchange&coursid=5"
+    );
+    const euroRate = response.data.find((rate) => rate.ccy === "EUR");
     res.json(euroRate);
   } catch (error) {
     next(error);
