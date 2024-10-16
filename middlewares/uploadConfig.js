@@ -16,7 +16,7 @@ const cloudinaryStorage = new CloudinaryStorage({
     public_id: (req, file) =>
       `${Date.now()}_${Math.round(Math.random() * 1e9)}_${
         path.parse(file.originalname).name
-      }`,
+      }.webp`,
     transformation: [
       {
         width: 1000,
