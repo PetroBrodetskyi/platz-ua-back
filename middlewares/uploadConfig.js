@@ -1,6 +1,6 @@
-import multer from 'multer';
-import { CloudinaryStorage } from 'multer-storage-cloudinary';
-import { v2 as cloudinary } from 'cloudinary';
+import multer from "multer";
+import { CloudinaryStorage } from "multer-storage-cloudinary";
+import { v2 as cloudinary } from "cloudinary";
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -11,12 +11,16 @@ cloudinary.config({
 const cloudinaryStorage = new CloudinaryStorage({
   cloudinary: cloudinary,
   params: {
-    folder: 'product_photos',
-    public_id: (req, file) => `${Date.now()}_${Math.round(Math.random() * 1E9)}_${file.originalname}`,
+    folder: "product_photos",
+    public_id: (req, file) =>
+      `${Date.now()}_${Math.round(Math.random() * 1e9)}_${file.originalname}`,
     transformation: [
       {
-        quality: 'auto',
-        format: 'webp',
+        width: 1000,
+        height: 1000,
+        crop: "limit",
+        quality: "auto",
+        format: "webp",
       },
     ],
   },
@@ -25,11 +29,17 @@ const cloudinaryStorage = new CloudinaryStorage({
 const uploadProductPhoto = multer({
   storage: cloudinaryStorage,
   fileFilter: (req, file, cb) => {
-    const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp', 'image/avif'];
+    const allowedTypes = [
+      "image/jpeg",
+      "image/jpg",
+      "image/png",
+      "image/webp",
+      "image/avif",
+    ];
     if (allowedTypes.includes(file.mimetype)) {
       cb(null, true);
     } else {
-      cb(new Error('Invalid file type'), false);
+      cb(new Error("Invalid file type"), false);
     }
   },
   limits: {
@@ -41,15 +51,16 @@ const uploadProductPhoto = multer({
 const avatarCloudinaryStorage = new CloudinaryStorage({
   cloudinary: cloudinary,
   params: {
-    folder: 'user_avatars',
-    public_id: (req, file) => `${Date.now()}_${Math.round(Math.random() * 1E9)}_${file.originalname}`,
+    folder: "user_avatars",
+    public_id: (req, file) =>
+      `${Date.now()}_${Math.round(Math.random() * 1e9)}_${file.originalname}`,
     transformation: [
       {
         width: 200,
         height: 200,
-        crop: 'fill',
-        quality: 'auto',
-        format: 'webp',
+        crop: "fill",
+        quality: "auto",
+        format: "webp",
       },
     ],
   },
@@ -58,11 +69,17 @@ const avatarCloudinaryStorage = new CloudinaryStorage({
 const uploadAvatar = multer({
   storage: avatarCloudinaryStorage,
   fileFilter: (req, file, cb) => {
-    const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp', 'image/avif'];
+    const allowedTypes = [
+      "image/jpeg",
+      "image/jpg",
+      "image/png",
+      "image/webp",
+      "image/avif",
+    ];
     if (allowedTypes.includes(file.mimetype)) {
       cb(null, true);
     } else {
-      cb(new Error('Invalid file type'), false);
+      cb(new Error("Invalid file type"), false);
     }
   },
   limits: {
