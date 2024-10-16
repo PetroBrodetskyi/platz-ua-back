@@ -56,14 +56,16 @@ const avatarCloudinaryStorage = new CloudinaryStorage({
   params: {
     folder: "user_avatars",
     public_id: (req, file) =>
-      `${Date.now()}_${Math.round(Math.random() * 1e9)}_${file.originalname}`,
+      `${Date.now()}_${Math.round(Math.random() * 1e9)}_${
+        path.parse(file.originalname).name
+      }`,
     transformation: [
       {
         width: 200,
         height: 200,
         crop: "fill",
         quality: "auto",
-        format: "webp",
+        fetch_format: "webp",
       },
     ],
   },
