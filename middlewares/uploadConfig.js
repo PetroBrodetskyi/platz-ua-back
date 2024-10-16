@@ -1,6 +1,7 @@
 import multer from "multer";
 import { CloudinaryStorage } from "multer-storage-cloudinary";
 import { v2 as cloudinary } from "cloudinary";
+import path from "path";
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -13,7 +14,9 @@ const cloudinaryStorage = new CloudinaryStorage({
   params: {
     folder: "product_photos",
     public_id: (req, file) =>
-      `${Date.now()}_${Math.round(Math.random() * 1e9)}_${file.originalname}`,
+      `${Date.now()}_${Math.round(Math.random() * 1e9)}_${
+        path.parse(file.originalname).name
+      }`,
     transformation: [
       {
         width: 1000,
