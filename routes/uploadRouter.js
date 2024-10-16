@@ -1,6 +1,6 @@
-import express from 'express';
-import { uploadProductPhoto } from '../middlewares/uploadConfig.js';
-import ctrlWrapper from '../helpers/ctrlWrapper.js';
+import express from "express";
+import { uploadProductPhoto } from "../middlewares/uploadConfig.js";
+import ctrlWrapper from "../helpers/ctrlWrapper.js";
 
 const router = express.Router();
 
@@ -13,6 +13,6 @@ const uploadImages = ctrlWrapper(async (req, res) => {
   }
 });
 
-router.post('/upload', uploadProductPhoto.array('image', 4), uploadImages);
+router.post("/upload", uploadProductPhoto.array("image", 4), uploadImages);
 
 export default router;
