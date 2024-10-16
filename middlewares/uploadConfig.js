@@ -13,13 +13,17 @@ const cloudinaryStorage = new CloudinaryStorage({
   cloudinary: cloudinary,
   params: {
     folder: "product_photos",
+    public_id: (req, file) =>
+      `${Date.now()}_${Math.round(Math.random() * 1e9)}_${
+        path.parse(file.originalname).name
+      }`,
     transformation: [
       {
         width: 1000,
         height: 1000,
         crop: "limit",
         quality: "auto",
-        format: "webp",
+        fetch_format: "webp",
       },
     ],
   },
