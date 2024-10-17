@@ -9,11 +9,11 @@ import { handleNotFound } from "../helpers/errorHandlers.js";
 import cloudinary from "../middlewares/cloudinaryConfig.js";
 
 export const getPublicProducts = ctrlWrapper(async (req, res) => {
-  const { page = 1, limit = 6, PLZ, city } = req.query;
+  const { page = 1, limit = 6, PLZ, city, all } = req.query;
 
   const options = {
     page: parseInt(page, 10),
-    limit: parseInt(limit, 10),
+    limit: all ? Infinity : parseInt(limit, 10),
     filter: {},
   };
 
@@ -257,5 +257,3 @@ export const updateStatusProduct = ctrlWrapper(async (req, res) => {
 
   res.status(200).json(updatedFavorite);
 });
-
-
