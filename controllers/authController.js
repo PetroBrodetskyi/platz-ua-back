@@ -1,11 +1,11 @@
 import * as userServices from "../services/usersServices.js";
 import HttpError from "../helpers/HttpError.js";
 import ctrlWrapper from "../helpers/ctrlWrapper.js";
-import { googleRegisterSchema } from "../schemas/usersSchemas.js";
+import { googleAuthSchema } from "../schemas/usersSchemas.js";
 import jwt from "jsonwebtoken";
 
 export const googleAuth = ctrlWrapper(async (req, res) => {
-  const { error } = googleRegisterSchema.validate(req.body);
+  const { error } = googleAuthSchema.validate(req.body);
   if (error) {
     throw HttpError(400, error.message);
   }
