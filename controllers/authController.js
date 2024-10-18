@@ -20,7 +20,6 @@ export const googleAuth = ctrlWrapper(async (req, res) => {
       name,
       email,
       avatarURL,
-      likes: 0,
     });
   }
 
