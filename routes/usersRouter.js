@@ -1,6 +1,7 @@
 import express from "express";
 import validateBody from "../helpers/validateBody.js";
 import {
+  googleAuthSchema,
   registerUserSchema,
   emailSchema,
   loginUserSchema,
