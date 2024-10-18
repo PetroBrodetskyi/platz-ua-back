@@ -18,7 +18,16 @@ async function verify(token) {
 export const googleAuth = ctrlWrapper(async (req, res) => {
   const { token } = req.body;
 
-  const payload = await verify(token);
+  if (!token) {
+    throw HttpError(400, '"token" is required');
+  }
+
+  let payload;
+  try {
+    payload = await verify(token);
+  } catch (error) {
+    throw HttpError(401, "Invalid token");
+  }
 
   const { name, email, picture } = payload;
 
