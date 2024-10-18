@@ -23,6 +23,7 @@ import {
   removeFromCart,
   getProductsInCart,
 } from "../controllers/cartsControllers.js";
+import { googleAuth } from "../controllers/authController.js";
 import { authenticate } from "../middlewares/authenticate.js";
 import { uploadAvatar } from "../middlewares/uploadConfig.js";
 import isAdmin from "../helpers/isAdmin.js";
@@ -30,6 +31,7 @@ import isAdmin from "../helpers/isAdmin.js";
 const usersRouter = express.Router();
 const adminRouter = express.Router();
 
+usersRouter.post("/google-auth", validateBody(googleAuthSchema), googleAuth);
 usersRouter.post("/register", validateBody(registerUserSchema), registerUser);
 usersRouter.get("/verify/:verificationToken", verifyEmail);
 usersRouter.post("/verify", validateBody(emailSchema), resendVerifyEmail);
