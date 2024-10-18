@@ -1,7 +1,6 @@
 import express from "express";
 import validateBody from "../helpers/validateBody.js";
 import {
-  googleAuthSchema,
   registerUserSchema,
   emailSchema,
   loginUserSchema,
@@ -32,7 +31,7 @@ import isAdmin from "../helpers/isAdmin.js";
 const usersRouter = express.Router();
 const adminRouter = express.Router();
 
-usersRouter.post("/google-auth", validateBody(googleAuthSchema), googleAuth);
+usersRouter.post("/google-auth", googleAuth);
 usersRouter.post("/register", validateBody(registerUserSchema), registerUser);
 usersRouter.get("/verify/:verificationToken", verifyEmail);
 usersRouter.post("/verify", validateBody(emailSchema), resendVerifyEmail);

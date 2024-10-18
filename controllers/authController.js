@@ -38,6 +38,11 @@ export const googleAuth = ctrlWrapper(async (req, res) => {
       name,
       email,
       avatarURL: picture,
+      password: null,
+      phone: null,
+      verificationToken: null,
+      likes: 0,
+      verify: true,
     });
   }
 

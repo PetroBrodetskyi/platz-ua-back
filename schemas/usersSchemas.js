@@ -1,9 +1,5 @@
 import Joi from "joi";
 
-export const googleAuthSchema = Joi.object({
-  token: Joi.string().required(),
-});
-
 export const registerUserSchema = Joi.object({
   firstName: Joi.string().required(),
   lastName: Joi.string().required(),
