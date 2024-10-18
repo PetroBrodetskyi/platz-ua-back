@@ -6,6 +6,7 @@ import jwt from "jsonwebtoken";
 
 export const googleAuth = ctrlWrapper(async (req, res) => {
   const { error } = googleAuthSchema.validate(req.body);
+  console.log("Received data:", req.body);
   if (error) {
     throw HttpError(400, error.message);
   }
