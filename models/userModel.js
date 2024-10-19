@@ -54,6 +54,41 @@ const userSchema = new mongoose.Schema(
       default: 0,
     },
     cart: [{ type: mongoose.Schema.Types.ObjectId, ref: "Product" }],
+    plz: {
+      type: String,
+      default: null,
+    },
+    city: {
+      type: String,
+      default: null,
+    },
+    facebook: {
+      type: String,
+      default: null,
+    },
+    instagram: {
+      type: String,
+      default: null,
+    },
+    linkedin: {
+      type: String,
+      default: null,
+    },
+    telegram: {
+      type: String,
+      default: null,
+    },
+    site: {
+      type: String,
+      default: null,
+    },
+    about: {
+      type: String,
+      default: null,
+    },
+    favoriteProducts: [
+      { type: mongoose.Schema.Types.ObjectId, ref: "Product" },
+    ],
   },
   { versionKey: false, timestamps: { createdAt: true } }
 );

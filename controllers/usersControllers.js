@@ -162,18 +162,44 @@ export const loginUser = ctrlWrapper(async (req, res) => {
 });
 
 export const getCurrentUser = ctrlWrapper(async (req, res) => {
-  const { _id, name, email, phone, subscription, avatarURL, likes, verify } =
-    req.user;
-
-  res.json({
+  const {
     _id,
     name,
     email,
+    password,
     phone,
     subscription,
     avatarURL,
     likes,
     verify,
+    plz,
+    city,
+    facebook,
+    instagram,
+    linkedin,
+    telegram,
+    site,
+    about,
+  } = req.user;
+
+  res.json({
+    _id,
+    name,
+    email,
+    password,
+    phone,
+    subscription,
+    avatarURL,
+    likes,
+    verify,
+    plz,
+    city,
+    facebook,
+    instagram,
+    linkedin,
+    telegram,
+    site,
+    about,
   });
 });
 

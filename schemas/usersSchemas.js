@@ -30,6 +30,7 @@ export const updateUserSchema = Joi.object({
   instagram: Joi.string().optional(),
   linkedin: Joi.string().optional(),
   telegram: Joi.string().optional(),
+  site: Joi.string().optional(),
   about: Joi.string().optional(),
   password: Joi.string().min(6).optional(),
   newPassword: Joi.string().min(6).optional(),
