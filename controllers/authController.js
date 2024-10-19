@@ -38,7 +38,7 @@ export const googleAuth = ctrlWrapper(async (req, res) => {
       name,
       email,
       avatarURL: picture,
-      password: "google-auth",
+      password: null,
       phone: null,
       verificationToken: null,
       likes: 0,
