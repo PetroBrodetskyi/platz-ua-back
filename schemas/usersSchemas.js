@@ -24,6 +24,19 @@ export const updateUserSchema = Joi.object({
   email: Joi.string().email().optional(),
   avatar: Joi.any().optional(),
   likes: Joi.number().integer().min(0).optional(),
+  plz: Joi.string().optional(),
+  city: Joi.string().optional(),
+  facebook: Joi.string().optional(),
+  instagram: Joi.string().optional(),
+  linkedin: Joi.string().optional(),
+  telegram: Joi.string().optional(),
+  about: Joi.string().optional(),
+  password: Joi.string().min(6).optional(),
+  newPassword: Joi.string().min(6).optional(),
+  confirmPassword: Joi.any().valid(Joi.ref("newPassword")).when("newPassword", {
+    is: Joi.exist(),
+    then: Joi.required(),
+  }),
 });
 
 export const addToCartSchema = Joi.object({

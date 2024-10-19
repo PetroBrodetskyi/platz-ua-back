@@ -182,6 +182,19 @@ export const updateUserDetails = async (req, res, next) => {
     const user = req.user._id;
     const currentUser = await User.findById(user);
 
+    if (req.body.newPassword) {
+      const isPasswordMatch = await bcrypt.compare(
+        req.body.password,
+        currentUser.password
+      );
+      if (!isPasswordMatch) {
+        throw HttpError(401, "Current password is incorrect");
+      }
+      req.body.password = await bcrypt.hash(req.body.newPassword, 10);
+      delete req.body.newPassword;
+      delete req.body.confirmPassword;
+    }
+
     if (req.file) {
       const { path } = req.file;
 
@@ -197,6 +210,7 @@ export const updateUserDetails = async (req, res, next) => {
       new: true,
       runValidators: true,
     });
+
     res.json(updatedUser);
   } catch (error) {
     next(error);
