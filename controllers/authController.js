@@ -58,7 +58,6 @@ export const googleAuth = ctrlWrapper(async (req, res) => {
       name: user.name,
       email: user.email,
       avatar: user.avatarURL,
-      password: user.password,
     },
   });
 });

@@ -166,7 +166,6 @@ export const getCurrentUser = ctrlWrapper(async (req, res) => {
     _id,
     name,
     email,
-    password,
     phone,
     subscription,
     avatarURL,
@@ -186,7 +185,6 @@ export const getCurrentUser = ctrlWrapper(async (req, res) => {
     _id,
     name,
     email,
-    password,
     phone,
     subscription,
     avatarURL,
@@ -246,14 +244,18 @@ export const updateUserDetails = async (req, res, next) => {
 export const getUserById = ctrlWrapper(async (req, res) => {
   const { userId } = req.params;
   const user = await User.findById(userId)
-    .select("-password -__v")
+    .select("-__v")
     .populate("likedUsers", "avatarURL");
 
   if (!user) {
     throw HttpError(404, "User not found");
   }
 
-  res.json(user);
+  const hasPassword = !!user.password;
+  const userWithoutPassword = user.toObject();
+  delete userWithoutPassword.password;
+
+  res.json({ ...userWithoutPassword, hasPassword });
 });
 
 export const logoutUser = ctrlWrapper(async (req, res) => {
