@@ -22,11 +22,6 @@ const corsOptions = {
   credentials: true,
 };
 
-app.use((req, res, next) => {
-  res.setHeader("Cross-Origin-Opener-Policy", "unsafe-none");
-  next();
-});
-
 app.use(morgan("tiny"));
 app.use(cors(corsOptions));
 app.use(express.json({ limit: "10mb" }));
