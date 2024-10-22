@@ -8,6 +8,22 @@ import {
 import { handleNotFound } from "../helpers/errorHandlers.js";
 import cloudinary from "../middlewares/cloudinaryConfig.js";
 
+// export const getPublicProducts = ctrlWrapper(async (req, res) => {
+//   const { page = 1, limit = 6, PLZ, city, all } = req.query;
+
+//   const options = {
+//     page: parseInt(page, 10),
+//     limit: all ? Infinity : parseInt(limit, 10),
+//     filter: {},
+//   };
+
+//   if (PLZ) options.filter.PLZ = PLZ.trim();
+//   if (city) options.filter.city = city.trim();
+
+//   const products = await productsServices.getPublicProducts(options);
+//   res.json(products);
+// });
+
 export const getPublicProducts = ctrlWrapper(async (req, res) => {
   const { page = 1, limit = 6, PLZ, city, all } = req.query;
 
@@ -20,8 +36,19 @@ export const getPublicProducts = ctrlWrapper(async (req, res) => {
   if (PLZ) options.filter.PLZ = PLZ.trim();
   if (city) options.filter.city = city.trim();
 
+  const totalProducts = await productsServices.countPublicProducts(
+    options.filter
+  );
+
   const products = await productsServices.getPublicProducts(options);
-  res.json(products);
+
+  if (products.length === 0) {
+    return res
+      .status(404)
+      .json({ message: "Продуктів за цією локацією не знайдено" });
+  }
+
+  res.json({ totalProducts, products });
 });
 
 export const getProductsByCategory = ctrlWrapper(async (req, res) => {

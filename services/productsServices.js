@@ -42,6 +42,20 @@ export const getPublicProducts = async (options) => {
   return products;
 };
 
+export const countPublicProducts = async (filter) => {
+  const query = {};
+
+  if (filter.PLZ) {
+    query.PLZ = filter.PLZ;
+  }
+
+  if (filter.city) {
+    query.city = filter.city;
+  }
+
+  return await Product.countDocuments(query);
+};
+
 export const getProductsByIds = async (ids) => {
   if (!Array.isArray(ids) || ids.length === 0) return [];
 
