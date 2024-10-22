@@ -1,5 +1,6 @@
 import express from "express";
 import {
+  searchLocations,
   getAllLocations,
   getLocationById,
   createLocation,
@@ -9,6 +10,7 @@ import {
 
 const locationsRouter = express.Router();
 
+locationsRouter.get("/search", searchLocations);
 locationsRouter.get("/", getAllLocations);
 locationsRouter.get("/:id", getLocationById);
 locationsRouter.post("/", createLocation);

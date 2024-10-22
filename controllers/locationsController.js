@@ -2,6 +2,21 @@ import Location from "../models/locationModel.js";
 import ctrlWrapper from "../helpers/ctrlWrapper.js";
 import HttpError from "../helpers/HttpError.js";
 
+export const searchLocations = ctrlWrapper(async (req, res) => {
+  const { plz, city } = req.query;
+  const query = {};
+
+  if (plz) {
+    query.plz = plz;
+  }
+  if (city) {
+    query.city = { $regex: city, $options: "i" };
+  }
+
+  const locations = await Location.find(query);
+  res.json(locations);
+});
+
 export const getAllLocations = ctrlWrapper(async (req, res) => {
   const locations = await Location.find();
   res.json(locations);
