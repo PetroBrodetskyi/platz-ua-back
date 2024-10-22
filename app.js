@@ -6,6 +6,7 @@ import "dotenv/config";
 
 import productsRouter from "./routes/productsRouter.js";
 import { usersRouter, adminRouter } from "./routes/usersRouter.js";
+import locationsRouter from "./routes/locationsRouter.js";
 import uploadRouter from "./routes/uploadRouter.js";
 import sitemapRouter from "./routes/sitemapRouter.js";
 
@@ -28,6 +29,7 @@ app.use(express.json({ limit: "10mb" }));
 
 app.use("/api/products", productsRouter);
 app.use("/api/users", usersRouter);
+app.use("/api/locations", locationsRouter);
 app.use("/api/admin", adminRouter);
 app.use("/api", uploadRouter);
 app.use(sitemapRouter);
