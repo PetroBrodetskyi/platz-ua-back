@@ -89,6 +89,8 @@ const userSchema = new mongoose.Schema(
     favoriteProducts: [
       { type: mongoose.Schema.Types.ObjectId, ref: "Product" },
     ],
+    followers: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
+    following: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
   },
   { versionKey: false, timestamps: { createdAt: true } }
 );

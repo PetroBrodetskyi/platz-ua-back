@@ -310,3 +310,29 @@ export const updateUserSubscription = ctrlWrapper(async (req, res) => {
     subscription: req.user.subscription,
   });
 });
+
+export const followUser = ctrlWrapper(async (req, res) => {
+  const userId = req.user._id;
+  const targetUserId = req.params.id;
+
+  const user = await User.findById(userId);
+
+  user.following.push(targetUserId);
+  await user.save();
+
+  const targetUser = await User.findById(targetUserId);
+  targetUser.followers.push(userId);
+  await targetUser.save();
+
+  res.status(200).json({ message: "Ви успішно підписалися на користувача" });
+});
+
+export const unfollowUser = ctrlWrapper(async (req, res) => {
+  const userId = req.user._id;
+  const targetUserId = req.params.id;
+
+  await User.findByIdAndUpdate(userId, { $pull: { following: targetUserId } });
+  await User.findByIdAndUpdate(targetUserId, { $pull: { followers: userId } });
+
+  res.status(200).json({ message: "Ви відписалися від користувача" });
+});

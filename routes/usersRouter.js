@@ -17,6 +17,8 @@ import {
   getUserById,
   updateLikes,
   updateUserDetails,
+  followUser,
+  unfollowUser,
 } from "../controllers/usersControllers.js";
 import {
   addToCart,
@@ -57,6 +59,8 @@ usersRouter.get("/cart", authenticate, getProductsInCart);
 usersRouter.post("/logout", authenticate, logoutUser);
 usersRouter.get("/:userId", getUserById);
 usersRouter.patch("/:userId/likes", authenticate, updateLikes);
+usersRouter.patch("/:id/follow", authenticate, followUser);
+usersRouter.patch("/:id/unfollow", authenticate, unfollowUser);
 
 adminRouter.get("/admin", authenticate, isAdmin);
 
