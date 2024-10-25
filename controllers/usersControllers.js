@@ -315,18 +315,24 @@ export const followUser = ctrlWrapper(async (req, res) => {
   const userId = req.user._id;
   const targetUserId = req.params.id;
 
-  console.log(`Користувач ${userId} підписується на ${targetUserId}`);
-
   const user = await User.findById(userId);
+  const targetUser = await User.findById(targetUserId);
+
+  if (!user || !targetUser) {
+    return res.status(404).json({ message: "Користувач не знайдений" });
+  }
+
+  if (user.following.includes(targetUserId)) {
+    return res
+      .status(400)
+      .json({ message: "Ви вже підписані на цього користувача" });
+  }
+
   user.following.push(targetUserId);
   await user.save();
 
-  const targetUser = await User.findById(targetUserId);
   targetUser.followers.push(userId);
   await targetUser.save();
-
-  console.log("Актуальні дані користувача:", user);
-  console.log("Актуальні дані цільового користувача:", targetUser);
 
   res.status(200).json({ message: "Ви успішно підписалися на користувача" });
 });
@@ -334,6 +340,13 @@ export const followUser = ctrlWrapper(async (req, res) => {
 export const unfollowUser = ctrlWrapper(async (req, res) => {
   const userId = req.user._id;
   const targetUserId = req.params.id;
+
+  const user = await User.findById(userId);
+  const targetUser = await User.findById(targetUserId);
+
+  if (!user || !targetUser) {
+    return res.status(404).json({ message: "Користувач не знайдений" });
+  }
 
   await User.findByIdAndUpdate(userId, { $pull: { following: targetUserId } });
   await User.findByIdAndUpdate(targetUserId, { $pull: { followers: userId } });
