@@ -246,8 +246,8 @@ export const getUserById = ctrlWrapper(async (req, res) => {
   const user = await User.findById(userId)
     .select("-__v")
     .populate("likedUsers", "avatarURL")
-    .populate("followers", "name avatarURL")
-    .populate("following", "name avatarURL");
+    .populate("followers", "name avatarURL plz city")
+    .populate("following", "name avatarURL plz city");
 
   if (!user) {
     throw HttpError(404, "User not found");
