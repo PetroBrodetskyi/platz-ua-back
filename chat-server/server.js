@@ -1,26 +1,22 @@
 import express from "express";
 import http from "http";
-import { Server } from "socket.io";
+import socketSetup from "./socketSetup.js";
+import dotenv from "dotenv";
+import chatRoutes from "./routes/chatRoutes.js";
+
+dotenv.config();
+
+const PORT = process.env.PORT;
 
 const app = express();
 const server = http.createServer(app);
-const io = new Server(server);
+
+socketSetup(server);
 
 app.use(express.static("."));
+app.use(express.json());
+app.use("/api/chat", chatRoutes);
 
-io.on("connection", (socket) => {
-  console.log("New client connected");
-
-  socket.on("chat message", (msg) => {
-    io.emit("chat message", msg);
-  });
-
-  socket.on("disconnect", () => {
-    console.log("Client disconnected");
-  });
-});
-
-const PORT = process.env.PORT || 4000;
 server.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
