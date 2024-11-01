@@ -1,4 +1,33 @@
+import Chat from "../models/chatModel.js";
 import Message from "../models/messageModel.js";
+
+export const getChats = async (req, res) => {
+  const { userId } = req.query;
+
+  try {
+    const chats = await Chat.find({ users: userId });
+    res.status(200).json(chats);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error while fetching chats." });
+  }
+};
+
+export const createChat = async (req, res) => {
+  const { userId1, userId2 } = req.body;
+
+  const newChat = new Chat({
+    users: [userId1, userId2],
+  });
+
+  try {
+    await newChat.save();
+    res.status(201).json(newChat);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error while creating chat." });
+  }
+};
 
 export const getMessages = async (req, res) => {
   const { senderId, receiverId } = req.query;
