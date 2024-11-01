@@ -8,10 +8,14 @@ export default function socketSetup(server) {
     console.log("New client connected");
 
     socket.on("chat message", async ({ senderId, receiverId, msg }) => {
-      const newMessage = new Message({ senderId, receiverId, content: msg });
-      await newMessage.save();
+      try {
+        const newMessage = new Message({ senderId, receiverId, content: msg });
+        await newMessage.save();
 
-      socket.to(receiverId).emit("chat message", { senderId, msg });
+        socket.to(receiverId).emit("chat message", { senderId, msg });
+      } catch (error) {
+        console.error("Error saving message:", error);
+      }
     });
 
     socket.on("disconnect", () => {
