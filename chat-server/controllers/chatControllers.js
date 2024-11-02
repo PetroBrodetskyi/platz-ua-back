@@ -22,8 +22,15 @@ export const createChat = async (req, res) => {
       { $setOnInsert: { users: [userId1, userId2], lastMessage: "" } },
       { upsert: true, new: true }
     );
+
     res.status(201).json(chat);
   } catch (error) {
+    if (error.code === 11000) {
+      const existingChat = await Chat.findOne({
+        users: { $all: [userId1, userId2] },
+      });
+      return res.status(200).json(existingChat);
+    }
     console.error(error);
     res.status(500).json({ message: "Server error while creating chat." });
   }
