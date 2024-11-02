@@ -17,21 +17,17 @@ export const createChat = async (req, res) => {
   const { userId1, userId2 } = req.body;
 
   try {
-    const chat = await Chat.findOneAndUpdate(
-      { users: { $all: [userId1, userId2] } },
-      { $setOnInsert: { users: [userId1, userId2], lastMessage: "" } },
-      { upsert: true, new: true }
-    );
-
-    res.status(201).json(chat);
-  } catch (error) {
-    if (error.code === 11000) {
-      const existingChat = await Chat.findOne({
-        users: { $all: [userId1, userId2] },
-      });
+    const existingChat = await Chat.findOne({
+      users: { $all: [userId1, userId2] },
+    });
+    if (existingChat) {
       return res.status(200).json(existingChat);
     }
-    console.error(error);
+
+    const newChat = await Chat.create({ users: [userId1, userId2] });
+    res.status(201).json(newChat);
+  } catch (error) {
+    console.error("Server error while creating chat:", error);
     res.status(500).json({ message: "Server error while creating chat." });
   }
 };
