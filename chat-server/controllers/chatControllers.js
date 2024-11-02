@@ -69,11 +69,11 @@ export const getMessages = async (req, res) => {
 };
 
 export const sendMessage = async (req, res) => {
-  const { senderId, receiverId, content, chatId } = req.body;
+  const { senderId, receiverId, content, chatId, senderName } = req.body;
 
   console.log("Sending message from:", senderId, "to:", receiverId);
 
-  if (!senderId || !receiverId || !content || !chatId) {
+  if (!senderId || !receiverId || !content || !chatId || !senderName) {
     return res.status(400).json({ message: "All fields are required." });
   }
 
@@ -82,6 +82,7 @@ export const sendMessage = async (req, res) => {
     receiverId,
     content,
     chatId,
+    senderName,
     createdAt: new Date(),
   });
 
