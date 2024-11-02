@@ -16,13 +16,13 @@ export const getChats = async (req, res) => {
 export const createChat = async (req, res) => {
   const { userId1, userId2 } = req.body;
 
-  const newChat = new Chat({
-    users: [userId1, userId2],
-  });
-
   try {
-    await newChat.save();
-    res.status(201).json(newChat);
+    const chat = await Chat.findOneAndUpdate(
+      { users: { $all: [userId1, userId2] } },
+      { $setOnInsert: { users: [userId1, userId2], lastMessage: "" } },
+      { upsert: true, new: true }
+    );
+    res.status(201).json(chat);
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Server error while creating chat." });
@@ -30,15 +30,10 @@ export const createChat = async (req, res) => {
 };
 
 export const getMessages = async (req, res) => {
-  const { senderId, receiverId } = req.query;
+  const { chatId } = req.query;
 
   try {
-    const messages = await Message.find({
-      $or: [
-        { senderId, receiverId },
-        { senderId: receiverId, receiverId: senderId },
-      ],
-    }).sort({ createdAt: 1 });
+    const messages = await Message.find({ chatId }).sort({ createdAt: 1 });
     res.status(200).json(messages);
   } catch (error) {
     console.error(error);
@@ -47,12 +42,13 @@ export const getMessages = async (req, res) => {
 };
 
 export const sendMessage = async (req, res) => {
-  const { senderId, receiverId, messageContent } = req.body;
+  const { senderId, receiverId, content, chatId } = req.body;
 
   const newMessage = new Message({
     senderId,
     receiverId,
-    content: messageContent,
+    content,
+    chatId,
     createdAt: new Date(),
   });
 
