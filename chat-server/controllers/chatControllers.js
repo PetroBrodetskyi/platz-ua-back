@@ -15,6 +15,7 @@ export const getChats = async (req, res) => {
 
 export const createChat = async (req, res) => {
   const { userId1, userId2 } = req.body;
+  console.log("Received userIds for chat creation:", { userId1, userId2 });
 
   try {
     const existingChat = await Chat.findOne({
@@ -25,10 +26,12 @@ export const createChat = async (req, res) => {
     }
 
     const newChat = await Chat.create({ users: [userId1, userId2] });
-    res.status(201).json(newChat);
+    return res.status(201).json(newChat);
   } catch (error) {
     console.error("Server error while creating chat:", error);
-    res.status(500).json({ message: "Server error while creating chat." });
+    return res
+      .status(500)
+      .json({ message: "Server error while creating chat." });
   }
 };
 
