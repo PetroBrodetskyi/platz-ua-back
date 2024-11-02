@@ -5,7 +5,7 @@ export const getChats = async (req, res) => {
   const { userId } = req.query;
 
   try {
-    const chats = await Chat.find({ users: userId });
+    const chats = await Chat.find({ users: { $in: [userId] } });
     res.status(200).json(chats);
   } catch (error) {
     console.error(error);
@@ -15,7 +15,10 @@ export const getChats = async (req, res) => {
 
 export const createChat = async (req, res) => {
   const { userId1, userId2 } = req.body;
-  console.log("Received userIds for chat creation:", { userId1, userId2 });
+
+  if (!userId1 || !userId2) {
+    return res.status(400).json({ message: "Both user IDs are required." });
+  }
 
   try {
     const existingChat = await Chat.findOne({
@@ -38,6 +41,10 @@ export const createChat = async (req, res) => {
 export const getMessages = async (req, res) => {
   const { chatId } = req.query;
 
+  if (!chatId) {
+    return res.status(400).json({ message: "Chat ID is required." });
+  }
+
   try {
     const messages = await Message.find({ chatId }).sort({ createdAt: 1 });
     res.status(200).json(messages);
@@ -49,6 +56,10 @@ export const getMessages = async (req, res) => {
 
 export const sendMessage = async (req, res) => {
   const { senderId, receiverId, content, chatId } = req.body;
+
+  if (!senderId || !receiverId || !content || !chatId) {
+    return res.status(400).json({ message: "All fields are required." });
+  }
 
   const newMessage = new Message({
     senderId,
