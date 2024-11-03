@@ -11,7 +11,9 @@ export const getChats = async (req, res) => {
   }
 
   try {
-    const chats = await Chat.find({ users: { $in: [userId] } });
+    const chats = await Chat.find({
+      $or: [{ user1: userId }, { user2: userId }],
+    });
     console.log("Chats found:", chats);
     res.status(200).json(chats);
   } catch (error) {
@@ -21,22 +23,24 @@ export const getChats = async (req, res) => {
 };
 
 export const createChat = async (req, res) => {
-  const { userId1, userId2 } = req.body;
+  let { userId1, userId2 } = req.body;
 
   if (!userId1 || !userId2) {
     return res.status(400).json({ message: "Both user IDs are required." });
   }
 
-  const usersArray = [userId1, userId2].sort();
+  if (userId1 > userId2) {
+    [userId1, userId2] = [userId2, userId1];
+  }
 
   try {
-    const existingChat = await Chat.findOne({ users: { $all: usersArray } });
+    const existingChat = await Chat.findOne({ user1: userId1, user2: userId2 });
 
     if (existingChat) {
       return res.status(200).json(existingChat);
     }
 
-    const newChat = await Chat.create({ users: usersArray });
+    const newChat = await Chat.create({ user1: userId1, user2: userId2 });
     return res.status(201).json(newChat);
   } catch (error) {
     console.error("Server error while creating chat:", error);
