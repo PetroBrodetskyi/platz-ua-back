@@ -19,7 +19,5 @@ const chatSchema = new mongoose.Schema({
   },
 });
 
-chatSchema.index({ user1: 1, user2: 1 }, { unique: true });
-
 const Chat = mongoose.model("Chat", chatSchema);
 export default Chat;
