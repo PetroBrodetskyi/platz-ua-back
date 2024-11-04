@@ -4,8 +4,6 @@ import Message from "../models/messageModel.js";
 export const getChats = async (req, res) => {
   const { userId } = req.query;
 
-  console.log("Fetching chats for userId:", userId);
-
   if (!userId) {
     return res.status(400).json({ message: "User ID is required." });
   }
@@ -14,7 +12,6 @@ export const getChats = async (req, res) => {
     const chats = await Chat.find({
       $or: [{ user1: userId }, { user2: userId }],
     });
-    console.log("Chats found:", chats);
     res.status(200).json(chats);
   } catch (error) {
     console.error("Error fetching chats:", error);
@@ -24,8 +21,6 @@ export const getChats = async (req, res) => {
 
 export const getChatById = async (req, res) => {
   const { chatId } = req.params;
-
-  console.log("Fetching chat for chatId:", chatId);
 
   if (!chatId) {
     return res.status(400).json({ message: "Chat ID is required." });
@@ -74,15 +69,12 @@ export const createChat = async (req, res) => {
 export const getMessages = async (req, res) => {
   const { chatId } = req.query;
 
-  console.log("Fetching messages for chatId:", chatId);
-
   if (!chatId) {
     return res.status(400).json({ message: "Chat ID is required." });
   }
 
   try {
     const messages = await Message.find({ chatId }).sort({ createdAt: 1 });
-    console.log("Messages found:", messages);
     res.status(200).json(messages);
   } catch (error) {
     console.error("Error fetching messages:", error);
@@ -92,8 +84,6 @@ export const getMessages = async (req, res) => {
 
 export const sendMessage = async (req, res) => {
   const { senderId, receiverId, content, chatId, senderName } = req.body;
-
-  console.log("Sending message from:", senderId, "to:", receiverId);
 
   if (!senderId || !receiverId || !content || !chatId || !senderName) {
     return res.status(400).json({ message: "All fields are required." });
