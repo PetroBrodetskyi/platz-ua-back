@@ -11,7 +11,7 @@ export const getChats = async (req, res) => {
   try {
     const chats = await Chat.find({
       $or: [{ user1: userId }, { user2: userId }],
-    });
+    }).sort({ updatedAt: -1 });
     res.status(200).json(chats);
   } catch (error) {
     console.error("Error fetching chats:", error);
