@@ -6,7 +6,7 @@ import {
   getChatById,
   createChat,
 } from "../controllers/chatControllers.js";
-import { authenticate } from "../../middlewares/authenticate.js";
+import { authenticate } from "../middlewares/authenticate.js";
 
 const router = express.Router();
 
