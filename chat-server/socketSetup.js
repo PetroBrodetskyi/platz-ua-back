@@ -19,12 +19,23 @@ export default function socketSetup(server) {
 
     socket.on(
       "chat message",
-      async ({ senderId, receiverId, content, chatId }) => {
+      async ({ senderId, receiverId, content, chatId, senderName }) => {
         try {
-          const newMessage = new Message({ senderId, receiverId, content });
+          const newMessage = new Message({
+            senderId,
+            receiverId,
+            content,
+            chatId,
+            senderName,
+          });
           await newMessage.save();
 
-          io.to(chatId).emit("chat message", { senderId, content });
+          io.to(chatId).emit("chat message", {
+            senderId,
+            content,
+            chatId,
+            senderName,
+          });
         } catch (error) {
           console.error("Error saving message:", error);
         }
