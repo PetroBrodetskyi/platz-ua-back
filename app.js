@@ -9,6 +9,7 @@ import { usersRouter, adminRouter } from "./routes/usersRouter.js";
 import locationsRouter from "./routes/locationsRouter.js";
 import uploadRouter from "./routes/uploadRouter.js";
 import sitemapRouter from "./routes/sitemapRouter.js";
+import chatRoutes from "./routes/chatRoutes.js";
 
 const app = express();
 
@@ -32,6 +33,7 @@ app.use("/api/users", usersRouter);
 app.use("/api/locations", locationsRouter);
 app.use("/api/admin", adminRouter);
 app.use("/api", uploadRouter);
+app.use("/api/chat", chatRoutes);
 app.use(sitemapRouter);
 
 app.get("/api/exchange-rate", async (req, res, next) => {
