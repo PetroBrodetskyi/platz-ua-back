@@ -39,7 +39,7 @@ usersRouter.post("/register", validateBody(registerUserSchema), registerUser);
 usersRouter.get("/verify/:verificationToken", verifyEmail);
 usersRouter.post("/verify", validateBody(emailSchema), resendVerifyEmail);
 usersRouter.post("/login", validateBody(loginUserSchema), loginUser);
-usersRouter.post("/api/auth/refresh", refreshUserToken);
+usersRouter.post("/refresh", refreshUserToken);
 usersRouter.get("/current", authenticate, getCurrentUser);
 
 usersRouter.patch(
