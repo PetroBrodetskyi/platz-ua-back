@@ -21,6 +21,7 @@ export const getChats = async (req, res) => {
 
 export const getChatById = async (req, res) => {
   const { chatId } = req.params;
+  const userId = req.user._id;
 
   if (!chatId) {
     return res.status(400).json({ message: "Chat ID is required." });
@@ -31,6 +32,11 @@ export const getChatById = async (req, res) => {
     if (!chat) {
       return res.status(404).json({ message: "Chat not found." });
     }
+
+    if (![chat.user1, chat.user2].includes(userId)) {
+      return res.status(403).json({ message: "Access denied." });
+    }
+
     res.status(200).json(chat);
   } catch (error) {
     console.error("Error fetching chat:", error);
@@ -68,12 +74,19 @@ export const createChat = async (req, res) => {
 
 export const getMessages = async (req, res) => {
   const { chatId } = req.query;
+  const userId = req.user._id;
 
   if (!chatId) {
     return res.status(400).json({ message: "Chat ID is required." });
   }
 
   try {
+    const chat = await Chat.findById(chatId);
+
+    if (!chat || ![chat.user1, chat.user2].includes(userId)) {
+      return res.status(403).json({ message: "Access denied." });
+    }
+
     const messages = await Message.find({ chatId }).sort({ createdAt: 1 });
     res.status(200).json(messages);
   } catch (error) {
