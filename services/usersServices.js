@@ -4,10 +4,6 @@ export const findUser = (filter) => User.findOne(filter);
 
 export const signup = (data) => User.create(data);
 
-export const findUserByRefreshToken = async (refreshToken) => {
-  return User.findOne({ refreshToken });
-};
-
 export const updateUserById = async (userId, updateData) => {
   return await User.findByIdAndUpdate(userId, updateData, {
     new: true,

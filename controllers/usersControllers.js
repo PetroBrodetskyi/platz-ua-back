@@ -148,40 +148,11 @@ export const loginUser = ctrlWrapper(async (req, res) => {
   };
 
   const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "23h" });
-  const refreshToken = nanoid();
 
-  await User.findByIdAndUpdate(existingUser._id, { token, refreshToken });
+  await User.findByIdAndUpdate(existingUser._id, { token });
 
   res.status(200).json({
     token,
-    refreshToken,
-    user: {
-      name: existingUser.name,
-      email: existingUser.email,
-      subscription: existingUser.subscription,
-    },
-  });
-});
-
-export const refreshUserToken = ctrlWrapper(async (req, res) => {
-  const { refreshToken } = req.body;
-
-  if (!refreshToken) {
-    throw HttpError(401, "No refresh token provided");
-  }
-
-  const existingUser = await userServices.findUserByRefreshToken(refreshToken);
-  if (!existingUser) {
-    throw HttpError(401, "Invalid refresh token");
-  }
-
-  const payload = {
-    id: existingUser._id,
-  };
-
-  const newToken = jwt.sign(payload, SECRET_KEY, { expiresIn: "23h" });
-  res.status(200).json({
-    token: newToken,
     user: {
       name: existingUser.name,
       email: existingUser.email,
