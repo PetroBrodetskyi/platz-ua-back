@@ -113,3 +113,46 @@ export const sendMessage = async (req, res) => {
     res.status(500).json({ message: "Server error while sending message." });
   }
 };
+
+export const editMessage = async (req, res) => {
+  const { messageId } = req.params;
+  const { content } = req.body;
+
+  if (!content) {
+    return res.status(400).json({ message: "Content is required." });
+  }
+
+  try {
+    const updatedMessage = await Message.findByIdAndUpdate(
+      messageId,
+      { content },
+      { new: true }
+    );
+
+    if (!updatedMessage) {
+      return res.status(404).json({ message: "Message not found." });
+    }
+
+    res.status(200).json(updatedMessage);
+  } catch (error) {
+    console.error("Error editing message:", error);
+    res.status(500).json({ message: "Server error while editing message." });
+  }
+};
+
+export const deleteMessage = async (req, res) => {
+  const { messageId } = req.params;
+
+  try {
+    const deletedMessage = await Message.findByIdAndDelete(messageId);
+
+    if (!deletedMessage) {
+      return res.status(404).json({ message: "Message not found." });
+    }
+
+    res.status(200).json({ message: "Message deleted successfully." });
+  } catch (error) {
+    console.error("Error deleting message:", error);
+    res.status(500).json({ message: "Server error while deleting message." });
+  }
+};
