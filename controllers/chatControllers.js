@@ -12,14 +12,7 @@ export const getChats = async (req, res) => {
     const chats = await Chat.find({
       $or: [{ user1: userId }, { user2: userId }],
     }).sort({ updatedAt: -1 });
-
-    const chatsWithUnreadCount = chats.map((chat) => ({
-      ...chat.toObject(),
-      unreadCount:
-        chat.unreadCount.get(chat.user1 === userId ? "user1" : "user2") || 0,
-    }));
-
-    res.status(200).json(chatsWithUnreadCount);
+    res.status(200).json(chats);
   } catch (error) {
     console.error("Error fetching chats:", error);
     res.status(500).json({ message: "Server error while fetching chats." });
@@ -74,24 +67,14 @@ export const createChat = async (req, res) => {
 };
 
 export const getMessages = async (req, res) => {
-  const { chatId, userId } = req.query;
+  const { chatId } = req.query;
 
-  if (!chatId || !userId) {
-    return res
-      .status(400)
-      .json({ message: "Chat ID and User ID are required." });
+  if (!chatId) {
+    return res.status(400).json({ message: "Chat ID is required." });
   }
 
   try {
     const messages = await Message.find({ chatId }).sort({ createdAt: 1 });
-
-    const chat = await Chat.findById(chatId);
-    if (chat) {
-      const userKey = chat.user1 === userId ? "user1" : "user2";
-      chat.unreadCount.set(userKey, 0);
-      await chat.save();
-    }
-
     res.status(200).json(messages);
   } catch (error) {
     console.error("Error fetching messages:", error);
@@ -118,16 +101,11 @@ export const sendMessage = async (req, res) => {
   try {
     await newMessage.save();
 
-    const chat = await Chat.findById(chatId);
-    if (chat) {
-      const receiverKey = chat.user1 === receiverId ? "user1" : "user2";
-      chat.unreadCount.set(
-        receiverKey,
-        (chat.unreadCount.get(receiverKey) || 0) + 1
-      );
-      chat.lastMessage = content;
-      await chat.save();
-    }
+    await Chat.findByIdAndUpdate(
+      chatId,
+      { lastMessage: content },
+      { new: true }
+    );
 
     res.status(201).json(newMessage);
   } catch (error) {
