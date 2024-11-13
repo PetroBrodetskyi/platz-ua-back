@@ -4,7 +4,7 @@ const verificationEmail = (verificationToken, baseUrl) => {
       <head>
         <style>
           body {
-            font-family: Arial, sans-serif;
+            font-family: Poppins, sans-serif;
             margin: 0;
             padding: 0;
             background-color: #25292ef5;
@@ -12,7 +12,7 @@ const verificationEmail = (verificationToken, baseUrl) => {
           .container {
             display: flex;
             flex-direction: column;
-            gap: 20px;
+            gap: 28px;
             width: 100%;
             margin: 0 auto;
             padding: 20px;
@@ -24,6 +24,9 @@ const verificationEmail = (verificationToken, baseUrl) => {
             justify-content: center;
             gap: 10px;
             text-align: center;
+          }
+
+          .header h3 {
             color: #fff;
           }
 
@@ -54,6 +57,7 @@ const verificationEmail = (verificationToken, baseUrl) => {
             text-decoration: none;
             border-radius: 4px;
             font-size: 14px;
+            font-weight: 600;
           }
           .footer {
             text-align: center;
@@ -70,7 +74,7 @@ const verificationEmail = (verificationToken, baseUrl) => {
               src="https://platzua.com/logo.png"
               alt="PlatzUA Logo"
             />
-            <h4>platzua.com</h4>
+            <h3>platzua.com</h3>
           </div>
           <div class="content">
             <h3>Вітаємо на платформі PlatzUA!</h3>

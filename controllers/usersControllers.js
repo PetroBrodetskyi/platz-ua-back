@@ -53,7 +53,7 @@ export const registerUser = ctrlWrapper(async (req, res) => {
 
   const verifyEmail = {
     to: email,
-    subject: "Verify email",
+    subject: "Підтвердження реєстрації на платформі PlatzUA",
     html: verificationEmail(verificationToken, BASE_URL),
   };
 
