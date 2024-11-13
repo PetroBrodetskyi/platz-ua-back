@@ -82,7 +82,7 @@ const verificationEmail = (verificationToken, baseUrl) => {
               Щоб підтвердити Ваш Email та завершити реєстрацію, натисніть на кнопку
               нижче:
             </p>
-            <a href="${baseUrl}/api/users/verify/${verificationToken}" class="btn"
+            <a href="${baseUrl}/api/users/verify/${verificationToken}" class="btn" target="_blank"
               >Підтвердити реєстрацію</a
             >
           </div>
