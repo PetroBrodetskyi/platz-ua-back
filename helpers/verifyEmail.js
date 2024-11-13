@@ -1,4 +1,4 @@
-export const verificationEmail = (verificationToken, baseUrl) => {
+const verificationEmail = (verificationToken, baseUrl) => {
   return `
     <html>
       <head>
@@ -60,7 +60,7 @@ export const verificationEmail = (verificationToken, baseUrl) => {
             <img src="https://platzua.com/logo.png" alt="Platzua Logo"/>
           </div>
           <div class="content">
-            <h2>Вітаємо на платформі Platzua!</h2>
+            <h2>Вітаємо на платформі PlatzUA!</h2>
             <p>Щоб завершити реєстрацію, натисніть на кнопку нижче:</p>
             <a href="${baseUrl}/api/users/verify/${verificationToken}" class="btn">Підтвердити реєстрацію</a>
           </div>
@@ -72,3 +72,5 @@ export const verificationEmail = (verificationToken, baseUrl) => {
     </html>
   `;
 };
+
+export default verificationEmail;
