@@ -3,6 +3,7 @@ import bcrypt from "bcrypt";
 import HttpError from "../helpers/HttpError.js";
 import ctrlWrapper from "../helpers/ctrlWrapper.js";
 import sendEmail from "../helpers/sendEmail.js";
+import verificationEmail from "../helpers/verifyEmail.js";
 import {
   registerUserSchema,
   loginUserSchema,
@@ -53,7 +54,7 @@ export const registerUser = ctrlWrapper(async (req, res) => {
   const verifyEmail = {
     to: email,
     subject: "Verify email",
-    html: `<a target="_blank" href="${BASE_URL}/api/users/verify/${verificationToken}">Click verify email</a>`,
+    html: verificationEmail(verificationToken, BASE_URL),
   };
 
   await sendEmail(verifyEmail);
