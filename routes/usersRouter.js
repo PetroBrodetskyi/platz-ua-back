@@ -13,7 +13,6 @@ import {
   getCurrentUser,
   logoutUser,
   verifyEmail,
-  resendVerifyEmail,
   getUserById,
   updateLikes,
   updateUserDetails,
@@ -36,7 +35,6 @@ const adminRouter = express.Router();
 usersRouter.post("/google-auth", googleAuth);
 usersRouter.post("/register", validateBody(registerUserSchema), registerUser);
 usersRouter.get("/verify/:verificationToken", verifyEmail);
-usersRouter.post("/verify", validateBody(emailSchema), resendVerifyEmail);
 usersRouter.post("/login", validateBody(loginUserSchema), loginUser);
 usersRouter.get("/current", authenticate, getCurrentUser);
 

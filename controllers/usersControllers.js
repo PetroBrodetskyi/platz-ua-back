@@ -73,8 +73,8 @@ export const verifyEmail = ctrlWrapper(async (req, res) => {
   const { verificationToken } = req.params;
   const user = await User.findOne({ verificationToken });
 
-  if (!user) {
-    throw HttpError(404, "Email not found");
+  if (!user || user.verify) {
+    return res.redirect(`${process.env.FRONTEND_URL}/email-verified`);
   }
 
   await User.findByIdAndUpdate(user._id, {
@@ -83,42 +83,6 @@ export const verifyEmail = ctrlWrapper(async (req, res) => {
   });
 
   res.redirect(`${process.env.FRONTEND_URL}/email-verified`);
-});
-
-export const resendVerifyEmail = ctrlWrapper(async (req, res) => {
-  const { email } = req.body;
-
-  if (!email) {
-    return res.status(400).json({ message: "missing required field email" });
-  }
-
-  const user = await User.findOne({ email });
-
-  if (!user) {
-    throw HttpError(401, "Email not found");
-  }
-
-  if (user.verify) {
-    throw HttpError(400, "Verification has already been passed");
-  }
-
-  if (user.verifiedEmailSent) {
-    throw HttpError(400, "Verification email already sent");
-  }
-
-  const verifyEmail = {
-    to: email,
-    subject: "Verify email",
-    html: `<a target="_blank" href="${BASE_URL}/api/users/verify/${user.verificationToken}">Click verify email</a>`,
-  };
-
-  await sendEmail(verifyEmail);
-  await User.findByIdAndUpdate(user._id, {
-    verify: true,
-    verifiedEmailSent: true,
-  });
-
-  res.status(200).json({ message: "Verification email sent" });
 });
 
 export const loginUser = ctrlWrapper(async (req, res) => {
