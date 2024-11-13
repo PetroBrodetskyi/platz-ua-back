@@ -74,7 +74,7 @@ export const verifyEmail = ctrlWrapper(async (req, res) => {
   const user = await User.findOne({ verificationToken });
 
   if (!user || user.verify) {
-    return res.redirect(`${process.env.FRONTEND_URL}/email-verified`);
+    return res.redirect(`${process.env.FRONTEND_URL}/email-verified-earlier`);
   }
 
   await User.findByIdAndUpdate(user._id, {
