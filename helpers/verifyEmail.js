@@ -7,47 +7,55 @@ const verificationEmail = (verificationToken, baseUrl) => {
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f7f7f7;
+            background-color: #25292ef5;
           }
           .container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
             width: 100%;
-            max-width: 600px;
             margin: 0 auto;
             padding: 20px;
-            background-color: #ffffff;
-            border-radius: 8px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            background-color: #25292ef5;
           }
           .header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
             text-align: center;
-            margin-bottom: 30px;
+            color: #fff;
           }
-          .header img {
-            width: 150px;
+
+          .logo {
+            width: 54px;
+            height: 54px;
+            border-radius: 50%;
+            box-shadow: 0 6px 20px rgba(177, 177, 177, 0.786);
           }
           .content {
             text-align: center;
+            color: #fff;
           }
-          .content h2 {
+          .content h3 {
             font-size: 24px;
-            color: #333;
+            color: #fff;
           }
           .content p {
-            font-size: 16px;
-            color: #666;
+            font-size: 14px;
+            color: #fff;
           }
           .btn {
             display: inline-block;
-            margin-top: 20px;
-            padding: 12px 25px;
-            background-color: #4CAF50;
-            color: white;
+            margin-top: 10px;
+            padding: 12px;
+            background-color: #dd0000;
+            color: #fff;
             text-decoration: none;
             border-radius: 4px;
-            font-size: 16px;
+            font-size: 14px;
           }
           .footer {
-            margin-top: 30px;
             text-align: center;
             font-size: 14px;
             color: #aaa;
@@ -57,15 +65,28 @@ const verificationEmail = (verificationToken, baseUrl) => {
       <body>
         <div class="container">
           <div class="header">
-            <img src="https://platzua.com/logo.png" alt="Platzua Logo"/>
+            <img
+              class="logo"
+              src="https://platzua.com/logo.png"
+              alt="PlatzUA Logo"
+            />
+            <h4>platzua.com</h4>
           </div>
           <div class="content">
-            <h2>Вітаємо на платформі PlatzUA!</h2>
-            <p>Щоб завершити реєстрацію, натисніть на кнопку нижче:</p>
-            <a href="${baseUrl}/api/users/verify/${verificationToken}" class="btn">Підтвердити реєстрацію</a>
+            <h3>Вітаємо на платформі PlatzUA!</h3>
+            <p>
+              Щоб підтвердити Ваш Email та завершити реєстрацію, натисніть на кнопку
+              нижче:
+            </p>
+            <a href="${baseUrl}/api/users/verify/${verificationToken}" class="btn"
+              >Підтвердити реєстрацію</a
+            >
           </div>
           <div class="footer">
-            <p>Цей лист був надісланий автоматично. Якщо ви не реєструвалися на нашій платформі, просто проігноруйте його.</p>
+            <p>
+              Цей лист був надісланий автоматично. Якщо ви не реєструвалися на нашій
+              платформі, просто проігноруйте його.
+            </p>
           </div>
         </div>
       </body>
