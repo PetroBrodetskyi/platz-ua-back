@@ -10,39 +10,31 @@ const verificationEmail = (verificationToken, baseUrl) => {
             background-color: #25292ef5;
           }
           .container {
-            display: flex;
-            flex-direction: column;
-            gap: 28px;
             width: 100%;
+            max-width: 800px;
             margin: 0 auto;
             padding: 20px;
             background-color: #25292ef5;
           }
-          .header {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
+          .header,
+          .content,
+          .footer {
             text-align: center;
           }
-
-          .header h3 {
-            color: #fff;
-          }
-
-          .logo {
+          .header img {
             width: 54px;
             height: 54px;
             border-radius: 50%;
             box-shadow: 0 6px 20px rgba(177, 177, 177, 0.786);
           }
-          .content {
-            text-align: center;
+          .header h3 {
             color: #fff;
+            margin-top: 20px;
           }
           .content h3 {
             font-size: 24px;
             color: #fff;
+            margin-top: 20px;
           }
           .content p {
             font-size: 14px;
@@ -50,7 +42,7 @@ const verificationEmail = (verificationToken, baseUrl) => {
           }
           .btn {
             display: inline-block;
-            margin-top: 10px;
+            margin-top: 20px;
             padding: 12px;
             background-color: #dd0000;
             color: #fff;
@@ -59,40 +51,45 @@ const verificationEmail = (verificationToken, baseUrl) => {
             font-size: 14px;
             font-weight: 600;
           }
-          .footer {
-            text-align: center;
+          .footer p {
             font-size: 14px;
             color: #aaa;
+            margin-top: 20px;
           }
         </style>
       </head>
       <body>
-        <div class="container">
-          <div class="header">
-            <img
-              class="logo"
-              src="https://platzua.com/logo.png"
-              alt="PlatzUA Logo"
-            />
-            <h3>platzua.com</h3>
-          </div>
-          <div class="content">
-            <h3>Вітаємо на платформі PlatzUA!</h3>
-            <p>
-              Щоб підтвердити Ваш Email та завершити реєстрацію, натисніть на кнопку
-              нижче:
-            </p>
-            <a href="${baseUrl}/api/users/verify/${verificationToken}" class="btn" target="_blank"
-              >Підтвердити реєстрацію</a
-            >
-          </div>
-          <div class="footer">
-            <p>
-              Цей лист був надісланий автоматично. Якщо ви не реєструвалися на нашій
-              платформі, просто проігноруйте його.
-            </p>
-          </div>
-        </div>
+        <table class="container" cellspacing="0" cellpadding="0" border="0">
+          <tr>
+            <td class="header">
+              <img src="https://platzua.com/logo.png" alt="PlatzUA Logo" />
+              <h3>platzua.com</h3>
+            </td>
+          </tr>
+          <tr>
+            <td class="content">
+              <h3>Вітаємо на платформі PlatzUA!</h3>
+              <p>
+                Щоб підтвердити Ваш Email та завершити реєстрацію, натисніть на
+                кнопку нижче:
+              </p>
+              <a
+                href="${baseUrl}/api/users/verify/${verificationToken}"
+                class="btn"
+                target="_blank"
+                >Підтвердити реєстрацію</a
+              >
+            </td>
+          </tr>
+          <tr>
+            <td class="footer">
+              <p>
+                Цей лист був надісланий автоматично. Якщо ви не реєструвалися на
+                нашій платформі, просто проігноруйте його.
+              </p>
+            </td>
+          </tr>
+        </table>
       </body>
     </html>
   `;
