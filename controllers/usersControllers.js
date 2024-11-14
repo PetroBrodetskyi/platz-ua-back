@@ -144,6 +144,8 @@ export const getCurrentUser = ctrlWrapper(async (req, res) => {
     telegram,
     site,
     about,
+    following,
+    followers,
   } = req.user;
 
   res.json({
@@ -163,6 +165,8 @@ export const getCurrentUser = ctrlWrapper(async (req, res) => {
     telegram,
     site,
     about,
+    following,
+    followers,
   });
 });
 
