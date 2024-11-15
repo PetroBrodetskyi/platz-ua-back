@@ -211,7 +211,13 @@ export const updateUserDetails = async (req, res, next) => {
 };
 
 export const getUserById = ctrlWrapper(async (req, res) => {
+  if (!req.user) {
+    throw HttpError(401, "User is not authenticated"); // Перевірка, чи користувач аутентифікований
+  }
+
   const { userId } = req.params;
+  const currentUserId = req.user._id; // Поточний користувач, для перевірки підписок
+
   const user = await User.findById(userId)
     .select("-__v")
     .populate("likedUsers", "avatarURL")
@@ -226,7 +232,22 @@ export const getUserById = ctrlWrapper(async (req, res) => {
   const userWithoutPassword = user.toObject();
   delete userWithoutPassword.password;
 
-  res.json({ ...userWithoutPassword, hasPassword });
+  const followersStatus = user.followers.map((follower) => ({
+    ...follower.toObject(),
+    isFollowing: follower._id.toString() === currentUserId,
+  }));
+
+  const followingStatus = user.following.map((following) => ({
+    ...following.toObject(),
+    isFollowing: following._id.toString() === currentUserId,
+  }));
+
+  res.json({
+    ...userWithoutPassword,
+    hasPassword,
+    followers: followersStatus,
+    following: followingStatus,
+  });
 });
 
 export const logoutUser = ctrlWrapper(async (req, res) => {
