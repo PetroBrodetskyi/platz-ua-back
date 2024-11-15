@@ -55,7 +55,7 @@ usersRouter.patch(
 usersRouter.delete("/cart/:productId", authenticate, removeFromCart);
 usersRouter.get("/cart", authenticate, getProductsInCart);
 usersRouter.post("/logout", authenticate, logoutUser);
-usersRouter.get("/:userId", authenticate, getUserById);
+usersRouter.get("/:userId", getUserById);
 usersRouter.patch("/:userId/likes", authenticate, updateLikes);
 usersRouter.patch("/:id/follow", authenticate, followUser);
 usersRouter.patch("/:id/unfollow", authenticate, unfollowUser);
