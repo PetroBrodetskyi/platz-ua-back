@@ -203,8 +203,13 @@ export const updateProduct = ctrlWrapper(async (req, res) => {
 export const updateUserProduct = ctrlWrapper(async (req, res) => {
   const { id } = req.params;
   const { body } = req;
-  const { _id: userId, subscription } = req.user;
+  const { _id: owner } = req.user;
   const options = { new: true };
+
+  const existingProduct = await productsServices.updateProduct(id, body, owner);
+  if (!existingProduct) {
+    return handleNotFound(req, res);
+  }
 
   try {
     await updateProductSchema.validateAsync(body);
@@ -218,20 +223,12 @@ export const updateUserProduct = ctrlWrapper(async (req, res) => {
       .json({ message: "Body must have at least one field" });
   }
 
-  const query =
-    subscription === "admin" ? { _id: id } : { _id: id, owner: userId };
-
-  const updatedUserProduct = await Product.findOneAndUpdate(
-    query,
+  const updatedUserProduct = await productsServices.updateProduct(
+    id,
     body,
+    owner,
     options
   );
-
-  if (!updatedUserProduct) {
-    return res
-      .status(404)
-      .json({ message: "Product not found or access denied" });
-  }
 
   res.status(200).json(updatedUserProduct);
 });
