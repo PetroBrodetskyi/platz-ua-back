@@ -36,9 +36,7 @@ export const updateProductSchema = Joi.object({
   subcategory1: Joi.string().optional(),
   subcategory2: Joi.string().optional(),
   subcategory3: Joi.string().optional(),
-  status: Joi.string()
-    .valid("pending", "approved", "rejected", "vip", "archive")
-    .optional(),
+  status: Joi.string().optional(),
 });
 
 export const updateFavoriteSchema = Joi.object({
