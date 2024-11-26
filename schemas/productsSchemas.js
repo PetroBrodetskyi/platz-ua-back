@@ -15,8 +15,8 @@ export const createProductSchema = Joi.object({
   views: Joi.string().optional(),
   category: Joi.string().required(),
   subcategory1: Joi.string().required(),
-  subcategory2: Joi.string().allow(null, '').optional(),
-  subcategory3: Joi.string().allow(null, '').optional(),
+  subcategory2: Joi.string().allow(null, "").optional(),
+  subcategory3: Joi.string().allow(null, "").optional(),
 });
 
 export const updateProductSchema = Joi.object({
@@ -36,6 +36,9 @@ export const updateProductSchema = Joi.object({
   subcategory1: Joi.string().optional(),
   subcategory2: Joi.string().optional(),
   subcategory3: Joi.string().optional(),
+  status: Joi.string()
+    .valid("pending", "approved", "rejected", "vip", "archive")
+    .optional(),
 });
 
 export const updateFavoriteSchema = Joi.object({
