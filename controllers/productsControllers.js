@@ -203,15 +203,12 @@ export const updateProduct = ctrlWrapper(async (req, res) => {
 export const updateUserProduct = ctrlWrapper(async (req, res) => {
   const { id } = req.params;
   const { body } = req;
-  const { _id: owner, subscription } = req.user;
+  const { _id: owner } = req.user;
   const options = { new: true };
 
-  const isAdmin = subscription === "admin";
-
-  if (owner !== id && !isAdmin) {
-    return res
-      .status(403)
-      .json({ message: "У вас немає прав для редагування цього продукту." });
+  const existingProduct = await productsServices.updateProduct(id, body, owner);
+  if (!existingProduct) {
+    return handleNotFound(req, res);
   }
 
   try {
@@ -232,10 +229,6 @@ export const updateUserProduct = ctrlWrapper(async (req, res) => {
     owner,
     options
   );
-
-  if (!updatedProduct) {
-    return handleNotFound(req, res);
-  }
 
   res.status(200).json(updatedUserProduct);
 });
