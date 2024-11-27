@@ -203,36 +203,34 @@ export const updateProduct = ctrlWrapper(async (req, res) => {
 export const updateUserProduct = ctrlWrapper(async (req, res) => {
   const { id } = req.params;
   const { body } = req;
-  const { _id: userId, role } = req.user;
+  const { _id: userId, subscription } = req.user;
   const options = { new: true };
 
-  const owner = role === "admin" ? null : userId;
-
-  const existingProduct = await productsServices.updateProduct(id, body, owner);
-  if (!existingProduct) {
-    return handleNotFound(req, res);
-  }
+  const owner = subscription === "admin" ? null : userId;
 
   try {
     await updateProductSchema.validateAsync(body);
+    if (!Object.keys(body).length) {
+      return res
+        .status(400)
+        .json({ message: "Body must have at least one field" });
+    }
+
+    const updatedUserProduct = await productsServices.updateProduct(
+      id,
+      body,
+      owner,
+      options
+    );
+
+    if (!updatedUserProduct) {
+      return handleNotFound(req, res);
+    }
+
+    res.status(200).json(updatedUserProduct);
   } catch (error) {
-    return res.status(400).json({ message: error.message });
+    res.status(400).json({ message: error.message });
   }
-
-  if (!Object.keys(body).length) {
-    return res
-      .status(400)
-      .json({ message: "Body must have at least one field" });
-  }
-
-  const updatedUserProduct = await productsServices.updateProduct(
-    id,
-    body,
-    owner,
-    options
-  );
-
-  res.status(200).json(updatedUserProduct);
 });
 
 export const updateStatusProduct = ctrlWrapper(async (req, res) => {
