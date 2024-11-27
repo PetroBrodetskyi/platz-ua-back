@@ -210,6 +210,7 @@ export const updateUserProduct = ctrlWrapper(async (req, res) => {
 
   try {
     await updateProductSchema.validateAsync(body);
+
     if (!Object.keys(body).length) {
       return res
         .status(400)

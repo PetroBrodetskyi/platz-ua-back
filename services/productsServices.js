@@ -14,8 +14,10 @@ export const deleteProduct = (id, owner) =>
 
 export const createProduct = (productData) => Product.create(productData);
 
-export const updateProduct = (id, body, owner, options) =>
-  Product.findOneAndUpdate({ _id: id, owner }, body, options);
+export const updateProduct = (id, body, owner, options) => {
+  const query = owner ? { _id: id, owner } : { _id: id };
+  return Product.findOneAndUpdate(query, body, options);
+};
 
 export const updateStatusProduct = (id, body, owner, options) =>
   Product.findOneAndUpdate({ _id: id, owner }, body, options);
