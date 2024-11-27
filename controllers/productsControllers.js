@@ -203,8 +203,10 @@ export const updateProduct = ctrlWrapper(async (req, res) => {
 export const updateUserProduct = ctrlWrapper(async (req, res) => {
   const { id } = req.params;
   const { body } = req;
-  const { _id: owner } = req.user;
+  const { _id: userId, role } = req.user;
   const options = { new: true };
+
+  const owner = role === "admin" ? null : userId;
 
   const existingProduct = await productsServices.updateProduct(id, body, owner);
   if (!existingProduct) {
