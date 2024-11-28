@@ -90,11 +90,35 @@ export const getOnePublicProduct = ctrlWrapper(async (req, res) => {
 export const deleteProduct = ctrlWrapper(async (req, res) => {
   const { id } = req.params;
   const { _id: owner } = req.user;
+
+  const product = await productsServices.getOneProduct(id, owner);
+  if (!product) {
+    return handleNotFound(req, res);
+  }
+
+  const images = [
+    product.image1,
+    product.image2,
+    product.image3,
+    product.image4,
+  ].filter(Boolean);
+
+  const deleteImagesPromises = images.map(async (url) => {
+    try {
+      const publicId = url.split("/").pop().split(".")[0];
+      await cloudinary.uploader.destroy(`product_photos/${publicId}`);
+    } catch (error) {
+      console.error(`Failed to delete image: ${url}`, error.message);
+    }
+  });
+  await Promise.all(deleteImagesPromises);
+
   const deletedProduct = await productsServices.deleteProduct(id, owner);
   if (!deletedProduct) {
     return handleNotFound(req, res);
   }
-  res.json(deletedProduct);
+
+  res.json({ message: "Product deleted successfully", deletedProduct });
 });
 
 export const createProduct = ctrlWrapper(async (req, res) => {
