@@ -93,6 +93,7 @@ export const deleteProduct = ctrlWrapper(async (req, res) => {
 
   const owner = subscription === "admin" ? null : userId;
 
+  const product = await productsServices.getOneProduct(id, owner);
   if (!product) {
     return handleNotFound(req, res);
   }
@@ -114,11 +115,7 @@ export const deleteProduct = ctrlWrapper(async (req, res) => {
   });
   await Promise.all(deleteImagesPromises);
 
-  const deletedProduct =
-    subscription === "admin"
-      ? await productsServices.deleteProduct(id, null)
-      : await productsServices.deleteProduct(id, owner);
-
+  const deletedProduct = await productsServices.deleteProduct(id, owner);
   if (!deletedProduct) {
     return handleNotFound(req, res);
   }
