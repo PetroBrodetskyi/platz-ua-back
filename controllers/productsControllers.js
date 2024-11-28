@@ -89,9 +89,7 @@ export const getOnePublicProduct = ctrlWrapper(async (req, res) => {
 
 export const deleteProduct = ctrlWrapper(async (req, res) => {
   const { id } = req.params;
-  const { _id: userId, subscription } = req.user;
-
-  const owner = subscription === "admin" ? null : userId;
+  const { _id: owner } = req.user;
 
   const product = await productsServices.getOneProduct(id, owner);
   if (!product) {
