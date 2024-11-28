@@ -89,19 +89,14 @@ export const getOnePublicProduct = ctrlWrapper(async (req, res) => {
 
 export const deleteProduct = ctrlWrapper(async (req, res) => {
   const { id } = req.params;
-  const { _id: owner, subscription } = req.user;
+  const { _id: userId, subscription } = req.user;
 
-  // Якщо адміністратор, пошук продукту без перевірки власника
-  const product =
-    subscription === "admin"
-      ? await productsServices.getOneProduct(id, null)
-      : await productsServices.getOneProduct(id, owner);
+  const owner = subscription === "admin" ? null : userId;
 
   if (!product) {
     return handleNotFound(req, res);
   }
 
-  // Видаляємо зображення, якщо вони є
   const images = [
     product.image1,
     product.image2,
