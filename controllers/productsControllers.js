@@ -89,9 +89,7 @@ export const getOnePublicProduct = ctrlWrapper(async (req, res) => {
 
 export const deleteProduct = ctrlWrapper(async (req, res) => {
   const { id } = req.params;
-  const { _id: userId, subscription } = req.user;
-
-  const owner = subscription === "admin" ? null : userId;
+  const { _id: owner } = req.user;
 
   const product = await productsServices.getOneProduct(id, owner);
   if (!product) {
@@ -115,11 +113,7 @@ export const deleteProduct = ctrlWrapper(async (req, res) => {
   });
   await Promise.all(deleteImagesPromises);
 
-  const deletedProduct =
-    subscription === "admin"
-      ? await productsServices.deleteProduct(id)
-      : await productsServices.deleteProduct(id, owner);
-
+  const deletedProduct = await productsServices.deleteProduct(id, owner);
   if (!deletedProduct) {
     return handleNotFound(req, res);
   }

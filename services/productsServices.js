@@ -9,10 +9,8 @@ export const getUserProducts = (owner) => Product.find({ owner });
 
 export const getOneProduct = (id, owner) => Product.findOne({ _id: id, owner });
 
-export const deleteProduct = (id, owner) => {
-  const query = owner ? { _id: id, owner } : { _id: id };
-  return Product.findOneAndDelete(query);
-};
+export const deleteProduct = (id, owner) =>
+  Product.findOneAndDelete({ _id: id, owner });
 
 export const createProduct = (productData) => Product.create(productData);
 
