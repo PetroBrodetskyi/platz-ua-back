@@ -37,7 +37,7 @@ const productsRouter = express.Router();
 
 productsRouter.get("/public", getPublicProducts);
 
-productsRouter.get("/public/category", getProductsByCategory);
+productsRouter.get("/category", getProductsByCategory);
 
 productsRouter.get("/", authenticate, getAllProducts);
 

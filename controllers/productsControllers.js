@@ -25,17 +25,24 @@ export const getPublicProducts = ctrlWrapper(async (req, res) => {
 });
 
 export const getProductsByCategory = ctrlWrapper(async (req, res) => {
-  const { category } = req.query;
+  const { category, subcategory1, subcategory2, subcategory3, subcategory4 } =
+    req.query;
   const { page = 1, limit = 60 } = req.query;
 
   if (!category) {
     return res.status(400).json({ message: "Category parameter is required" });
   }
 
+  const filter = { category };
+  if (subcategory1) filter.subcategory1 = subcategory1.trim();
+  if (subcategory2) filter.subcategory2 = subcategory2.trim();
+  if (subcategory3) filter.subcategory3 = subcategory3.trim();
+  if (subcategory4) filter.subcategory4 = subcategory4.trim();
+
   const options = {
     page: parseInt(page, 10),
     limit: parseInt(limit, 10),
-    category,
+    filter,
   };
 
   try {

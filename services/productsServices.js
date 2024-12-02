@@ -51,10 +51,24 @@ export const getProductsByIds = async (ids) => {
   return products;
 };
 
-export const getProductsByCategory = (options) =>
-  Product.find({ category: options.category })
-    .skip((options.page - 1) * options.limit)
-    .limit(options.limit);
+export const getProductsByCategory = async ({ filter, page, limit }) => {
+  const query = { ...filter };
+  const options = {
+    skip: (page - 1) * limit,
+    limit,
+    sort: { createdAt: -1 },
+  };
+
+  const products = await Product.find(query, null, options).exec();
+  const totalProducts = await Product.countDocuments(query);
+
+  return {
+    products,
+    total: totalProducts,
+    totalPages: Math.ceil(totalProducts / limit),
+    currentPage: page,
+  };
+};
 
 export const getOnePublicProduct = async (id) => {
   const product = await Product.findById(id);
