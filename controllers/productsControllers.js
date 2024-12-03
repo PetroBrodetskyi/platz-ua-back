@@ -129,15 +129,24 @@ export const deleteProduct = ctrlWrapper(async (req, res) => {
 });
 
 export const createProduct = ctrlWrapper(async (req, res) => {
-  const { name, price, description, condition, PLZ, city, category } = req.body;
+  const {
+    name,
+    price,
+    description,
+    condition,
+    PLZ,
+    city,
+    main,
+    subcategory1,
+    subcategory2,
+    subcategory3,
+  } = req.body;
   const owner = req.user._id;
 
-  let parsedCategory;
-  try {
-    parsedCategory = JSON.parse(category);
-  } catch (error) {
-    return res.status(400).json({ message: "Invalid category format" });
-  }
+  const category = {
+    main: main,
+    subcategories: [subcategory1, subcategory2, subcategory3],
+  };
 
   const uploadedUrls = req.files.map((file) => file.path);
 
@@ -152,7 +161,7 @@ export const createProduct = ctrlWrapper(async (req, res) => {
     image2: uploadedUrls[1] || null,
     image3: uploadedUrls[2] || null,
     image4: uploadedUrls[3] || null,
-    category: parsedCategory,
+    category,
     owner,
   };
 
