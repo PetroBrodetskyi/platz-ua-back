@@ -132,6 +132,13 @@ export const createProduct = ctrlWrapper(async (req, res) => {
   const { name, price, description, condition, PLZ, city, category } = req.body;
   const owner = req.user._id;
 
+  let parsedCategory;
+  try {
+    parsedCategory = JSON.parse(category);
+  } catch (error) {
+    return res.status(400).json({ message: "Invalid category format" });
+  }
+
   const uploadedUrls = req.files.map((file) => file.path);
 
   const newProduct = {
@@ -145,10 +152,7 @@ export const createProduct = ctrlWrapper(async (req, res) => {
     image2: uploadedUrls[1] || null,
     image3: uploadedUrls[2] || null,
     image4: uploadedUrls[3] || null,
-    category: {
-      main: category.main,
-      subcategories: category.subcategories,
-    },
+    category: parsedCategory,
     owner,
   };
 
