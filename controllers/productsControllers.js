@@ -136,17 +136,12 @@ export const createProduct = ctrlWrapper(async (req, res) => {
     condition,
     PLZ,
     city,
-    main,
+    category,
     subcategory1,
     subcategory2,
     subcategory3,
   } = req.body;
   const owner = req.user._id;
-
-  const category = {
-    main: main,
-    subcategories: [subcategory1, subcategory2, subcategory3],
-  };
 
   const uploadedUrls = req.files.map((file) => file.path);
 
@@ -162,8 +157,18 @@ export const createProduct = ctrlWrapper(async (req, res) => {
     image3: uploadedUrls[2] || null,
     image4: uploadedUrls[3] || null,
     category,
+    subcategory1,
+    subcategory2: subcategory2 || null,
+    subcategory3: subcategory3 || null,
     owner,
   };
+
+  if (newProduct.subcategory2 === null) {
+    delete newProduct.subcategory2;
+  }
+  if (newProduct.subcategory3 === null) {
+    delete newProduct.subcategory3;
+  }
 
   const productForValidation = { ...newProduct };
   delete productForValidation.owner;
