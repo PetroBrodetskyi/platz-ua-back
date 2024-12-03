@@ -13,10 +13,10 @@ export const createProductSchema = Joi.object({
   image3: Joi.any().optional(),
   image4: Joi.any().optional(),
   views: Joi.string().optional(),
-  category: Joi.string().required(),
-  subcategory1: Joi.string().required(),
-  subcategory2: Joi.string().allow(null, "").optional(),
-  subcategory3: Joi.string().allow(null, "").optional(),
+  category: Joi.object({
+    main: Joi.string().required(),
+    subcategories: Joi.array().items(Joi.string()).min(1).required(),
+  }).required(),
 });
 
 export const updateProductSchema = Joi.object({
@@ -32,10 +32,10 @@ export const updateProductSchema = Joi.object({
   image3: Joi.any().optional(),
   image4: Joi.any().optional(),
   views: Joi.string().optional(),
-  category: Joi.string().optional(),
-  subcategory1: Joi.string().optional(),
-  subcategory2: Joi.string().optional(),
-  subcategory3: Joi.string().optional(),
+  category: Joi.object({
+    main: Joi.string().optional(),
+    subcategories: Joi.array().items(Joi.string()).optional(),
+  }).optional(),
   status: Joi.string().optional(),
 });
 
