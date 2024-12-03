@@ -8,34 +8,17 @@ import {
 import { handleNotFound } from "../helpers/errorHandlers.js";
 import cloudinary from "../middlewares/cloudinaryConfig.js";
 
-const getPaginationOptions = (page, limit, all) => ({
-  page: parseInt(page, 10) || 1,
-  limit: all ? Infinity : parseInt(limit, 10) || 6,
-});
-
-const buildProductFilter = ({ PLZ, city, category, subcategories }) => {
-  const filter = {};
-
-  if (PLZ) filter.PLZ = PLZ.trim();
-  if (city) filter.city = city.trim();
-  if (category) filter.category = category.trim();
-
-  if (subcategories) {
-    subcategories.forEach((subcategory, index) => {
-      if (subcategory) {
-        filter[`subcategory${index + 1}`] = subcategory.trim();
-      }
-    });
-  }
-
-  return filter;
-};
-
 export const getPublicProducts = ctrlWrapper(async (req, res) => {
-  const { page, limit, PLZ, city, all } = req.query;
+  const { page = 1, limit = 6, PLZ, city, all } = req.query;
 
-  const options = getPaginationOptions(page, limit, all);
-  options.filter = buildProductFilter({ PLZ, city });
+  const options = {
+    page: parseInt(page, 10),
+    limit: all ? Infinity : parseInt(limit, 10),
+    filter: {},
+  };
+
+  if (PLZ) options.filter.PLZ = PLZ.trim();
+  if (city) options.filter.city = city.trim();
 
   const products = await productsServices.getPublicProducts(options);
   res.json(products);
@@ -44,41 +27,41 @@ export const getPublicProducts = ctrlWrapper(async (req, res) => {
 export const getProductsByCategory = ctrlWrapper(async (req, res) => {
   const { category, subcategory1, subcategory2, subcategory3, subcategory4 } =
     req.query;
-  const { page, limit } = req.query;
+  const { page = 1, limit = 60 } = req.query;
 
   if (!category) {
     return res.status(400).json({ message: "Category parameter is required" });
   }
 
-  const subcategories = [
-    subcategory1,
-    subcategory2,
-    subcategory3,
-    subcategory4,
-  ];
-  const filter = buildProductFilter({ category, subcategories });
+  const filter = { category };
+  if (subcategory1) filter.subcategory1 = subcategory1.trim();
+  if (subcategory2) filter.subcategory2 = subcategory2.trim();
+  if (subcategory3) filter.subcategory3 = subcategory3.trim();
+  if (subcategory4) filter.subcategory4 = subcategory4.trim();
 
-  const options = getPaginationOptions(page, limit);
+  const options = {
+    page: parseInt(page, 10),
+    limit: parseInt(limit, 10),
+    filter,
+  };
 
   try {
-    const products = await productsServices.getProductsByCategory({
-      ...options,
-      filter,
-    });
+    const products = await productsServices.getProductsByCategory(options);
     res.json(products);
   } catch (error) {
-    res.status(500).json({
-      message: "Error fetching products by category",
-      error: error.message,
-    });
+    res.status(500).json({ message: "Internal Server Error" });
   }
 });
 
 export const getAllProducts = ctrlWrapper(async (req, res) => {
-  const { page, limit } = req.query;
+  const { page = 1, limit = 8 } = req.query;
   const currentUser = req.user;
 
-  const options = getPaginationOptions(page, limit);
+  const options = {
+    page: parseInt(page, 10),
+    limit: parseInt(limit, 10),
+  };
+
   const products = await productsServices.getAllProducts(
     currentUser._id,
     options
@@ -96,22 +79,18 @@ export const getOneProduct = ctrlWrapper(async (req, res) => {
   const { id } = req.params;
   const { _id: owner } = req.user;
   const oneProduct = await productsServices.getOneProduct(id, owner);
-
   if (!oneProduct) {
     return handleNotFound(req, res);
   }
-
   res.json(oneProduct);
 });
 
 export const getOnePublicProduct = ctrlWrapper(async (req, res) => {
   const { id } = req.params;
   const onePublicProduct = await productsServices.getOnePublicProduct(id);
-
   if (!onePublicProduct) {
     return res.status(404).json({ message: "Product not found" });
   }
-
   res.json(onePublicProduct);
 });
 
@@ -130,16 +109,17 @@ export const deleteProduct = ctrlWrapper(async (req, res) => {
     product.image3,
     product.image4,
   ].filter(Boolean);
+
   const deleteImagesPromises = images.map(async (url) => {
     try {
       const publicId = url.split("/").pop().split(".")[0];
       await cloudinary.uploader.destroy(`product_photos/${publicId}`);
     } catch (error) {
-      console.error(`Failed to delete image: ${url}`, error.message);
+      console.error(`Failed to delete image: ${url}, ${error.message}`);
     }
   });
-
   await Promise.all(deleteImagesPromises);
+
   const deletedProduct = await productsServices.deleteProduct(id, owner);
   if (!deletedProduct) {
     return handleNotFound(req, res);
@@ -161,8 +141,8 @@ export const createProduct = ctrlWrapper(async (req, res) => {
     subcategory2,
     subcategory3,
   } = req.body;
-
   const owner = req.user._id;
+
   const uploadedUrls = req.files.map((file) => file.path);
 
   const newProduct = {
@@ -182,6 +162,7 @@ export const createProduct = ctrlWrapper(async (req, res) => {
     subcategory3: subcategory3 || null,
     owner,
   };
+
   if (newProduct.subcategory2 === null) {
     delete newProduct.subcategory2;
   }
@@ -273,6 +254,7 @@ export const updateUserProduct = ctrlWrapper(async (req, res) => {
       owner,
       options
     );
+
     if (!updatedUserProduct) {
       return handleNotFound(req, res);
     }
