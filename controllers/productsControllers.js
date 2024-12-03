@@ -145,7 +145,10 @@ export const createProduct = ctrlWrapper(async (req, res) => {
     image2: uploadedUrls[1] || null,
     image3: uploadedUrls[2] || null,
     image4: uploadedUrls[3] || null,
-    category,
+    category: {
+      main: category.main,
+      subcategories: category.subcategories,
+    },
     owner,
   };
 
