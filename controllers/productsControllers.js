@@ -137,23 +137,17 @@ export const createProduct = ctrlWrapper(async (req, res) => {
     PLZ,
     city,
     category,
-    subcategories,
+    subcategory1,
+    subcategory2,
+    subcategory3,
   } = req.body;
-
   const owner = req.user._id;
 
   const uploadedUrls = req.files.map((file) => file.path);
 
-  let parsedSubcategories = [];
-  if (typeof subcategories === "string") {
-    try {
-      parsedSubcategories = JSON.parse(subcategories);
-    } catch (error) {
-      return res.status(400).json({ message: "Invalid subcategories format" });
-    }
-  } else if (Array.isArray(subcategories)) {
-    parsedSubcategories = subcategories;
-  }
+  const subcategories = [subcategory1, subcategory2, subcategory3].filter(
+    Boolean
+  );
 
   const newProduct = {
     name,
@@ -162,17 +156,19 @@ export const createProduct = ctrlWrapper(async (req, res) => {
     condition,
     PLZ,
     city,
+    category,
+    subcategories,
+    owner,
     image1: uploadedUrls[0] || null,
     image2: uploadedUrls[1] || null,
     image3: uploadedUrls[2] || null,
     image4: uploadedUrls[3] || null,
-    category,
-    subcategories: parsedSubcategories.filter(Boolean),
-    owner,
   };
 
-  const productForValidation = { ...newProduct };
-  delete productForValidation.owner;
+  const productForValidation = {
+    ...req.body,
+    subcategories,
+  };
 
   try {
     await createProductSchema.validateAsync(productForValidation);

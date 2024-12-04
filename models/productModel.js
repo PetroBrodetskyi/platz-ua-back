@@ -88,7 +88,7 @@ const productSchema = new Schema(
     },
     subcategories: {
       type: [String],
-      required: [true, "Set subcategories for product"],
+      required: true,
     },
     owner: {
       type: Schema.Types.ObjectId,

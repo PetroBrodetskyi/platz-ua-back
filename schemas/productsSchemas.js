@@ -14,7 +14,9 @@ export const createProductSchema = Joi.object({
   image4: Joi.any().optional(),
   views: Joi.string().optional(),
   category: Joi.string().required(),
-  subcategories: Joi.array().items(Joi.string()).min(1).required(),
+  subcategory1: Joi.string().required(),
+  subcategory2: Joi.string().allow(null, "").optional(),
+  subcategory3: Joi.string().allow(null, "").optional(),
 });
 
 export const updateProductSchema = Joi.object({
