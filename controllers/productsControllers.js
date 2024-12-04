@@ -141,8 +141,8 @@ export const createProduct = ctrlWrapper(async (req, res) => {
     subcategory2,
     subcategory3,
   } = req.body;
-  const owner = req.user._id;
 
+  const owner = req.user._id;
   const uploadedUrls = req.files.map((file) => file.path);
 
   const subcategories = [subcategory1, subcategory2, subcategory3].filter(
@@ -166,13 +166,13 @@ export const createProduct = ctrlWrapper(async (req, res) => {
   };
 
   try {
-    await createProductSchema.validateAsync(newProduct);
+    await createProductSchema.validateAsync(req.body);
+
+    const result = await productsServices.createProduct(newProduct);
+    res.status(201).json(result);
   } catch (error) {
     return res.status(400).json({ message: error.message });
   }
-
-  const result = await productsServices.createProduct(newProduct);
-  res.status(201).json(result);
 });
 
 export const updateProduct = ctrlWrapper(async (req, res) => {
