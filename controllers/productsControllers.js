@@ -165,13 +165,8 @@ export const createProduct = ctrlWrapper(async (req, res) => {
     image4: uploadedUrls[3] || null,
   };
 
-  const productForValidation = {
-    ...req.body,
-    subcategories,
-  };
-
   try {
-    await createProductSchema.validateAsync(productForValidation);
+    await createProductSchema.validateAsync(newProduct);
   } catch (error) {
     return res.status(400).json({ message: error.message });
   }
