@@ -137,12 +137,23 @@ export const createProduct = ctrlWrapper(async (req, res) => {
     PLZ,
     city,
     category,
-    subcategories, // Масив підкатегорій
+    subcategories,
   } = req.body;
 
   const owner = req.user._id;
 
   const uploadedUrls = req.files.map((file) => file.path);
+
+  let parsedSubcategories = [];
+  if (typeof subcategories === "string") {
+    try {
+      parsedSubcategories = JSON.parse(subcategories);
+    } catch (error) {
+      return res.status(400).json({ message: "Invalid subcategories format" });
+    }
+  } else if (Array.isArray(subcategories)) {
+    parsedSubcategories = subcategories;
+  }
 
   const newProduct = {
     name,
@@ -156,9 +167,7 @@ export const createProduct = ctrlWrapper(async (req, res) => {
     image3: uploadedUrls[2] || null,
     image4: uploadedUrls[3] || null,
     category,
-    subcategories: Array.isArray(subcategories)
-      ? subcategories.filter(Boolean)
-      : [],
+    subcategories: parsedSubcategories.filter(Boolean),
     owner,
   };
 
