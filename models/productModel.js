@@ -88,10 +88,7 @@ const productSchema = new Schema(
     },
     subcategories: {
       type: [String],
-      validate: {
-        validator: (v) => Array.isArray(v) && v.length > 0,
-        message: "At least one subcategory is required",
-      },
+      required: [true, "Set subcategories for product"],
     },
     owner: {
       type: Schema.Types.ObjectId,
