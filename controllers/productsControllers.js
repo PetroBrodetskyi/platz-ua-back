@@ -9,49 +9,74 @@ import { handleNotFound } from "../helpers/errorHandlers.js";
 import cloudinary from "../middlewares/cloudinaryConfig.js";
 
 export const getPublicProducts = ctrlWrapper(async (req, res) => {
-  const { page = 1, limit = 6, PLZ, city, all } = req.query;
+  console.log("Request received with query:", req.query);
+
+  const {
+    page = 1,
+    limit = 6,
+    PLZ,
+    city,
+    category,
+    subcategories,
+    all,
+  } = req.query;
 
   const options = {
     page: parseInt(page, 10),
-    limit: all ? Infinity : parseInt(limit, 10),
+    limit: all === "true" ? Infinity : parseInt(limit, 10),
     filter: {},
   };
 
   if (PLZ) options.filter.PLZ = PLZ.trim();
   if (city) options.filter.city = city.trim();
-
-  const products = await productsServices.getPublicProducts(options);
-  res.json(products);
-});
-
-export const getProductsByCategory = ctrlWrapper(async (req, res) => {
-  const { category, subcategories } = req.query;
-  const { page = 1, limit = 60 } = req.query;
-
-  if (!category) {
-    return res.status(400).json({ message: "Category parameter is required" });
-  }
-
-  const filter = { category };
+  if (category) options.filter.category = category.trim();
 
   if (subcategories) {
-    const subcategoryArray = subcategories.split(",").map((sub) => sub.trim());
-    filter.subcategories = { $all: subcategoryArray };
+    const subcategoryArray =
+      typeof subcategories === "string"
+        ? subcategories.split(",").map((sub) => sub.trim())
+        : subcategories;
+
+    options.filter.subcategories = { $all: subcategoryArray };
+    console.log("Filter options:", options.filter);
   }
 
-  const options = {
-    page: parseInt(page, 10),
-    limit: parseInt(limit, 10),
-    filter,
-  };
-
   try {
-    const products = await productsServices.getProductsByCategory(options);
+    const products = await productsServices.getPublicProducts(options);
     res.json(products);
   } catch (error) {
     res.status(500).json({ message: "Internal Server Error" });
   }
 });
+
+// export const getProductsByCategory = ctrlWrapper(async (req, res) => {
+//   const { category, subcategories } = req.query;
+//   const { page = 1, limit = 60 } = req.query;
+
+//   if (!category) {
+//     return res.status(400).json({ message: "Category parameter is required" });
+//   }
+
+//   const filter = { category };
+
+//   if (subcategories) {
+//     const subcategoryArray = subcategories.split(",").map((sub) => sub.trim());
+//     filter.subcategories = { $all: subcategoryArray };
+//   }
+
+//   const options = {
+//     page: parseInt(page, 10),
+//     limit: parseInt(limit, 10),
+//     filter,
+//   };
+
+//   try {
+//     const products = await productsServices.getProductsByCategory(options);
+//     res.json(products);
+//   } catch (error) {
+//     res.status(500).json({ message: "Internal Server Error" });
+//   }
+// });
 
 export const getAllProducts = ctrlWrapper(async (req, res) => {
   const { page = 1, limit = 8 } = req.query;

@@ -22,28 +22,6 @@ export const updateProduct = (id, body, owner, options) => {
 export const updateStatusProduct = (id, body, owner, options) =>
   Product.findOneAndUpdate({ _id: id, owner }, body, options);
 
-export const getPublicProducts = async (options) => {
-  const { page, limit, filter } = options;
-
-  const query = {};
-
-  if (filter && filter.PLZ) {
-    query.PLZ = filter.PLZ;
-  }
-
-  if (filter && filter.city) {
-    query.city = filter.city;
-  }
-
-  const products = await Product.find(query)
-    .sort({ createdAt: -1 })
-    .skip((page - 1) * limit)
-    .limit(limit)
-    .exec();
-
-  return products;
-};
-
 export const getProductsByIds = async (ids) => {
   if (!Array.isArray(ids) || ids.length === 0) return [];
 
@@ -51,7 +29,7 @@ export const getProductsByIds = async (ids) => {
   return products;
 };
 
-export const getProductsByCategory = async ({ filter, page, limit }) => {
+export const getPublicProducts = async ({ filter, page, limit }) => {
   const query = { ...filter };
   const options = {
     skip: (page - 1) * limit,
