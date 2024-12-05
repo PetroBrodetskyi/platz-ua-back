@@ -9,8 +9,6 @@ import { handleNotFound } from "../helpers/errorHandlers.js";
 import cloudinary from "../middlewares/cloudinaryConfig.js";
 
 export const getPublicProducts = ctrlWrapper(async (req, res) => {
-  console.log("Request received with query:", req.query);
-
   const {
     page = 1,
     limit = 6,
@@ -43,6 +41,7 @@ export const getPublicProducts = ctrlWrapper(async (req, res) => {
 
   try {
     const products = await productsServices.getPublicProducts(options);
+
     res.json(products);
   } catch (error) {
     res.status(500).json({ message: "Internal Server Error" });

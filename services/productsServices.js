@@ -38,14 +38,8 @@ export const getPublicProducts = async ({ filter, page, limit }) => {
   };
 
   const products = await Product.find(query, null, options).exec();
-  const totalProducts = await Product.countDocuments(query);
 
-  return {
-    products,
-    total: totalProducts,
-    totalPages: Math.ceil(totalProducts / limit),
-    currentPage: page,
-  };
+  return products;
 };
 
 export const getOnePublicProduct = async (id) => {
