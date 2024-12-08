@@ -29,34 +29,28 @@ export const getPublicProducts = ctrlWrapper(async (req, res) => {
   }
 });
 
-// export const getProductsByCategory = ctrlWrapper(async (req, res) => {
-//   const { category, subcategories } = req.query;
-//   const { page = 1, limit = 60 } = req.query;
+export const getProductsByCategories = ctrlWrapper(async (req, res) => {
+  const { category, subcategories } = req.query;
 
-//   if (!category) {
-//     return res.status(400).json({ message: "Category parameter is required" });
-//   }
+  if (!category) {
+    return res.status(400).json({ message: "Category parameter is required" });
+  }
 
-//   const filter = { category };
+  const filter = { category: category.trim() };
 
-//   if (subcategories) {
-//     const subcategoryArray = subcategories.split(",").map((sub) => sub.trim());
-//     filter.subcategories = { $all: subcategoryArray };
-//   }
+  if (subcategories) {
+    const subcategoryArray = subcategories.split(",").map((sub) => sub.trim());
+    filter.subcategories = { $all: subcategoryArray };
+  }
 
-//   const options = {
-//     page: parseInt(page, 10),
-//     limit: parseInt(limit, 10),
-//     filter,
-//   };
+  try {
+    const products = await productsServices.getProductsByCategories(filter);
 
-//   try {
-//     const products = await productsServices.getProductsByCategory(options);
-//     res.json(products);
-//   } catch (error) {
-//     res.status(500).json({ message: "Internal Server Error" });
-//   }
-// });
+    res.status(200).json(products);
+  } catch (error) {
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+});
 
 export const getAllProducts = ctrlWrapper(async (req, res) => {
   const { page = 1, limit = 8 } = req.query;

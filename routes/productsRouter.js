@@ -9,7 +9,7 @@ import {
   updateProduct,
   updateUserProduct,
   updateStatusProduct,
-  // getProductsByCategory,
+  getProductsByCategories,
   getOnePublicProduct,
 } from "../controllers/productsControllers.js";
 
@@ -37,7 +37,7 @@ const productsRouter = express.Router();
 
 productsRouter.get("/public", getPublicProducts);
 
-// productsRouter.get("/category", getProductsByCategory);
+productsRouter.get("/category", getProductsByCategories);
 
 productsRouter.get("/", authenticate, getAllProducts);
 
