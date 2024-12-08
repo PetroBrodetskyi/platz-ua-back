@@ -9,15 +9,7 @@ import { handleNotFound } from "../helpers/errorHandlers.js";
 import cloudinary from "../middlewares/cloudinaryConfig.js";
 
 export const getPublicProducts = ctrlWrapper(async (req, res) => {
-  const {
-    page = 1,
-    limit = 6,
-    PLZ,
-    city,
-    category,
-    subcategories,
-    all,
-  } = req.query;
+  const { page = 1, limit = 6, PLZ, city, all } = req.query;
 
   const options = {
     page: parseInt(page, 10),
@@ -27,17 +19,6 @@ export const getPublicProducts = ctrlWrapper(async (req, res) => {
 
   if (PLZ) options.filter.PLZ = PLZ.trim();
   if (city) options.filter.city = city.trim();
-  if (category) options.filter.category = category.trim();
-
-  if (subcategories) {
-    const subcategoryArray =
-      typeof subcategories === "string"
-        ? subcategories.split(",").map((sub) => sub.trim())
-        : subcategories;
-
-    options.filter.subcategories = { $all: subcategoryArray };
-    console.log("Filter options:", options.filter);
-  }
 
   try {
     const products = await productsServices.getPublicProducts(options);
