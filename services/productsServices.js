@@ -8,13 +8,8 @@ export const getAllProducts = (owner, options) =>
 export const getUserProducts = (owner) => Product.find({ owner });
 
 export const getProductsByCategories = async (filter) => {
-  try {
-    const products = await Product.find(filter).sort({ createdAt: -1 });
-    return products;
-  } catch (error) {
-    console.error("Error fetching products by categories:", error);
-    throw error;
-  }
+  const products = await Product.find(filter).sort({ createdAt: -1 });
+  return products;
 };
 
 export const getOneProduct = (id, owner) => Product.findOne({ _id: id, owner });

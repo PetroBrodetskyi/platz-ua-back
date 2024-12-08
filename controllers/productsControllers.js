@@ -32,24 +32,15 @@ export const getPublicProducts = ctrlWrapper(async (req, res) => {
 export const getProductsByCategories = ctrlWrapper(async (req, res) => {
   const { category, subcategories } = req.query;
 
-  if (!category) {
-    return res.status(400).json({ message: "Category parameter is required" });
-  }
-
-  const filter = { category: category.trim() };
+  const filter = { category };
 
   if (subcategories) {
-    const subcategoryArray = subcategories.split(",").map((sub) => sub.trim());
-    filter.subcategories = { $all: subcategoryArray };
+    filter.subcategories = { $all: subcategories.split(",") };
   }
 
-  try {
-    const products = await productsServices.getProductsByCategories(filter);
+  const products = await productsServices.getProductsByCategories(filter);
 
-    res.status(200).json(products);
-  } catch (error) {
-    res.status(500).json({ message: "Internal Server Error" });
-  }
+  res.status(200).json(products);
 });
 
 export const getAllProducts = ctrlWrapper(async (req, res) => {
