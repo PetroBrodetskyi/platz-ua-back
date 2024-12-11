@@ -5,13 +5,21 @@ export const getSitemapUrls = async () => {
 
   const staticUrls = [
     { loc: `${baseUrl}/`, changefreq: "daily", priority: 1.0 },
-    { loc: `${baseUrl}/how-it-works`, changefreq: "monthly", priority: 0.7 },
     {
-      loc: `${baseUrl}/terms-of-service`,
+      loc: `${baseUrl}/info/how-it-works`,
       changefreq: "monthly",
       priority: 0.7,
     },
-    { loc: `${baseUrl}/privacy-policy`, changefreq: "monthly", priority: 0.7 },
+    {
+      loc: `${baseUrl}/info/terms-of-service`,
+      changefreq: "monthly",
+      priority: 0.7,
+    },
+    {
+      loc: `${baseUrl}/info/privacy-policy`,
+      changefreq: "monthly",
+      priority: 0.7,
+    },
     { loc: `${baseUrl}/create`, changefreq: "monthly", priority: 0.7 },
   ];
 
